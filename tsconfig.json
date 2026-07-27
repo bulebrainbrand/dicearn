@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "noEmit": true,
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "types": [
+            "vite-plus/client"
+        ],
+        "target": "esnext",
+        "isolatedModules": true,
+        "skipLibCheck": true,
+    }
+}
