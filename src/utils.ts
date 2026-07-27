@@ -1,5 +1,5 @@
 import { CELL_SIZE_PX } from "./constants.ts";
-import { Route } from "./BoardViewCoordinateCalculator.ts";
+import { Route } from "./board/BoardViewCoordinateCalculator.ts";
 
 export const modulo = (n: number, d: number) => ((n % d) + d) % d;
 

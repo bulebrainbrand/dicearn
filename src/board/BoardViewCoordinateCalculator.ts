@@ -1,4 +1,4 @@
-import { Direction, DIRECTION_OFFSET } from "./Direction.ts";
+import { Direction, DIRECTION_OFFSET } from "@/Direction.ts";
 
 export type Position = { x: number; y: number };
 type Offset = [number, number];

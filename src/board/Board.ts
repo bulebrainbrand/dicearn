@@ -1,8 +1,8 @@
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter.js";
-import { Tiles } from "./Tiles.ts";
-import { Cursor } from "./CursorModel.ts";
-import { DIRECTION_OFFSET } from "./Direction.ts";
-import { Tile } from "./Tile.ts";
+import { Tiles } from "@/Tiles/Model.ts";
+import { Cursor } from "@/cursor/Model";
+import { DIRECTION_OFFSET } from "@/Direction.ts";
+import { Tile } from "@/Tile/Model.ts";
 type Position = [number, number];
 export class Board extends EventEmitter {
   tiles: Tiles;

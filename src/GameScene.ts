@@ -1,17 +1,17 @@
 import * as Phaser from "phaser";
 import { DIRECTION_TAPLE } from "./Direction.ts";
-import { CURSOR_COLOR, CURSOR_RADIUS } from "./Cursor.ts";
-import { Tiles } from "./Tiles.ts";
+import { CURSOR_COLOR, CURSOR_RADIUS } from "./cursor/constants.ts";
+import { Tiles } from "./Tiles/Model.ts";
 import { Dice } from "./Dice.ts";
 import { Shop } from "./Shop.ts";
 import { default as BoardView } from "phaser4-rex-plugins/plugins/board/board/Board.js";
-import { Board } from "./Board.ts";
-import { BoardViewCoordinateCalculator } from "./BoardViewCoordinateCalculator.ts";
-import { Tile } from "./Tile.ts";
-import { Cursor as CursorModel } from "./CursorModel.ts";
-import { CELL_SIZE_PX } from "./constants.ts";
-import { TileView } from "./TileView.ts";
-import type { Route } from "./BoardViewCoordinateCalculator.ts";
+import { Board } from "./board/Board.ts";
+import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalculator.ts";
+import { Tile } from "./Tile/Model.ts";
+import { Cursor as CursorModel } from "@/cursor/Model.ts";
+import { CELL_SIZE_PX } from "@/constants.ts";
+import { TileView } from "@/Tile/View.ts";
+import type { Route } from "@/board/BoardViewCoordinateCalculator.ts";
 import MoveTo from "phaser4-rex-plugins/plugins/board/moveto/MoveTo";
 
 export class GameScene extends Phaser.Scene {

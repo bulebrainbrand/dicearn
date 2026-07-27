@@ -1,5 +1,5 @@
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter.js";
-import { Direction } from "./Direction.ts";
+import { Direction } from "@/Direction.ts";
 
 export class Tile extends EventEmitter {
   constructor(private dir: Direction) {

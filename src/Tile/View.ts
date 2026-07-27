@@ -1,12 +1,7 @@
 import Phaser from "phaser";
-import { CELL_SIZE_PX } from "./constants.ts";
-import { Direction } from "./Direction.ts";
-const CELL_COLOR = {
-  d: 0xff0000,
-  u: 0x00ff00,
-  r: 0x0000ff,
-  l: 0x00ffff,
-} as const satisfies Record<Direction, number>;
+import { CELL_SIZE_PX } from "@/constants.ts";
+import { Direction } from "@/Direction.ts";
+import { CELL_COLOR } from "@/Tile/constants";
 
 export class TileView extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene, dir: Direction) {

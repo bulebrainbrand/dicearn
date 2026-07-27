@@ -1,5 +1,5 @@
-import { Tile } from "./Tile.ts";
-import { times } from "./utils.ts";
+import { Tile } from "@/Tile/Model";
+import { times } from "@/utils.ts";
 export class Tiles {
   private tiles: (Tile | undefined)[][] = [];
   constructor(
@@ -22,7 +22,6 @@ export class Tiles {
   removeTile(x: number, y: number) {
     this.assetsValidPosition(x, y);
     const [ix, iy] = this.convertPositionToIndex(x, y);
-    console.log(ix, iy, x, y);
     this.tiles[ix][iy] = undefined;
   }
   getTile(x: number, y: number): Tile | undefined {

@@ -10,5 +10,13 @@
         "target": "esnext",
         "isolatedModules": true,
         "skipLibCheck": true,
-    }
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        }
+    },
+    "include": [
+        "./src/**/*.ts"
+    ]
 }
