@@ -97,7 +97,7 @@ export class BoardViewCoordinateCalculator {
         pos1.x === pos2.x
           ? pos1.y < pos2.y
             ? "u"
-            : "r"
+            : "d"
           : pos1.x < pos2.x
             ? "l"
             : "r";

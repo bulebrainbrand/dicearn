@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 7ce8f0a234b7138e959bea506021c888f8b9166c..28fd4609e3f19beadc615abe5361b1b803396959 100644
+--- a/package.json
++++ b/package.json
+@@ -86,5 +86,6 @@
+         "papaparse": "^5.4.1",
+         "webfontloader": "^1.6.28",
+         "tinyqueue": "^3.0.0"
+-    }
++    },
++    "type": "module"
+ }

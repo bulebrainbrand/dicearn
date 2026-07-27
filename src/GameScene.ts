@@ -57,6 +57,9 @@ export class GameScene extends Phaser.Scene {
         );
       },
     );
+    this.cursorModel.addListener("warp", (event: { new: [number, number] }) => {
+      this.playWarp(event);
+    });
   }
   createMoney() {
     const money = this.add.text(256 * 3, 256 * 7.5, String(this.money), {
@@ -181,6 +184,7 @@ export class GameScene extends Phaser.Scene {
       { x: oldPos[0], y: oldPos[1] },
       { x: newPos[0], y: newPos[1] },
     );
+    console.log("animateCursorMove", { oldPos, newPos, route });
     return this.playRoute(route);
   }
   private async playRoute([step, ...rest]: Route[]): Promise<void> {
@@ -193,5 +197,13 @@ export class GameScene extends Phaser.Scene {
       action.moveTo(step.x, step.y);
     });
     return await this.playRoute(rest);
+  }
+  private playWarp({ new: newPos }: { new: [number, number] }) {
+    this.cursorAnimationQueue = this.cursorAnimationQueue.then(() =>
+      this.playRoute([
+        { x: newPos[0], y: newPos[1], type: "set" },
+        { x: newPos[0], y: newPos[1], type: "move" },
+      ]),
+    );
   }
 }

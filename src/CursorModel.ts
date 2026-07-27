@@ -31,6 +31,20 @@ export class Cursor extends EventEmitter {
      */
     this.emit("move", { old: [oldX, oldY], new: [x, y] });
   }
+  /**
+   * @fires Cursor#event:warp
+   * @param x
+   * @param y
+   */
+  warp(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+    /**
+     * @event Cursor#event:warp
+     * @param { {new: [number, number]} }
+     */
+    this.emit("warp", { new: [x, y] });
+  }
   private assetsValidPosition(x: number, y: number) {
     if (x < this.minX || x > this.maxX || y < this.minY || y > this.maxY) {
       throw new Error(`Invalid position: (${x}, ${y})`);

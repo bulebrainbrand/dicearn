@@ -27,19 +27,29 @@ export class Board extends EventEmitter {
   ): Generator<[number, number, Tile], void, unknown> {
     for (let i = 0; i < times; i++) {
       let [x, y] = this.cursor.getPosition();
-      const [newX, newY] = this.covertPosToInside(
-        this.applyOffset(
-          [x, y],
-          DIRECTION_OFFSET[this.tiles.getTile(x, y)!.getDirection()],
-        ),
-      );
-      this.cursor.move(newX, newY);
-      onOneMoveCallback?.(newX, newY, this.tiles.getTile(newX, newY)!);
-      yield [newX, newY, this.tiles.getTile(newX, newY)!];
+      const tile = this.tiles.getTile(x, y);
+      if (tile === undefined) {
+        this.cursor.warp(0, 0);
+        yield [0, 0, this.tiles.getTile(0, 0)!];
+      } else {
+        const [newX, newY] = this.covertPosToInside(
+          this.applyOffset([x, y], DIRECTION_OFFSET[tile.getDirection()]),
+        );
+        const nextTile = this.tiles.getTile(newX, newY);
+        if (nextTile === undefined) {
+          this.cursor.warp(0, 0);
+          yield [0, 0, this.tiles.getTile(0, 0)!];
+        } else {
+          this.cursor.move(newX, newY);
+          onOneMoveCallback?.(newX, newY, nextTile);
+          yield [newX, newY, nextTile];
+        }
+      }
     }
     onFinishCallback?.();
   }
-  private applyOffset(pos: Position, offset: [number, number]): Position {
+  private applyOffset(pos: Position, offset?: [number, number]): Position {
+    if (!offset) return [0, 0];
     return [pos[0] + offset[0], pos[1] + offset[1]];
   }
   private covertPosToInside(pos: Position): Position {
