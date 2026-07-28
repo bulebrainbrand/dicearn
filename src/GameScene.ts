@@ -1,6 +1,5 @@
 import * as Phaser from "phaser";
 import { DIRECTION_TAPLE } from "./Direction.ts";
-import { CURSOR_COLOR, CURSOR_RADIUS } from "./cursor/constants.ts";
 import { Tiles } from "./Tiles/Model.ts";
 import { Dice } from "./Dice.ts";
 import { Shop } from "./Shop.ts";
@@ -11,16 +10,13 @@ import { Tile } from "./Tile/Model.ts";
 import { Cursor as CursorModel } from "@/cursor/Model.ts";
 import { CELL_SIZE_PX } from "@/constants.ts";
 import { TileView } from "@/Tile/View.ts";
-import type { Route } from "@/board/BoardViewCoordinateCalculator.ts";
-import MoveTo from "phaser4-rex-plugins/plugins/board/moveto/MoveTo";
+import { CursorView } from "./cursor/View.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
   tiles!: Tiles;
   cursorModel!: CursorModel;
-  cursor!: Phaser.GameObjects.Arc;
-  private cursorMoveTo!: MoveTo;
-  private cursorSetTo!: MoveTo;
+  cursor!: CursorView;
   private cursorAnimationQueue: Promise<void> = Promise.resolve();
   money: number = 0;
   moneyObject!: Phaser.GameObjects.Text;
@@ -53,12 +49,14 @@ export class GameScene extends Phaser.Scene {
       "move",
       (event: { old: [number, number]; new: [number, number] }) => {
         this.cursorAnimationQueue = this.cursorAnimationQueue.then(() =>
-          this.animateCursorMove(event.old, event.new),
+          this.cursor.animateCursorMove(event.old, event.new),
         );
       },
     );
     this.cursorModel.addListener("warp", (event: { new: [number, number] }) => {
-      this.playWarp(event);
+      this.cursorAnimationQueue = this.cursorAnimationQueue.then(() =>
+        this.cursor.playWarp(event),
+      );
     });
   }
   createMoney() {
@@ -115,19 +113,14 @@ export class GameScene extends Phaser.Scene {
   }
   createCursorView() {
     const [x, y] = this.cursorModel.getPosition();
-    const cursor = this.add.circle(
-      x * CELL_SIZE_PX,
-      y * CELL_SIZE_PX,
-      CURSOR_RADIUS,
-      CURSOR_COLOR,
+    this.cursor = new CursorView(
+      this,
+      this.boardView,
+      this.rexBoard,
+      x,
+      y,
+      this.boardViewCoodinateCalculator,
     );
-    cursor.setOrigin(0, 0);
-    this.boardView.addChess(cursor, x, y, 1, true);
-    this.cursor = cursor;
-    this.cursorMoveTo = this.rexBoard.add.moveTo(this.cursor, { speed: 900 });
-    this.cursorSetTo = this.rexBoard.add.moveTo(this.cursor, {
-      speed: Infinity,
-    });
   }
   createTilesView() {
     this.tiles.forEach((tile, x, y) => {
@@ -175,35 +168,5 @@ export class GameScene extends Phaser.Scene {
       }
       return false;
     });
-  }
-  private animateCursorMove(
-    oldPos: [number, number],
-    newPos: [number, number],
-  ): Promise<void> {
-    const route = this.boardViewCoodinateCalculator.twoPosToRoute(
-      { x: oldPos[0], y: oldPos[1] },
-      { x: newPos[0], y: newPos[1] },
-    );
-    console.log("animateCursorMove", { oldPos, newPos, route });
-    return this.playRoute(route);
-  }
-  private async playRoute([step, ...rest]: Route[]): Promise<void> {
-    if (step === undefined) {
-      return;
-    }
-    const action = step.type === "set" ? this.cursorSetTo : this.cursorMoveTo;
-    await new Promise<void>((resolve) => {
-      action.once("complete", resolve);
-      action.moveTo(step.x, step.y);
-    });
-    return await this.playRoute(rest);
-  }
-  private playWarp({ new: newPos }: { new: [number, number] }) {
-    this.cursorAnimationQueue = this.cursorAnimationQueue.then(() =>
-      this.playRoute([
-        { x: newPos[0], y: newPos[1], type: "set" },
-        { x: newPos[0], y: newPos[1], type: "move" },
-      ]),
-    );
   }
 }
