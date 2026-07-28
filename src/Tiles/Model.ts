@@ -1,9 +1,9 @@
 import { Tile } from "@/Tile/Model";
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter";
 import { TilesDataStorage } from "./tilesDataStorage";
-type TilesModelSetEvent = { x: number; y: number; newTile: Tile };
-type TilesModelRemoveEvent = { x: number; y: number };
-type TilesModelBoardSizeUpdateEvent = {
+export type TilesModelSetEvent = { x: number; y: number; newTile: Tile };
+export type TilesModelRemoveEvent = { x: number; y: number };
+export type TilesModelBoardSizeUpdateEvent = {
   minX: number;
   minY: number;
   maxX: number;

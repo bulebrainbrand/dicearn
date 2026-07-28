@@ -1,6 +1,11 @@
 import Phaser from "phaser";
 import Board from "phaser4-rex-plugins/plugins/board/board/Board.js";
-import { CURSOR_COLOR, CURSOR_RADIUS, CURSOR_TILE_Z } from "./constants";
+import {
+  CURSOR_COLOR,
+  CURSOR_DEPTH,
+  CURSOR_RADIUS,
+  CURSOR_TILE_Z,
+} from "./constants";
 
 import {
   BoardViewCoordinateCalculator,
@@ -21,10 +26,11 @@ export class CursorView extends Phaser.GameObjects.Container {
     private readonly boardViewCoodinateCalculator: BoardViewCoordinateCalculator,
   ) {
     super(scene, CELL_SIZE_PX * tileX, CELL_SIZE_PX * tileY);
+    this.setDepth(CURSOR_DEPTH);
     const arc = scene.add.circle(0, 0, CURSOR_RADIUS, CURSOR_COLOR);
+    arc.setOrigin(0, 0);
     this.add(arc);
     scene.add.existing(this);
-    arc.setOrigin(0, 0);
     boardView.addChess(this, tileX, tileY, CURSOR_TILE_Z, true);
     this.moveToPosititon = plugin.add.moveTo(this, { speed: 900 });
     this.setToPosition = plugin.add.moveTo(this, {

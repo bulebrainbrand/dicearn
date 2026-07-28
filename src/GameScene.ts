@@ -1,6 +1,11 @@
 import * as Phaser from "phaser";
 import { DIRECTION_TAPLE } from "./Direction.ts";
-import { Tiles } from "./Tiles/Model.ts";
+import {
+  Tiles,
+  TilesModelBoardSizeUpdateEvent,
+  TilesModelRemoveEvent,
+  TilesModelSetEvent,
+} from "./Tiles/Model.ts";
 import { Dice } from "./Dice.ts";
 import { Shop } from "./Shop.ts";
 import { default as BoardView } from "phaser4-rex-plugins/plugins/board/board/Board.js";
@@ -9,12 +14,13 @@ import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalcul
 import { Tile } from "./Tile/Model.ts";
 import { Cursor as CursorModel } from "@/cursor/Model.ts";
 import { CELL_SIZE_PX } from "@/constants.ts";
-import { TileView } from "@/Tile/View.ts";
 import { CursorView } from "./cursor/View.ts";
+import { TilesView } from "./Tiles/View.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
   tiles!: Tiles;
+  tilesView!: TilesView;
   cursorModel!: CursorModel;
   cursor!: CursorView;
   private cursorAnimationQueue: Promise<void> = Promise.resolve();
@@ -33,6 +39,7 @@ export class GameScene extends Phaser.Scene {
     this.createMoney();
     this.createShop();
     this.registorEventListener();
+    this.initTiles();
   }
   createModel() {
     this.createTilesModel();
@@ -43,6 +50,17 @@ export class GameScene extends Phaser.Scene {
     this.createBoardView();
     this.createTilesView();
     this.createCursorView();
+  }
+  initTiles() {
+    Array.from({ length: 6 }, (_, x) =>
+      Array.from({ length: 6 }, (_, y) =>
+        this.tiles.setTile(
+          x,
+          y,
+          new Tile(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)]),
+        ),
+      ),
+    );
   }
   registorEventListener() {
     this.cursorModel.addListener(
@@ -58,6 +76,17 @@ export class GameScene extends Phaser.Scene {
         this.cursor.playWarp(event),
       );
     });
+    this.tiles.addListener("set", (arg: TilesModelSetEvent) =>
+      this.tilesView.setTile(arg.x, arg.y, arg.newTile),
+    );
+    this.tiles.addListener("remove", (arg: TilesModelRemoveEvent) =>
+      this.tilesView.removeTile(arg.x, arg.y),
+    );
+    this.tiles.addListener(
+      "updateBoardSize",
+      (arg: TilesModelBoardSizeUpdateEvent) =>
+        this.tilesView.updateBoardSize(arg),
+    );
   }
   createMoney() {
     const money = this.add.text(256 * 3, 256 * 7.5, String(this.money), {
@@ -77,15 +106,7 @@ export class GameScene extends Phaser.Scene {
   }
   createTilesModel() {
     const tiles = new Tiles(0, 5, 0, 5);
-    Array.from({ length: 6 }, (_, x) =>
-      Array.from({ length: 6 }, (_, y) =>
-        tiles.setTile(
-          x,
-          y,
-          new Tile(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)]),
-        ),
-      ),
-    );
+
     this.tiles = tiles;
   }
   createCursorModel() {
@@ -106,6 +127,7 @@ export class GameScene extends Phaser.Scene {
         cellHeight: CELL_SIZE_PX,
         type: "orthogonal",
       },
+
       infinity: true,
       wrap: true,
     });
@@ -123,16 +145,7 @@ export class GameScene extends Phaser.Scene {
     );
   }
   createTilesView() {
-    this.tiles.forEach((tile, x, y) => {
-      if (tile === undefined) return;
-      this.boardView.addChess(
-        new TileView(this, tile.getDirection()),
-        x,
-        y,
-        0,
-        true,
-      );
-    });
+    this.tilesView = new TilesView(this, this.boardView, this.tiles);
   }
   createDice() {
     const dice = new Dice(this, 256 * 3, 256 * 6.5);

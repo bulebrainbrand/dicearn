@@ -122,6 +122,8 @@ export class TilesDataStorage<T> {
       throw new RangeError(
         `expect ${this.minY}-${this.maxY} y coordinate but actual ${y}`,
       );
+    if (isNaN(x) || isNaN(y))
+      throw new TypeError(`caon't use NaN (x:${x},y:${y})`);
   }
   private convertPositionToIndex(x: number, y: number): [number, number] {
     return [x - this.minX, y - this.minY];

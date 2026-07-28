@@ -4,10 +4,14 @@ import Board from "phaser4-rex-plugins/plugins/board/board/Board";
 import { Tiles } from "./Model";
 import { Tile } from "@/Tile/Model";
 import { TilesDataStorage } from "./tilesDataStorage";
-export class TilesView extends Board {
+import { TILE_DEPTH, TILE_TILE_Z } from "./constants";
+export class TilesView {
   private tiles: TilesDataStorage<TileView>;
-  constructor(scene: Phaser.Scene, config: Board.IConfig, tilesModel: Tiles) {
-    super(scene, config);
+  constructor(
+    private scene: Phaser.Scene,
+    private board: Board,
+    tilesModel: Tiles,
+  ) {
     const { maxX, maxY, minX, minY } = tilesModel.getBoardSize();
     this.tiles = new TilesDataStorage(minX, maxX, minY, maxY, (tile) => {
       if (tile) tile.destroy();
@@ -15,14 +19,16 @@ export class TilesView extends Board {
     tilesModel.forEach((tile, x, y) => {
       if (tile === undefined) return;
       const sprite = new TileView(scene, tile.getDirection());
-      this.addChess(sprite, x, y, 0, true);
+      this.board.addChess(sprite, x, y, TILE_TILE_Z, false);
       this.tiles.setTile(x, y, sprite);
+      sprite.setDepth(TILE_DEPTH);
     });
   }
   setTile(x: number, y: number, tile: Tile) {
     const sprite = new TileView(this.scene, tile.getDirection());
     this.tiles.setTile(x, y, sprite);
-    this.addChess(sprite, x, y, 0, true);
+    this.board.addChess(sprite, x, y, TILE_TILE_Z, true);
+    sprite.setDepth(TILE_DEPTH);
   }
   removeTile(x: number, y: number) {
     this.tiles.removeTile(x, y);
