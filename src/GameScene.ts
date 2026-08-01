@@ -16,6 +16,7 @@ import { Cursor as CursorModel } from "@/cursor/Model.ts";
 import { CELL_SIZE_PX } from "@/constants.ts";
 import { CursorView } from "./cursor/View.ts";
 import { TilesView } from "./Tiles/View.ts";
+import { Pan } from "phaser4-rex-plugins/plugins/gestures";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -40,6 +41,12 @@ export class GameScene extends Phaser.Scene {
     this.createShop();
     this.registorEventListener();
     this.initTiles();
+    const pan = this.rexGestures.add.pan(this, { threshold: 10 });
+    pan.on("pan", (pan: Pan) => {
+      const cam = this.cameras.main;
+      cam.scrollX -= pan.dx / cam.zoom;
+      cam.scrollY -= pan.dy / cam.zoom;
+    });
   }
   createModel() {
     this.createTilesModel();
@@ -51,6 +58,7 @@ export class GameScene extends Phaser.Scene {
     this.createTilesView();
     this.createCursorView();
   }
+
   initTiles() {
     Array.from({ length: 6 }, (_, x) =>
       Array.from({ length: 6 }, (_, y) =>
@@ -89,13 +97,20 @@ export class GameScene extends Phaser.Scene {
     );
   }
   createMoney() {
-    const money = this.add.text(256 * 3, 256 * 7.5, String(this.money), {
-      color: "#000000",
-      fontSize: "256px",
-    });
+    const money = this.add.text(
+      CELL_SIZE_PX * 9,
+      CELL_SIZE_PX * 8,
+      String(this.money),
+      {
+        color: "#000000",
+        fontSize: "256px",
+      },
+    );
     this.moneyObject = money;
     money.setOrigin(0.5, 0.5);
     this.syncMoney();
+    money.setScrollFactor(0, 0);
+    money.setDepth(2);
   }
   applyMoney(num: number) {
     this.money += num;
@@ -148,7 +163,7 @@ export class GameScene extends Phaser.Scene {
     this.tilesView = new TilesView(this, this.boardView, this.tiles);
   }
   createDice() {
-    const dice = new Dice(this, 256 * 3, 256 * 6.5);
+    const dice = new Dice(this, CELL_SIZE_PX * 11, CELL_SIZE_PX * 8);
     dice.on("roll", async (value: number) => {
       dice.setRollable(false);
       const gene = this.board.moveCursor(value);
@@ -162,7 +177,7 @@ export class GameScene extends Phaser.Scene {
     });
   }
   createShop() {
-    const shop = new Shop(this, 256 * 6.5, 256 * 3);
+    const shop = new Shop(this, CELL_SIZE_PX * 15, CELL_SIZE_PX * 3);
     this.add.existing(shop);
     shop.addItem("Upsize Grid", () => {
       if (this.money >= 5) {

@@ -6,10 +6,11 @@ export class Dice extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y);
     scene.add.existing(this);
-    const dice = scene.add.text(256 * 3, 256 * 6.5, "-", {
+    const dice = scene.add.text(0, 0, "-", {
       fontSize: "256px",
       color: "#000000",
     });
+    this.add(dice);
     dice.setOrigin(0.5, 0.5);
     dice.setInteractive();
     dice.on("pointerdown", () => {
@@ -19,6 +20,8 @@ export class Dice extends Phaser.GameObjects.Container {
         this.emit("roll", rollValue);
       }
     });
+    this.setScrollFactor(0, 0, true);
+    dice.setScrollFactor(0);
   }
   private roll() {
     return Phaser.Math.Between(this.minDiceValue, this.maxDiceValue);
