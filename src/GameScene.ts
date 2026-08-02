@@ -1,11 +1,6 @@
 import * as Phaser from "phaser";
 import { DIRECTION_TAPLE } from "./Direction.ts";
-import {
-  Tiles,
-  TilesModelBoardSizeUpdateEvent,
-  TilesModelRemoveEvent,
-  TilesModelSetEvent,
-} from "./Tiles/Model.ts";
+import { Tiles } from "./Tiles/Model.ts";
 import { Dice } from "./Dice.ts";
 import { Shop } from "./Shop.ts";
 import { default as BoardView } from "phaser4-rex-plugins/plugins/board/board/Board.js";
@@ -85,17 +80,6 @@ export class GameScene extends Phaser.Scene {
         this.cursor.playWarp(event),
       );
     });
-    this.tiles.addListener("set", (arg: TilesModelSetEvent) =>
-      this.tilesView.setTile(arg.x, arg.y, arg.newTile),
-    );
-    this.tiles.addListener("remove", (arg: TilesModelRemoveEvent) =>
-      this.tilesView.removeTile(arg.x, arg.y),
-    );
-    this.tiles.addListener(
-      "updateBoardSize",
-      (arg: TilesModelBoardSizeUpdateEvent) =>
-        this.tilesView.updateBoardSize(arg),
-    );
   }
   createMoney() {
     const money = this.add.text(
