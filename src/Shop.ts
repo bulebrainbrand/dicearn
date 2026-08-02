@@ -1,9 +1,11 @@
 import Phaser from "phaser";
+import { SHOP_DEPTH } from "./layor";
 export class Shop extends Phaser.GameObjects.Container {
   private items: Phaser.GameObjects.Text[] = [];
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y);
     this.setScrollFactor(0, 0, true);
+    this.setDepth(SHOP_DEPTH);
     scene.add.existing(this);
   }
   addItem(name: string, onClick: () => boolean) {

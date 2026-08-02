@@ -9,7 +9,7 @@ import {
 import { Dice } from "./Dice.ts";
 import { Shop } from "./Shop.ts";
 import { default as BoardView } from "phaser4-rex-plugins/plugins/board/board/Board.js";
-import { Board } from "./board/Board.ts";
+import { Board } from "./board/Model.ts";
 import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalculator.ts";
 import { Tile } from "./Tile/Model.ts";
 import { Cursor as CursorModel } from "@/cursor/Model.ts";
@@ -17,6 +17,7 @@ import { CELL_SIZE_PX } from "@/constants.ts";
 import { CursorView } from "./cursor/View.ts";
 import { TilesView } from "./Tiles/View.ts";
 import { Pan } from "phaser4-rex-plugins/plugins/gestures";
+import { MONEY_DEPTH } from "./layor.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -110,7 +111,7 @@ export class GameScene extends Phaser.Scene {
     money.setOrigin(0.5, 0.5);
     this.syncMoney();
     money.setScrollFactor(0, 0);
-    money.setDepth(2);
+    money.setDepth(MONEY_DEPTH);
   }
   applyMoney(num: number) {
     this.money += num;

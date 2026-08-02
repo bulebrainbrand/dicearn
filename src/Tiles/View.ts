@@ -4,7 +4,8 @@ import Board from "phaser4-rex-plugins/plugins/board/board/Board";
 import { Tiles } from "./Model";
 import { Tile } from "@/Tile/Model";
 import { TilesDataStorage } from "./tilesDataStorage";
-import { TILE_DEPTH, TILE_TILE_Z } from "./constants";
+import { TILE_TILE_Z } from "./constants";
+import { TILE_DEPTH } from "@/layor";
 export class TilesView {
   private tiles: TilesDataStorage<TileView>;
   constructor(
