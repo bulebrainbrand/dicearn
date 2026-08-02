@@ -3,6 +3,7 @@ import { Tiles } from "@/Tiles/Model.ts";
 import { Cursor } from "@/cursor/Model";
 import { DIRECTION_OFFSET } from "@/Direction.ts";
 import { Tile } from "@/Tile/Model.ts";
+import { BoardSize } from "@/types";
 type Position = [number, number];
 export class Board extends EventEmitter {
   tiles: Tiles;
@@ -59,23 +60,14 @@ export class Board extends EventEmitter {
       pos[1] < this.minY ? this.maxY : this.maxY < pos[1] ? this.minY : pos[1];
     return [x, y];
   }
-  updateBoardSize({
-    maxX,
-    maxY,
-    minX,
-    minY,
-  }: {
-    minX: number;
-    minY: number;
-    maxX: number;
-    maxY: number;
-  }) {
+  updateBoardSize({ maxX, maxY, minX, minY }: BoardSize) {
     this.minX = minX;
     this.minY = minY;
     this.maxX = maxX;
     this.maxY = maxY;
     this.tiles.updateBoardSize({ minX, minY, maxX, maxY });
     this.cursor.updateBoardSize({ minX, minY, maxX, maxY });
+    this.emit("updateBoardSize", { minX, minY, maxX, maxY });
   }
   getBoardSize() {
     return {
