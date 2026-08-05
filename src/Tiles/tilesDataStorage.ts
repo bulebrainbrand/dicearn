@@ -1,5 +1,5 @@
 import { times } from "@/utils";
-
+import { FIXME } from "untodo";
 export class TilesDataStorage<T> {
   private tiles: (T | undefined)[][];
   constructor(
@@ -7,7 +7,12 @@ export class TilesDataStorage<T> {
     private maxX: number,
     private minY: number,
     private maxY: number,
-    private onRemoveCallback: (tile: T | undefined) => void,
+    private onRemoveCallback: (tile: T | undefined) => void = () => {},
+    private onSetCallback: (
+      x: number,
+      y: number,
+      tile: T | undefined,
+    ) => void = () => {},
   ) {
     this.tiles = Array.from({ length: maxX - minX + 1 }, () =>
       Array(maxY - minY).fill(undefined),
@@ -24,12 +29,26 @@ export class TilesDataStorage<T> {
 
     const [ix, iy] = this.convertPositionToIndex(x, y);
     this.tiles[ix][iy] = data;
+    this.onSetCallback(x, y, data);
   }
   removeTile(x: number, y: number): void {
     this.assetsValidPosition(x, y);
     const [ix, iy] = this.convertPositionToIndex(x, y);
     this.onRemoveCallback(this.tiles[ix][iy]);
     this.tiles[ix][iy] = undefined;
+  }
+  swap(x1: number, y1: number, x2: number, y2: number) {
+    this.assetsValidPosition(x1, y1);
+    this.assetsValidPosition(x2, y2);
+    const [ix1, iy1] = this.convertPositionToIndex(x1, y1);
+    const [ix2, iy2] = this.convertPositionToIndex(x2, y2);
+    const first = this.tiles[ix1][iy1];
+    const second = this.tiles[ix2][iy2];
+    this.tiles[ix1][iy1] = second;
+    this.tiles[ix2][iy2] = first;
+    this.onSetCallback(x1, y1, second);
+    this.onSetCallback(x2, y2, first);
+    return { first, second };
   }
   updateBoardSize({
     maxX,
@@ -42,6 +61,9 @@ export class TilesDataStorage<T> {
     maxX: number;
     maxY: number;
   }) {
+    FIXME({
+      reason: "pop時にonRemove関数を呼び忘れている",
+    }) as undefined;
     // update minX
     const minXDiff = this.minX - minX;
     if (minXDiff > 0) {
@@ -51,7 +73,10 @@ export class TilesDataStorage<T> {
       );
     }
     if (minXDiff < 0) {
-      times(() => this.tiles.shift(), Math.abs(minXDiff));
+      times(
+        () => this.tiles.shift()?.forEach(this.onRemoveCallback),
+        Math.abs(minXDiff),
+      );
     }
     // update maxX
     const maxXDiff = maxX - this.maxX;
@@ -62,7 +87,10 @@ export class TilesDataStorage<T> {
       );
     }
     if (maxXDiff < 0) {
-      times(() => this.tiles.pop(), Math.abs(minXDiff));
+      times(
+        () => this.tiles.pop()?.forEach(this.onRemoveCallback),
+        Math.abs(minXDiff),
+      );
     }
     // update minY
     const minYDiff = this.minY - minY;
@@ -73,7 +101,7 @@ export class TilesDataStorage<T> {
     }
     if (minYDiff < 0) {
       this.tiles.forEach((value) =>
-        times(() => value.shift(), Math.abs(minYDiff)),
+        times(() => this.onRemoveCallback(value.shift()), Math.abs(minYDiff)),
       );
     }
     // update maxY
@@ -85,7 +113,7 @@ export class TilesDataStorage<T> {
     }
     if (maxYDiff < 0) {
       this.tiles.forEach((value) =>
-        times(() => value.pop(), Math.abs(maxYDiff)),
+        times(() => this.onRemoveCallback(value.pop()), Math.abs(maxYDiff)),
       );
     }
     this.minX = minX;

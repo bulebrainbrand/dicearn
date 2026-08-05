@@ -14,7 +14,6 @@ export class TileView extends Phaser.GameObjects.Container {
       CELL_SIZE_PX,
       CELL_COLOR[dir],
     );
-    sprite.setOrigin(0, 0);
     this.add(sprite);
     this.setSize(sprite.width, sprite.height);
   }

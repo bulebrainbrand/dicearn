@@ -38,7 +38,15 @@ export class GameScene extends Phaser.Scene {
     this.registorEventListener();
     this.initTiles();
     const pan = this.rexGestures.add.pan(this, { threshold: 10 });
+    let shouldMove = true;
+    pan.on("panstart", (pan: Pan) => {
+      shouldMove = !this.boardView
+        .getBoardBounds()
+        .contains(pan.worldX, pan.worldY);
+    });
     pan.on("pan", (pan: Pan) => {
+      if (!shouldMove) return;
+
       const cam = this.cameras.main;
       cam.scrollX -= pan.dx / cam.zoom;
       cam.scrollY -= pan.dy / cam.zoom;
@@ -133,7 +141,12 @@ export class GameScene extends Phaser.Scene {
     );
   }
   createTilesView() {
-    this.tilesView = new TilesView(this, this.boardView, this.tiles);
+    this.tilesView = new TilesView(
+      this,
+      this.boardView,
+      this.tiles,
+      this.boardViewCoodinateCalculator,
+    );
   }
   createDice() {
     const dice = new Dice(this, CELL_SIZE_PX * 11, CELL_SIZE_PX * 8);

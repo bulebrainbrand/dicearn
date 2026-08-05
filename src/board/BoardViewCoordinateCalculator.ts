@@ -108,4 +108,13 @@ export class BoardViewCoordinateCalculator {
   isWarp(pos1: Position, pos2: Position): boolean {
     return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) >= 2;
   }
+  clampPosition({ x, y }: Position): Position {
+    return {
+      x: this.clamp(this.minX, x, this.maxX),
+      y: this.clamp(this.minY, y, this.maxY),
+    };
+  }
+  private clamp(a: number, b: number, c: number) {
+    return Math.min(Math.max(a, b), c);
+  }
 }

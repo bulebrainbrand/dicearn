@@ -28,7 +28,6 @@ export class CursorView extends Phaser.GameObjects.Container {
     super(scene, CELL_SIZE_PX * tileX, CELL_SIZE_PX * tileY);
     this.setDepth(CURSOR_DEPTH);
     const arc = scene.add.circle(0, 0, CURSOR_RADIUS, CURSOR_COLOR);
-    arc.setOrigin(0, 0);
     this.add(arc);
     scene.add.existing(this);
     boardView.addChess(this, tileX, tileY, CURSOR_TILE_Z, true);
