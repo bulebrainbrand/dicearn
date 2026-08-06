@@ -1,14 +1,8 @@
 import * as Phaser from "phaser";
 import { DIRECTION_TAPLE } from "./Direction.ts";
-import {
-  Tiles,
-  TilesModelBoardSizeUpdateEvent,
-  TilesModelRemoveEvent,
-  TilesModelSetEvent,
-} from "./Tiles/Model.ts";
+import { Tiles } from "./Tiles/Model.ts";
 import { Dice } from "./Dice.ts";
 import { Shop } from "./Shop.ts";
-import { default as BoardView } from "phaser4-rex-plugins/plugins/board/board/Board.js";
 import { Board } from "./board/Model.ts";
 import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalculator.ts";
 import { Tile } from "./Tile/Model.ts";
@@ -18,9 +12,10 @@ import { CursorView } from "./cursor/View.ts";
 import { TilesView } from "./Tiles/View.ts";
 import { Pan } from "phaser4-rex-plugins/plugins/gestures";
 import { MONEY_DEPTH } from "./layor.ts";
+import { BoardView } from "./board/View.ts";
 
 export class GameScene extends Phaser.Scene {
-  board!: Board;
+  boardModel!: Board;
   tiles!: Tiles;
   tilesView!: TilesView;
   cursorModel!: CursorModel;
@@ -43,10 +38,22 @@ export class GameScene extends Phaser.Scene {
     this.registorEventListener();
     this.initTiles();
     const pan = this.rexGestures.add.pan(this, { threshold: 10 });
+    let shouldMove = true;
+    pan.on("panstart", (pan: Pan) => {
+      console.log("panstart");
+      shouldMove = !this.boardView
+        .getBoardBounds()
+        .contains(pan.worldX, pan.worldY);
+    });
     pan.on("pan", (pan: Pan) => {
+      if (!shouldMove) return;
+
       const cam = this.cameras.main;
       cam.scrollX -= pan.dx / cam.zoom;
       cam.scrollY -= pan.dy / cam.zoom;
+    });
+    pan.on("panend", (_pan: Pan) => {
+      console.log("panEnd");
     });
   }
   createModel() {
@@ -85,17 +92,6 @@ export class GameScene extends Phaser.Scene {
         this.cursor.playWarp(event),
       );
     });
-    this.tiles.addListener("set", (arg: TilesModelSetEvent) =>
-      this.tilesView.setTile(arg.x, arg.y, arg.newTile),
-    );
-    this.tiles.addListener("remove", (arg: TilesModelRemoveEvent) =>
-      this.tilesView.removeTile(arg.x, arg.y),
-    );
-    this.tiles.addListener(
-      "updateBoardSize",
-      (arg: TilesModelBoardSizeUpdateEvent) =>
-        this.tilesView.updateBoardSize(arg),
-    );
   }
   createMoney() {
     const money = this.add.text(
@@ -131,22 +127,10 @@ export class GameScene extends Phaser.Scene {
   }
   createBoardModel() {
     const board = new Board(this.tiles, this.cursorModel, 0, 5, 0, 5);
-    this.board = board;
+    this.boardModel = board;
   }
   createBoardView() {
-    const board = this.rexBoard.add.board({
-      grid: {
-        gridType: "quadGrid", // 'quadGrid' | 'hexagonGrid'
-        x: 0, // グリッド原点のワールドX座標
-        y: 0, // グリッド原点のワールドY座標
-        cellWidth: CELL_SIZE_PX,
-        cellHeight: CELL_SIZE_PX,
-        type: "orthogonal",
-      },
-
-      infinity: true,
-      wrap: true,
-    });
+    const board = new BoardView(this, {}, this.boardModel);
     this.boardView = board;
   }
   createCursorView() {
@@ -161,13 +145,18 @@ export class GameScene extends Phaser.Scene {
     );
   }
   createTilesView() {
-    this.tilesView = new TilesView(this, this.boardView, this.tiles);
+    this.tilesView = new TilesView(
+      this,
+      this.boardView,
+      this.tiles,
+      this.boardViewCoodinateCalculator,
+    );
   }
   createDice() {
     const dice = new Dice(this, CELL_SIZE_PX * 11, CELL_SIZE_PX * 8);
     dice.on("roll", async (value: number) => {
       dice.setRollable(false);
-      const gene = this.board.moveCursor(value);
+      const gene = this.boardModel.moveCursor(value);
       for (const _ of gene) {
         // cursorModel の "move" イベント経由でキューに積まれたアニメーションが
         // 実際に終わるまで待ってから次の1マスへ進む
@@ -184,14 +173,14 @@ export class GameScene extends Phaser.Scene {
       if (this.money >= 5) {
         this.applyMoney(-5);
         console.log("Bought Upsize Grid");
-        const gridSize = this.board.getBoardSize();
+        const gridSize = this.boardModel.getBoardSize();
         const newGridSize = {
           minX: gridSize.minX - 1,
           minY: gridSize.minY - 1,
           maxX: gridSize.maxX + 1,
           maxY: gridSize.maxY + 1,
         };
-        this.board.updateBoardSize(newGridSize);
+        this.boardModel.updateBoardSize(newGridSize);
         this.boardViewCoodinateCalculator.updateGridSize(newGridSize);
         return true;
       }

@@ -9,6 +9,7 @@ export default defineConfig({
     },
     jsPlugins: [{ name: "untodo", specifier: "untodo/eslint" }],
     rules: {
+      "typescript/await-thenable": "error",
       "untodo/no-todo": "error",
       "untodo/no-fixme": "error",
       "untodo/no-hack": "warn",
@@ -25,6 +26,13 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  run: {
+    tasks: {
+      lint: ["vp lint"],
+      test: ["vp test --run"],
+      check: ["vpr lint", "vpr test"],
     },
   },
 });
