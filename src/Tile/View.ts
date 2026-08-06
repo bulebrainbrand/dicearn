@@ -4,6 +4,7 @@ import { Direction } from "@/Direction.ts";
 import { CELL_COLOR } from "@/Tile/constants";
 
 export class TileView extends Phaser.GameObjects.Container {
+  private sprite: Phaser.GameObjects.Rectangle;
   constructor(scene: Phaser.Scene, dir: Direction) {
     super(scene, 0, 0);
     scene.add.existing(this);
@@ -14,7 +15,11 @@ export class TileView extends Phaser.GameObjects.Container {
       CELL_SIZE_PX,
       CELL_COLOR[dir],
     );
+    this.sprite = sprite;
     this.add(sprite);
     this.setSize(sprite.width, sprite.height);
+  }
+  changeDirection(dir: Direction): void {
+    this.sprite.setFillStyle(CELL_COLOR[dir]);
   }
 }
