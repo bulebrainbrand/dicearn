@@ -1,5 +1,4 @@
 import { times } from "@/utils";
-import { FIXME } from "untodo";
 export class TilesDataStorage<T> {
   private tiles: (T | undefined)[][];
   constructor(
@@ -61,9 +60,6 @@ export class TilesDataStorage<T> {
     maxX: number;
     maxY: number;
   }) {
-    FIXME({
-      reason: "pop時にonRemove関数を呼び忘れている",
-    }) as undefined;
     // update minX
     const minXDiff = this.minX - minX;
     if (minXDiff > 0) {
@@ -89,7 +85,7 @@ export class TilesDataStorage<T> {
     if (maxXDiff < 0) {
       times(
         () => this.tiles.pop()?.forEach(this.onRemoveCallback),
-        Math.abs(minXDiff),
+        Math.abs(maxXDiff),
       );
     }
     // update minY

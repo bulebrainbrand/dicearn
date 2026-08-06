@@ -28,7 +28,7 @@ export class BoardView extends RexBoard {
     });
   }
   updateBoardSize(boardSize: BoardSize) {
-    this.setBoardWidth(boardSize.maxX - boardSize.minX);
-    this.setBoardHeight(boardSize.maxY - boardSize.minY);
+    this.setBoardWidth(boardSize.maxX - boardSize.minX + 1);
+    this.setBoardHeight(boardSize.maxY - boardSize.minY + 1);
   }
 }
