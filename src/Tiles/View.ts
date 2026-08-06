@@ -14,7 +14,6 @@ import { TilesDataStorage } from "./tilesDataStorage";
 import { TILE_TILE_Z } from "./constants";
 import { TILE_DEPTH } from "@/layor";
 import { BoardViewCoordinateCalculator } from "@/board/BoardViewCoordinateCalculator";
-import { CELL_SIZE_PX } from "@/constants";
 export class TilesView {
   private tiles: TilesDataStorage<TileView>;
   constructor(
@@ -58,7 +57,6 @@ export class TilesView {
     );
   }
   private createTileSprite(x: number, y: number, tile: Tile): TileView {
-    console.log(x, y);
     const sprite = new TileView(this.scene, tile.getDirection());
     this.board.addChess(sprite, x, y, TILE_TILE_Z, true);
     this.tiles.setTile(x, y, sprite);
@@ -69,9 +67,9 @@ export class TilesView {
     const drag = new Drag(sprite);
     drag.setEnable(true);
 
-    sprite.on("drag", (pointer, dragX: number, dragY: number) => {
+    sprite.on("drag", () => {
       const tileXY = this.board.worldXYToTileXY(sprite.x, sprite.y, true);
-      console.log(tileXY);
+
       const clampedPosition =
         this.boardViewCoordinateCalculator.clampPosition(tileXY);
 
@@ -83,18 +81,10 @@ export class TilesView {
       sprite.setPosition(newPosition.x, newPosition.y);
     });
     sprite.on("dragend", () => {
-      console.log(sprite.x, sprite.y);
       const tileXY = this.board.worldXYToTileXY(sprite.x, sprite.y, true);
-      console.log(tileXY);
+
       const newPosition =
         this.boardViewCoordinateCalculator.clampPosition(tileXY);
-
-      console.log(
-        "dragend",
-        sprite.getData("x"),
-        sprite.getData("y"),
-        newPosition,
-      );
       this.tilesModel.swapTile(
         sprite.getData("x"),
         sprite.getData("y"),

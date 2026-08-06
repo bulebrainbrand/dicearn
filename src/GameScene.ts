@@ -40,6 +40,7 @@ export class GameScene extends Phaser.Scene {
     const pan = this.rexGestures.add.pan(this, { threshold: 10 });
     let shouldMove = true;
     pan.on("panstart", (pan: Pan) => {
+      console.log("panstart");
       shouldMove = !this.boardView
         .getBoardBounds()
         .contains(pan.worldX, pan.worldY);
@@ -50,6 +51,9 @@ export class GameScene extends Phaser.Scene {
       const cam = this.cameras.main;
       cam.scrollX -= pan.dx / cam.zoom;
       cam.scrollY -= pan.dy / cam.zoom;
+    });
+    pan.on("panend", (_pan: Pan) => {
+      console.log("panEnd");
     });
   }
   createModel() {
