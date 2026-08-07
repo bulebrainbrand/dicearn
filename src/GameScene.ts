@@ -16,6 +16,9 @@ import { BoardView } from "./board/View.ts";
 import { DayModel } from "./day/Model.ts";
 import { DayView } from "./day/View.ts";
 import { dayFactory } from "./day/factory.ts";
+import { InventoryModel } from "./inventory/Model.ts";
+import { InventoryView } from "./inventory/View.ts";
+import { QuadGrid } from "phaser4-rex-plugins/plugins/board-components";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -41,6 +44,7 @@ export class GameScene extends Phaser.Scene {
     this.createDice();
     this.createMoney();
     this.createShop();
+    this.createInventory();
     this.registorEventListener();
     this.initTiles();
     const pan = this.rexGestures.add.pan(this, { threshold: 10 });
@@ -71,6 +75,29 @@ export class GameScene extends Phaser.Scene {
     this.createBoardView();
     this.createTilesView();
     this.createCursorView();
+  }
+  createInventory() {
+    const model = new InventoryModel();
+    const _view = new InventoryView(
+      this,
+      CELL_SIZE_PX * 6,
+      CELL_SIZE_PX / 2,
+      {
+        grid: new QuadGrid({
+          x: 0, // グリッド原点のワールドX座標
+          y: 0,
+          cellWidth: CELL_SIZE_PX,
+          cellHeight: CELL_SIZE_PX,
+          type: "orthogonal",
+        }),
+        draggable: false,
+      },
+      this.boardView,
+      this.tiles,
+      model,
+      this.boardViewCoodinateCalculator,
+    );
+    model.addTile(1);
   }
   createDay() {
     const { model, view } = dayFactory(

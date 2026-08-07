@@ -10,6 +10,8 @@ export default defineConfig({
     jsPlugins: [{ name: "untodo", specifier: "untodo/eslint" }],
     rules: {
       "typescript/await-thenable": "error",
+      "typescript/no-array-delete": "error",
+      "typescript/no-unsafe-type-assertion": "error",
       "untodo/no-todo": "error",
       "untodo/no-fixme": "error",
       "untodo/no-hack": "warn",
