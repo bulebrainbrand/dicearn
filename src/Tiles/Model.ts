@@ -25,7 +25,9 @@ export class Tiles extends EventEmitter {
   private tiles: TilesDataStorage<Tile>;
   constructor(minX: number, maxX: number, minY: number, maxY: number) {
     super();
-    this.tiles = new TilesDataStorage(minX, maxX, minY, maxY, () => {});
+    this.tiles = new TilesDataStorage(minX, maxX, minY, maxY, (tile) => {
+      if (tile) this.emit("destory", tile);
+    });
   }
   setTile(x: number, y: number, tile: Tile) {
     this.tiles.setTile(x, y, tile);
