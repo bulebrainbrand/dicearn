@@ -63,7 +63,7 @@ export class InventoryView extends MiniBoard {
       tiles.setTile(tileXY.x, tileXY.y, new Tile("u"));
       inventoryModel.useTile();
     });
-    this.tiles.addListener("destory", (tile: Tile) =>
+    this.tiles.addListener("destroy", (tile: Tile) =>
       inventoryModel.addTile(1),
     );
     FIXME({ reason: "this is class does not shown" });
