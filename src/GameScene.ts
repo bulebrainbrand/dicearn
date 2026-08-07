@@ -110,6 +110,9 @@ export class GameScene extends Phaser.Scene {
     this.dayModel.addListener("checkMoney", (money: number) => {
       this.checkMoney(money);
     });
+    this.dayModel.addListener("nextDay", (day: number) => {
+      this.dayView.updateDay(day);
+    });
   }
   createMoney() {
     const money = this.add.text(
@@ -208,9 +211,9 @@ export class GameScene extends Phaser.Scene {
   }
   checkMoney(needMoney: number) {
     if (this.money < needMoney) {
-      console.log("pass");
-    } else {
       console.log("game over");
+    } else {
+      console.log("pass");
     }
   }
 }
