@@ -7,6 +7,7 @@ import { InventoryModel } from "./Model";
 import { BoardViewCoordinateCalculator } from "@/board/BoardViewCoordinateCalculator";
 import { Tile } from "@/Tile/Model";
 import { FIXME } from "untodo";
+import { INVENTORY_DEPTH } from "@/layor";
 export class InventoryView extends MiniBoard {
   private item: InventoryTileView;
   constructor(
@@ -35,6 +36,8 @@ export class InventoryView extends MiniBoard {
     });
     this.addChess(this.item, 0, 0, 0);
     this.item.setInteractive();
+    this.setDepth(INVENTORY_DEPTH);
+    this.setScrollFactor(0, 0);
     scene.input.setDraggable(this.item);
     let clone: TileView | undefined = undefined;
     this.item.on("dragstart", () => {
@@ -50,6 +53,8 @@ export class InventoryView extends MiniBoard {
         if (clone === undefined) return;
         clone.setX(dragX);
         clone.setY(dragY);
+        FIXME({ reason: "カーソルに追従せず、遠くに表示される" });
+        FIXME({ reason: "ドラッグ時にカメラが同時に動く" });
       },
     );
     this.item.on("dragend", (pointer: Phaser.Input.Pointer) => {
@@ -66,6 +71,5 @@ export class InventoryView extends MiniBoard {
     this.tiles.addListener("destroy", (tile: Tile) =>
       inventoryModel.addTile(1),
     );
-    FIXME({ reason: "this is class does not shown" });
   }
 }

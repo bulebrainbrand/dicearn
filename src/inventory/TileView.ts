@@ -20,6 +20,7 @@ export class InventoryTileView extends Phaser.GameObjects.Container {
       color: "#000000",
       fontSize: 128,
     });
+
     this.add(this.text);
     this.setSize(tileView.width, tileView.height);
   }

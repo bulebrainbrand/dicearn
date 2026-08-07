@@ -80,8 +80,8 @@ export class GameScene extends Phaser.Scene {
     const model = new InventoryModel();
     const _view = new InventoryView(
       this,
-      0,
-      0,
+      CELL_SIZE_PX * 6,
+      CELL_SIZE_PX / 2,
       {
         grid: new QuadGrid({
           x: 0, // グリッド原点のワールドX座標
