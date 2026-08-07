@@ -13,6 +13,9 @@ import { TilesView } from "./Tiles/View.ts";
 import { Pan } from "phaser4-rex-plugins/plugins/gestures";
 import { MONEY_DEPTH } from "./layor.ts";
 import { BoardView } from "./board/View.ts";
+import { DayModel } from "./day/Model.ts";
+import { DayView } from "./day/View.ts";
+import { dayFactory } from "./day/factory.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -26,12 +29,15 @@ export class GameScene extends Phaser.Scene {
   boardViewCoodinateCalculator: BoardViewCoordinateCalculator =
     new BoardViewCoordinateCalculator(0, 5, 0, 5);
   boardView!: BoardView;
+  dayModel!: DayModel;
+  dayView!: DayView;
   constructor() {
     super();
   }
   create() {
     this.createModel();
     this.createView();
+    this.createDay();
     this.createDice();
     this.createMoney();
     this.createShop();
@@ -66,6 +72,15 @@ export class GameScene extends Phaser.Scene {
     this.createTilesView();
     this.createCursorView();
   }
+  createDay() {
+    const { model, view } = dayFactory(
+      this,
+      CELL_SIZE_PX * 13,
+      CELL_SIZE_PX * 8,
+    );
+    this.dayModel = model;
+    this.dayView = view;
+  }
 
   initTiles() {
     Array.from({ length: 6 }, (_, x) =>
@@ -91,6 +106,12 @@ export class GameScene extends Phaser.Scene {
       this.cursorAnimationQueue = this.cursorAnimationQueue.then(() =>
         this.cursor.playWarp(event),
       );
+    });
+    this.dayModel.addListener("checkMoney", (money: number) => {
+      this.checkMoney(money);
+    });
+    this.dayModel.addListener("nextDay", (day: number) => {
+      this.dayView.updateDay(day);
     });
   }
   createMoney() {
@@ -163,6 +184,7 @@ export class GameScene extends Phaser.Scene {
         await this.cursorAnimationQueue;
         this.applyMoney(1);
       }
+      this.dayModel.nextDay();
       dice.setRollable(true);
     });
   }
@@ -186,5 +208,12 @@ export class GameScene extends Phaser.Scene {
       }
       return false;
     });
+  }
+  checkMoney(needMoney: number) {
+    if (this.money < needMoney) {
+      console.log("game over");
+    } else {
+      console.log("pass");
+    }
   }
 }
