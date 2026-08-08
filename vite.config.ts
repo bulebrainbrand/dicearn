@@ -22,6 +22,7 @@ export default defineConfig({
     insertFinalNewline: false,
     sortPackageJson: true,
     objectWrap: "collapse",
+    ignorePatterns: ["*.json"],
   },
   test: {
     include: ["src/**/*.test.ts", "__tests__/**/*.test.ts"],
@@ -36,5 +37,5 @@ export default defineConfig({
       check: ["vpr lint", "vpr test"],
     },
   },
-  staged: { "*.{ts,json}": "vpr check && vpr fmt" },
+  staged: { "*.{ts}": "vpr check && vpr fmt" },
 });

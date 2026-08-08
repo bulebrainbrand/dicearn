@@ -4,13 +4,19 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "types": ["vite-plus/client"],
+    "types": [
+      "vite-plus/client"
+    ],
     "target": "esnext",
     "isolatedModules": true,
     "skipLibCheck": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["./src/**/*.ts"]
+  "include": [
+    "./src/**/*.ts"
+  ]
 }

@@ -1,0 +1,9 @@
+{
+    "editor.formatOnSave": true,
+    "js/ts.format.enabled": true,
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "[json]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "vscode.json-language-features"
+    }
+}
