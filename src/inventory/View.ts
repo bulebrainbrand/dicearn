@@ -6,7 +6,6 @@ import { Tiles } from "@/Tiles/Model";
 import { InventoryModel } from "./Model";
 import { BoardViewCoordinateCalculator } from "@/board/BoardViewCoordinateCalculator";
 import { Tile } from "@/Tile/Model";
-import { FIXME } from "untodo";
 import { INVENTORY_DEPTH } from "@/layor";
 export class InventoryView extends MiniBoard {
   private item: InventoryTileView;
@@ -47,16 +46,11 @@ export class InventoryView extends MiniBoard {
       clone = this.item.createCloneForDrop();
       clone.setDepth(1000);
     });
-    this.item.on(
-      "drag",
-      (_pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
-        if (clone === undefined) return;
-        clone.setX(dragX);
-        clone.setY(dragY);
-        FIXME({ reason: "カーソルに追従せず、遠くに表示される" });
-        FIXME({ reason: "ドラッグ時にカメラが同時に動く" });
-      },
-    );
+    this.item.on("drag", (pointer: Phaser.Input.Pointer) => {
+      if (clone === undefined) return;
+      clone.setX(pointer.worldX);
+      clone.setY(pointer.worldY);
+    });
     this.item.on("dragend", (pointer: Phaser.Input.Pointer) => {
       if (clone === undefined) return;
       clone.destroy();
