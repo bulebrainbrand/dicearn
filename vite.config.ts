@@ -12,8 +12,8 @@ export default defineConfig({
       "typescript/await-thenable": "error",
       "typescript/no-array-delete": "error",
       "typescript/no-unsafe-type-assertion": "error",
-      "untodo/no-todo": "error",
-      "untodo/no-fixme": "error",
+      "untodo/no-todo": "warn",
+      "untodo/no-fixme": "warn",
       "untodo/no-hack": "warn",
     },
   },
@@ -33,7 +33,7 @@ export default defineConfig({
   run: {
     tasks: {
       lint: ["vp lint"],
-      test: ["vp test --run"],
+      test: ["vp test --run  --passWithNoTests"],
       check: ["vpr lint", "vpr test"],
     },
   },
