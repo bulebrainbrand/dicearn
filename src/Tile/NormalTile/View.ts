@@ -1,10 +1,15 @@
 import Phaser from "phaser";
 import { CELL_SIZE_PX } from "@/constants.ts";
 import { Direction } from "@/Direction.ts";
-import { CELL_COLOR } from "@/Tile/constants";
+import { CELL_COLOR } from "@/Tile/NormalTile/constants";
+import { TileView } from "../types";
 
-export class TileView extends Phaser.GameObjects.Container {
+export class NormalTileView
+  extends Phaser.GameObjects.Container
+  implements TileView
+{
   private sprite: Phaser.GameObjects.Rectangle;
+  readonly name: string = "normal";
   constructor(scene: Phaser.Scene, dir: Direction) {
     super(scene, 0, 0);
     scene.add.existing(this);
