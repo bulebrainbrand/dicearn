@@ -10,16 +10,8 @@ export type TilesModelBoardSizeUpdateEvent = {
   maxY: number;
 };
 export type TilesModelSwapEvent = {
-  first: {
-    x: number;
-    y: number;
-    data: Tile | undefined;
-  };
-  second: {
-    x: number;
-    y: number;
-    data: Tile | undefined;
-  };
+  first: { x: number; y: number; data: Tile | undefined };
+  second: { x: number; y: number; data: Tile | undefined };
 };
 export class Tiles extends EventEmitter {
   private tiles: TilesDataStorage<Tile>;

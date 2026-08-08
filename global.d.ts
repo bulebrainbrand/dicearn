@@ -1,4 +1,4 @@
-declare module 'untodo' {
+declare module "untodo" {
   interface TodoMeta {
     // issue?: number | string;
     // assignee?: string;

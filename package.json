@@ -2,18 +2,15 @@
   "name": "dicearn",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "keywords": [],
-  "author": "",
   "license": "ISC",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.20.0",
-      "onFail": "download"
-    }
-  },
+  "author": "",
   "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "phaser": "^4.2.1",
+    "phaser4-rex-plugins": "^4.2.0"
+  },
   "devDependencies": {
     "@types/node": "^26.1.1",
     "@typescript-eslint/utils": "^8.66.0",
@@ -21,8 +18,11 @@
     "untodo": "^0.0.1",
     "vite-plus": "^0.2.8"
   },
-  "dependencies": {
-    "phaser": "^4.2.1",
-    "phaser4-rex-plugins": "^4.2.0"
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.20.0",
+      "onFail": "download"
+    }
   }
 }

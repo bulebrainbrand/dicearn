@@ -22,26 +22,13 @@ const config: Phaser.Types.Core.GameConfig = {
   height: GAME_HEIGHT,
   parent: GAME_PARENT_ELEMENT_ID,
   backgroundColor: BACKGROUND_COLOR,
-  render: {
-    roundPixels: true,
-    antialias: true,
-  },
+  render: { roundPixels: true, antialias: true },
   scene: GameScene,
-  scale: {
-    mode: Phaser.Scale.FIT,
-  },
+  scale: { mode: Phaser.Scale.FIT },
   plugins: {
     scene: [
-      {
-        key: "rexBoard",
-        plugin: RexBoardPlugin,
-        mapping: "rexBoard",
-      },
-      {
-        key: "rexGestures",
-        plugin: RexGesturesPlugin,
-        mapping: "rexGestures",
-      },
+      { key: "rexBoard", plugin: RexBoardPlugin, mapping: "rexBoard" },
+      { key: "rexGestures", plugin: RexGesturesPlugin, mapping: "rexGestures" },
     ],
   },
 };

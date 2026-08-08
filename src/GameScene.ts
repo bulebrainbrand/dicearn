@@ -49,9 +49,7 @@ export class GameScene extends Phaser.Scene {
     this.registorEventListener();
     this.initTiles();
     this.createBoardPanZone();
-    const pan = this.rexGestures.add.pan(this.boardPanZone, {
-      threshold: 10,
-    });
+    const pan = this.rexGestures.add.pan(this.boardPanZone, { threshold: 10 });
     pan.on("panstart", () => {
       console.log("panstart");
     });
@@ -156,10 +154,7 @@ export class GameScene extends Phaser.Scene {
       CELL_SIZE_PX * 9,
       CELL_SIZE_PX * 8,
       String(this.money),
-      {
-        color: "#000000",
-        fontSize: "256px",
-      },
+      { color: "#000000", fontSize: "256px" },
     );
     this.moneyObject = money;
     money.setOrigin(0.5, 0.5);

@@ -1,4 +1,4 @@
-import { defineConfig } from 'untodo';
+import { defineConfig } from "untodo";
 
 export default defineConfig({
   // repo: 'org/repo',

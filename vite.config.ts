@@ -3,10 +3,7 @@ import path from "node:path";
 import { defineConfig } from "vite-plus";
 export default defineConfig({
   lint: {
-    options: {
-      typeAware: true,
-      typeCheck: true,
-    },
+    options: { typeAware: true, typeCheck: true },
     jsPlugins: [{ name: "untodo", specifier: "untodo/eslint" }],
     rules: {
       "typescript/await-thenable": "error",
@@ -17,24 +14,27 @@ export default defineConfig({
       "untodo/no-hack": "warn",
     },
   },
+  fmt: {
+    endOfLine: "lf",
+    singleQuote: false,
+    quoteProps: "as-needed",
+    printWidth: 80,
+    insertFinalNewline: false,
+    sortPackageJson: true,
+    objectWrap: "collapse",
+  },
   test: {
     include: ["src/**/*.test.ts", "__tests__/**/*.test.ts"],
-    coverage: {
-      enabled: true,
-      provider: "v8",
-      reporter: "text",
-    },
+    coverage: { enabled: true, provider: "v8", reporter: "text" },
   },
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
+  resolve: { alias: { "@": path.resolve(__dirname, "./src") } },
   run: {
     tasks: {
       lint: ["vp lint"],
       test: ["vp test --run  --passWithNoTests"],
+      fmt: ["vp fmt"],
       check: ["vpr lint", "vpr test"],
     },
   },
+  staged: { "*.{ts,json}": "vpr check && vpr fmt" },
 });

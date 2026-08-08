@@ -32,9 +32,7 @@ export class CursorView extends Phaser.GameObjects.Container {
     scene.add.existing(this);
     boardView.addChess(this, tileX, tileY, CURSOR_TILE_Z, true);
     this.moveToPosititon = plugin.add.moveTo(this, { speed: 900 });
-    this.setToPosition = plugin.add.moveTo(this, {
-      speed: Infinity,
-    });
+    this.setToPosition = plugin.add.moveTo(this, { speed: Infinity });
     this.setSize(arc.width, arc.height);
   }
   animateCursorMove(

@@ -117,12 +117,7 @@ export class TilesDataStorage<T> {
     this.maxX = maxX;
     this.maxY = maxY;
   }
-  getBoardSize(): {
-    minX: number;
-    minY: number;
-    maxX: number;
-    maxY: number;
-  } {
+  getBoardSize(): { minX: number; minY: number; maxX: number; maxY: number } {
     return {
       minX: this.minX,
       minY: this.minY,
