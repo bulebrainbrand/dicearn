@@ -1,5 +1,4 @@
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter";
-import { FIXME } from "untodo";
 type InventoryData = Record<string, { amount: number; index: number }>;
 export class InventoryModel extends EventEmitter {
   private tileAmounts: InventoryData;

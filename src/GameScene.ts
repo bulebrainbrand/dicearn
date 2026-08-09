@@ -8,7 +8,6 @@ import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalcul
 import { CursorModel } from "@/cursor/Model.ts";
 import { CELL_SIZE_PX } from "@/constants.ts";
 import { CursorView } from "./cursor/View.ts";
-import { TilesView } from "./Tiles/View.ts";
 import { Pan } from "phaser4-rex-plugins/plugins/gestures";
 import { MONEY_DEPTH } from "./layor.ts";
 import { BoardView } from "./board/View.ts";
@@ -16,8 +15,6 @@ import { DayModel } from "./day/Model.ts";
 import { DayView } from "./day/View.ts";
 import { dayFactory } from "./day/factory.ts";
 import { TileTypeChecker } from "./Tile/TileTypeChecker.ts";
-import { InventoryTileViewFactory as IInventoryTileViewFactory } from "./inventory/types.ts";
-import { TileViewFactory as ITileViewFactory } from "./Tile/types.ts";
 import { NormalTileModel } from "./Tile/NormalTile/Model.ts";
 import { BoardContextFactory } from "./boardContextFactory.ts";
 import { InventoryContextFactory } from "./inventoryContextFactory.ts";
