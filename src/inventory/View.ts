@@ -41,8 +41,8 @@ export class InventoryView extends MiniBoard {
     this.setScrollFactor(0, 0);
   }
   private makeInventoryTileViewPlacable(name: string, item: InventoryTileView) {
-    item.setInteractive();
-    this.scene.input.setDraggable(item);
+    item.setDepth(INVENTORY_DEPTH);
+    item.setInteractive({ draggable: true });
     let clone: TileView | undefined = undefined;
     item.on("dragstart", () => {
       if (this.inventoryModel.getAmount(name) === 0) {

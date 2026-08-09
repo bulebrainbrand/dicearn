@@ -45,12 +45,13 @@ export class GameScene extends Phaser.Scene {
       cursorModel,
       cursor,
     } = this.createBoardContext();
-    this.createInventoryContext(
+    const { inventoryModel } = this.createInventoryContext(
       boardView,
       tiles,
       coordinateCalculator,
       tileTypeChecker,
     );
+    inventoryModel.addTile("normal", 1);
     this.boardModel = boardModel;
     this.tiles = tiles;
     this.cursorModel = cursorModel;
