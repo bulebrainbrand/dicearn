@@ -21,7 +21,6 @@ export class InventoryModel extends EventEmitter {
     }
     this.tileAmounts[name].amount += amount;
     this.emit("updateAmount", name, this.tileAmounts[name].amount);
-    FIXME({ reason: "新規追加処理がない" });
   }
   useTile(name: string) {
     if (this.tileAmounts[name] === undefined)
@@ -30,7 +29,6 @@ export class InventoryModel extends EventEmitter {
       throw new TypeError(`can't use tile when tile amount is 0`);
     this.tileAmounts[name].amount--;
     this.emit("updateAmount", name, this.tileAmounts[name].amount);
-    FIXME({ reason: "nameが存在しない場合にエラーだがなんとかしたい" });
   }
   getAmount(name: string): number {
     if (this.tileAmounts[name] === undefined)
