@@ -8,12 +8,8 @@ export class NormalTileFactory implements TileFactory<
   NormalTileModel,
   NormalTileView
 > {
-  withModel(
-    scene: Phaser.Scene,
-    model: NormalTileModel,
-    dir: Direction = this.DEFAULT_DIR,
-  ): NormalTileView {
-    const view = new NormalTileView(scene, dir);
+  withModel(scene: Phaser.Scene, model: NormalTileModel): NormalTileView {
+    const view = new NormalTileView(scene, model.getDirection());
     model.addListener("changeDirection", (dir: Direction) =>
       view.changeDirection(dir),
     );
