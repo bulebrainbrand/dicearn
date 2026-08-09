@@ -203,7 +203,15 @@ export class GameScene extends Phaser.Scene {
     this.cursorModel = cursor;
   }
   createBoardModel() {
-    const board = new Board(this.tiles, this.cursorModel, 0, 5, 0, 5);
+    const board = new Board(
+      this.tiles,
+      this.cursorModel,
+      0,
+      5,
+      0,
+      5,
+      this.tileTypeChecker,
+    );
     this.boardModel = board;
   }
   createBoardView() {
