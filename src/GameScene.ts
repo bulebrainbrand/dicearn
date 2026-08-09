@@ -43,6 +43,7 @@ export class GameScene extends Phaser.Scene {
       coordinateCalculator,
       tileTypeChecker,
       cursorModel,
+      cursor,
     } = this.createBoardContext();
     this.createInventoryContext(
       boardView,
@@ -54,6 +55,7 @@ export class GameScene extends Phaser.Scene {
     this.tiles = tiles;
     this.cursorModel = cursorModel;
     this.boardViewCoodinateCalculator = coordinateCalculator;
+    this.cursor = cursor;
     this.createDay();
     this.createDice();
     this.createMoney();
