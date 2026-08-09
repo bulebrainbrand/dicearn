@@ -64,8 +64,11 @@ export class InventoryView extends MiniBoard {
       if (this.boardViewCoordinateCalculator.isOutside(tileXY)) {
         return;
       }
-      this.tiles.setTile(tileXY.x, tileXY.y, item.createTileModelForTiles());
+      if (this.inventoryModel.getAmount(name) === 0) {
+        return;
+      }
       this.inventoryModel.useTile(name);
+      this.tiles.setTile(tileXY.x, tileXY.y, item.createTileModelForTiles());
     });
   }
   private createItem(name: string, amount: number, index: number) {
