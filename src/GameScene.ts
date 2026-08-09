@@ -5,7 +5,6 @@ import { Dice } from "./Dice.ts";
 import { Shop } from "./Shop.ts";
 import { Board } from "./board/Model.ts";
 import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalculator.ts";
-import { Tile } from "./Tile/Model.ts";
 import { Cursor as CursorModel } from "@/cursor/Model.ts";
 import { CELL_SIZE_PX } from "@/constants.ts";
 import { CursorView } from "./cursor/View.ts";
@@ -19,6 +18,13 @@ import { dayFactory } from "./day/factory.ts";
 import { InventoryModel } from "./inventory/Model.ts";
 import { InventoryView } from "./inventory/View.ts";
 import { QuadGrid } from "phaser4-rex-plugins/plugins/board-components";
+import { TileTypeChecker } from "./Tile/TileTypeChecker.ts";
+import { InventoryTileViewFactory as IInventoryTileViewFactory } from "./inventory/types.ts";
+import { InventoryTileViewFactory } from "./inventory/InventoryTileViewFactory.ts";
+import { TileViewFactory as ITileViewFactory } from "./Tile/types.ts";
+import { TileViewFactory } from "./Tile/TileViewFactory.ts";
+import { NormalTileFactory } from "./Tile/NormalTile/Factory.ts";
+import { NormalTileModel } from "./Tile/NormalTile/Model.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -35,6 +41,9 @@ export class GameScene extends Phaser.Scene {
   private boardPanZone!: Phaser.GameObjects.Zone;
   dayModel!: DayModel;
   dayView!: DayView;
+  tileTypeChecker!: TileTypeChecker;
+  inventoryTileViewFactory!: IInventoryTileViewFactory;
+  tileViewFactory!: ITileViewFactory;
   constructor() {
     super();
   }
@@ -84,6 +93,20 @@ export class GameScene extends Phaser.Scene {
     this.createTilesView();
     this.createCursorView();
   }
+  createTileTypeChecker() {
+    this.tileTypeChecker = new TileTypeChecker();
+  }
+  createInventoryTileViewFactory() {
+    this.inventoryTileViewFactory = new InventoryTileViewFactory();
+  }
+  createNormalTileFactory() {}
+  createTileViewFactory() {
+    this.tileViewFactory = new TileViewFactory(
+      this,
+      this.tileTypeChecker,
+      new NormalTileFactory(),
+    );
+  }
   createInventory() {
     const model = new InventoryModel();
     const _view = new InventoryView(
@@ -103,9 +126,10 @@ export class GameScene extends Phaser.Scene {
       this.boardView,
       this.tiles,
       model,
+      this.inventoryTileViewFactory,
       this.boardViewCoodinateCalculator,
     );
-    model.addTile(1);
+    model.addTile("normal", 1);
   }
   createDay() {
     const { model, view } = dayFactory(
@@ -123,7 +147,7 @@ export class GameScene extends Phaser.Scene {
         this.tiles.setTile(
           x,
           y,
-          new Tile(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)]),
+          new NormalTileModel(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)]),
         ),
       ),
     );
@@ -203,6 +227,8 @@ export class GameScene extends Phaser.Scene {
       this.boardView,
       this.tiles,
       this.boardViewCoodinateCalculator,
+      this.tileViewFactory,
+      this.tileTypeChecker,
     );
   }
   createDice() {
