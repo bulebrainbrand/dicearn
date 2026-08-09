@@ -31,6 +31,12 @@ export class InventoryView extends MiniBoard {
         this.items[name].updateAmount(amount);
       },
     );
+    inventoryModel.addListener(
+      "newItem",
+      (name: string, index: number, amount: number) => {
+        this.createItem(name, amount, index);
+      },
+    );
     this.setDepth(INVENTORY_DEPTH);
     this.setScrollFactor(0, 0);
   }
@@ -68,5 +74,6 @@ export class InventoryView extends MiniBoard {
     this.addChess(inventoryTileView, index, 0, 0);
     this.makeInventoryTileViewPlacable(name, inventoryTileView);
     inventoryTileView.updateAmount(amount);
+    this.items[name] = inventoryTileView;
   }
 }

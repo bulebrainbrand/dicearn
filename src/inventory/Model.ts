@@ -3,11 +3,22 @@ import { FIXME } from "untodo";
 type InventoryData = Record<string, { amount: number; index: number }>;
 export class InventoryModel extends EventEmitter {
   private tileAmounts: InventoryData;
+  private index: number = 0;
   constructor() {
     super();
     this.tileAmounts = {};
   }
   addTile(name: string, amount: number) {
+    if (this.has(name) === false) {
+      this.tileAmounts[name] = { amount, index: this.index++ };
+      this.emit(
+        "newItem",
+        name,
+        this.tileAmounts[name].index,
+        this.tileAmounts[name].amount,
+      );
+      return;
+    }
     this.tileAmounts[name].amount += amount;
     this.emit("updateAmount", name, this.tileAmounts[name].amount);
     FIXME({ reason: "新規追加処理がない" });
@@ -17,7 +28,7 @@ export class InventoryModel extends EventEmitter {
       throw new TypeError(`unexpected inventory name "${name}"`);
     this.tileAmounts[name].amount--;
     this.emit("updateAmount", name, this.tileAmounts[name].amount);
-    FIXME({ reason: "存在しない場合にエラー" });
+    FIXME({ reason: "nameが存在しない場合にエラーだがなんとかしたい" });
   }
   getAmount(name: string): number {
     if (this.tileAmounts[name] === undefined)

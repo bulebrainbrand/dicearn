@@ -6,7 +6,7 @@ export class NormalTileModel
   extends EventEmitter
   implements RotatableTileModel, MovaleTileModel
 {
-  readonly name: string = "normal";
+  readonly name = "normal";
   constructor(private dir: Direction) {
     super();
   }

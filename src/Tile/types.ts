@@ -1,8 +1,9 @@
 import { Direction } from "@/Direction";
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter";
+import { TileName } from "./TileName";
 
 export interface TileModel extends EventEmitter {
-  readonly name: string;
+  readonly name: TileName;
 }
 
 export interface DirectionTileModel extends TileModel {
@@ -28,4 +29,9 @@ export interface TileFactory<M extends TileModel, V extends TileView> {
   all(scene: Phaser.Scene): { model: M; view: V };
   view(scene: Phaser.Scene): V;
   model(): M;
+  withModel(scene: Phaser.Scene, model: M): V;
+}
+
+export interface TileViewFactory {
+  create(tile: TileModel): TileView;
 }
