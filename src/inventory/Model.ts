@@ -26,6 +26,8 @@ export class InventoryModel extends EventEmitter {
   useTile(name: string) {
     if (this.tileAmounts[name] === undefined)
       throw new TypeError(`unexpected inventory name "${name}"`);
+    if (this.tileAmounts[name].amount === 0)
+      throw new TypeError(`can't use tile when tile amount is 0`);
     this.tileAmounts[name].amount--;
     this.emit("updateAmount", name, this.tileAmounts[name].amount);
     FIXME({ reason: "nameが存在しない場合にエラーだがなんとかしたい" });

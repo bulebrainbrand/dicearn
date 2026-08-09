@@ -1,6 +1,6 @@
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter.js";
 
-export class Cursor extends EventEmitter {
+export class CursorModel extends EventEmitter {
   private movable: boolean = true;
   constructor(
     private x: number,

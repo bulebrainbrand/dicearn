@@ -1,6 +1,6 @@
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter.js";
 import { Tiles } from "@/Tiles/Model.ts";
-import { Cursor } from "@/cursor/Model";
+import { CursorModel } from "@/cursor/Model";
 import { DIRECTION_OFFSET } from "@/Direction.ts";
 import { TileModel } from "@/Tile/types";
 import { BoardSize } from "@/types";
@@ -9,11 +9,11 @@ import { TODO } from "untodo";
 type Position = [number, number];
 export class Board extends EventEmitter {
   tiles: Tiles;
-  cursor: Cursor;
+  cursor: CursorModel;
 
   constructor(
     tiles: Tiles,
-    cursor: Cursor,
+    cursor: CursorModel,
     private minX: number,
     private maxX: number,
     private minY: number,

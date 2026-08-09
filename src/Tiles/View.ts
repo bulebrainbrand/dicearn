@@ -67,7 +67,7 @@ export class TilesView {
     sprite.setInteractive({ draggable: true });
     const drag = new Drag(sprite);
     drag.setEnable(true);
-    if (this.tileTypeChecker.isMovable(tile)) {
+    if (this.tileTypeChecker.isMovable(tile) && tile.getMovable()) {
       sprite.on("drag", () => {
         const tileXY = this.board.worldXYToTileXY(sprite.x, sprite.y, true);
 
