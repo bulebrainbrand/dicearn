@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import { TileView } from "@/Tile/View";
 import Board from "phaser4-rex-plugins/plugins/board/board/Board";
 import {
   Tiles,
@@ -9,12 +8,13 @@ import {
   TilesModelSwapEvent,
 } from "./Model";
 import Drag from "phaser4-rex-plugins/plugins/input/drag/Drag";
-import { Tile } from "@/Tile/Model";
 import { TilesDataStorage } from "./tilesDataStorage";
 import { TILE_TILE_Z } from "./constants";
 import { TILE_DEPTH } from "@/layor";
 import { BoardViewCoordinateCalculator } from "@/board/BoardViewCoordinateCalculator";
 import { Direction } from "@/Direction";
+import { TileModel, TileView, TileViewFactory } from "@/Tile/types";
+import { TileTypeChecker } from "@/Tile/TileTypeChecker";
 export class TilesView {
   private tiles: TilesDataStorage<TileView>;
   constructor(
@@ -22,6 +22,8 @@ export class TilesView {
     private board: Board,
     private tilesModel: Tiles,
     private boardViewCoordinateCalculator: BoardViewCoordinateCalculator,
+    private readonly tileViewFactory: TileViewFactory,
+    private readonly tileTypeChecker: TileTypeChecker,
   ) {
     const { maxX, maxY, minX, minY } = tilesModel.getBoardSize();
     this.tiles = new TilesDataStorage(
@@ -57,56 +59,55 @@ export class TilesView {
       this.swapTiles(arg),
     );
   }
-  private createTileSprite(x: number, y: number, tile: Tile): TileView {
-    const sprite = new TileView(this.scene, tile.getDirection());
-    tile.addListener("changeDirection", (dir: Direction) =>
-      sprite.changeDirection(dir),
-    );
+  private createTileSprite(x: number, y: number, tile: TileModel): TileView {
+    const sprite = this.tileViewFactory.create(tile);
     this.board.addChess(sprite, x, y, TILE_TILE_Z, true);
     this.tiles.setTile(x, y, sprite);
     sprite.setDepth(TILE_DEPTH);
-
     sprite.setInteractive({ draggable: true });
-
     const drag = new Drag(sprite);
     drag.setEnable(true);
-
-    sprite.on("drag", () => {
-      const tileXY = this.board.worldXYToTileXY(sprite.x, sprite.y, true);
-
-      const clampedPosition =
-        this.boardViewCoordinateCalculator.clampPosition(tileXY);
-
-      const newPosition = this.board.tileXYToWorldXY(
-        clampedPosition.x,
-        clampedPosition.y,
-      );
-      //console.log("dragging", newPosition);
-      sprite.setPosition(newPosition.x, newPosition.y);
-    });
-    sprite.on("dragend", (pointer: Phaser.Input.Pointer) => {
-      if (this.isDrag(pointer, sprite)) {
+    if (this.tileTypeChecker.isMovable(tile) && tile.getMovable()) {
+      sprite.on("drag", () => {
         const tileXY = this.board.worldXYToTileXY(sprite.x, sprite.y, true);
-        console.log("dragend", pointer.downTime);
-        const newPosition =
+
+        const clampedPosition =
           this.boardViewCoordinateCalculator.clampPosition(tileXY);
-        this.tilesModel.swapTile(
-          sprite.getData("x"),
-          sprite.getData("y"),
-          newPosition.x,
-          newPosition.y,
+
+        const newPosition = this.board.tileXYToWorldXY(
+          clampedPosition.x,
+          clampedPosition.y,
         );
-      } else {
-        console.log("click");
-        const getNextDirection = (dir: Direction): Direction => {
-          if (dir === "d") return "l";
-          if (dir === "l") return "u";
-          if (dir === "r") return "d";
-          return "r";
-        };
-        tile.changeDirection(getNextDirection(tile.getDirection()));
-      }
-    });
+        sprite.setPosition(newPosition.x, newPosition.y);
+      });
+      sprite.on("dragend", (pointer: Phaser.Input.Pointer) => {
+        if (this.isDrag(pointer, sprite)) {
+          const tileXY = this.board.worldXYToTileXY(sprite.x, sprite.y, true);
+          console.log("dragend", pointer.downTime);
+          const newPosition =
+            this.boardViewCoordinateCalculator.clampPosition(tileXY);
+          this.tilesModel.swapTile(
+            sprite.getData("x"),
+            sprite.getData("y"),
+            newPosition.x,
+            newPosition.y,
+          );
+        }
+      });
+    }
+    if (this.tileTypeChecker.isRotatable(tile)) {
+      sprite.on("dragend", (pointer: Phaser.Input.Pointer) => {
+        if (!this.isDrag(pointer, sprite)) {
+          const getNextDirection = (dir: Direction): Direction => {
+            if (dir === "d") return "l";
+            if (dir === "l") return "u";
+            if (dir === "r") return "d";
+            return "r";
+          };
+          tile.changeDirection(getNextDirection(tile.getDirection()));
+        }
+      });
+    }
     return sprite;
   }
   private isDrag(pointer: Phaser.Input.Pointer, sprite: TileView): boolean {
@@ -124,7 +125,7 @@ export class TilesView {
       sprite.getData("y") !== tileXY.y
     );
   }
-  setTile(x: number, y: number, tile: Tile) {
+  setTile(x: number, y: number, tile: TileModel) {
     this.createTileSprite(x, y, tile);
   }
   swapTiles({ first, second }: TilesModelSwapEvent) {

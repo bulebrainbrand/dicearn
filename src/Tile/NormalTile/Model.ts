@@ -1,7 +1,12 @@
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter.js";
 import { Direction } from "@/Direction.ts";
+import { MovaleTileModel, RotatableTileModel } from "../types";
 
-export class Tile extends EventEmitter {
+export class NormalTileModel
+  extends EventEmitter
+  implements RotatableTileModel, MovaleTileModel
+{
+  readonly name = "normal";
   constructor(private dir: Direction) {
     super();
   }
@@ -19,5 +24,8 @@ export class Tile extends EventEmitter {
      * @param {Direction} dir
      */
     this.emit("changeDirection", dir);
+  }
+  getMovable(): boolean {
+    return true;
   }
 }

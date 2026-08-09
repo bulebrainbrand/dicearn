@@ -5,25 +5,23 @@ import { Dice } from "./Dice.ts";
 import { Shop } from "./Shop.ts";
 import { Board } from "./board/Model.ts";
 import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalculator.ts";
-import { Tile } from "./Tile/Model.ts";
-import { Cursor as CursorModel } from "@/cursor/Model.ts";
+import { CursorModel } from "@/cursor/Model.ts";
 import { CELL_SIZE_PX } from "@/constants.ts";
 import { CursorView } from "./cursor/View.ts";
-import { TilesView } from "./Tiles/View.ts";
 import { Pan } from "phaser4-rex-plugins/plugins/gestures";
 import { MONEY_DEPTH } from "./layor.ts";
 import { BoardView } from "./board/View.ts";
 import { DayModel } from "./day/Model.ts";
 import { DayView } from "./day/View.ts";
 import { dayFactory } from "./day/factory.ts";
-import { InventoryModel } from "./inventory/Model.ts";
-import { InventoryView } from "./inventory/View.ts";
-import { QuadGrid } from "phaser4-rex-plugins/plugins/board-components";
+import { TileTypeChecker } from "./Tile/TileTypeChecker.ts";
+import { NormalTileModel } from "./Tile/NormalTile/Model.ts";
+import { BoardContextFactory } from "./boardContextFactory.ts";
+import { InventoryContextFactory } from "./inventoryContextFactory.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
   tiles!: Tiles;
-  tilesView!: TilesView;
   cursorModel!: CursorModel;
   cursor!: CursorView;
   private cursorAnimationQueue: Promise<void> = Promise.resolve();
@@ -31,7 +29,6 @@ export class GameScene extends Phaser.Scene {
   moneyObject!: Phaser.GameObjects.Text;
   boardViewCoodinateCalculator: BoardViewCoordinateCalculator =
     new BoardViewCoordinateCalculator(0, 5, 0, 5);
-  boardView!: BoardView;
   private boardPanZone!: Phaser.GameObjects.Zone;
   dayModel!: DayModel;
   dayView!: DayView;
@@ -39,13 +36,31 @@ export class GameScene extends Phaser.Scene {
     super();
   }
   create() {
-    this.createModel();
-    this.createView();
+    const {
+      boardModel,
+      boardView,
+      tiles,
+      coordinateCalculator,
+      tileTypeChecker,
+      cursorModel,
+      cursor,
+    } = this.createBoardContext();
+    const { inventoryModel } = this.createInventoryContext(
+      boardView,
+      tiles,
+      coordinateCalculator,
+      tileTypeChecker,
+    );
+    inventoryModel.addTile("normal", 1);
+    this.boardModel = boardModel;
+    this.tiles = tiles;
+    this.cursorModel = cursorModel;
+    this.boardViewCoodinateCalculator = coordinateCalculator;
+    this.cursor = cursor;
     this.createDay();
     this.createDice();
     this.createMoney();
     this.createShop();
-    this.createInventory();
     this.registorEventListener();
     this.initTiles();
     this.createBoardPanZone();
@@ -74,38 +89,26 @@ export class GameScene extends Phaser.Scene {
       this.boardPanZone.setSize(this.scale.width, this.scale.height);
     });
   }
-  createModel() {
-    this.createTilesModel();
-    this.createCursorModel();
-    this.createBoardModel();
-  }
-  createView() {
-    this.createBoardView();
-    this.createTilesView();
-    this.createCursorView();
-  }
-  createInventory() {
-    const model = new InventoryModel();
-    const _view = new InventoryView(
+  createBoardContext() {
+    return BoardContextFactory.create(
       this,
-      CELL_SIZE_PX * 6,
-      CELL_SIZE_PX / 2,
-      {
-        grid: new QuadGrid({
-          x: 0, // グリッド原点のワールドX座標
-          y: 0,
-          cellWidth: CELL_SIZE_PX,
-          cellHeight: CELL_SIZE_PX,
-          type: "orthogonal",
-        }),
-        draggable: false,
-      },
-      this.boardView,
-      this.tiles,
-      model,
-      this.boardViewCoodinateCalculator,
+      { maxX: 5, maxY: 5, minX: 0, minY: 0 },
+      { x: 0, y: 0 },
     );
-    model.addTile(1);
+  }
+  createInventoryContext(
+    board: BoardView,
+    tiles: Tiles,
+    boardViewCoordinateCalculator: BoardViewCoordinateCalculator,
+    tileTypeChecker: TileTypeChecker,
+  ) {
+    return InventoryContextFactory.create(
+      this,
+      board,
+      tiles,
+      boardViewCoordinateCalculator,
+      tileTypeChecker,
+    );
   }
   createDay() {
     const { model, view } = dayFactory(
@@ -123,7 +126,7 @@ export class GameScene extends Phaser.Scene {
         this.tiles.setTile(
           x,
           y,
-          new Tile(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)]),
+          new NormalTileModel(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)]),
         ),
       ),
     );
@@ -169,42 +172,7 @@ export class GameScene extends Phaser.Scene {
   syncMoney() {
     this.moneyObject.text = String(this.money);
   }
-  createTilesModel() {
-    const tiles = new Tiles(0, 5, 0, 5);
 
-    this.tiles = tiles;
-  }
-  createCursorModel() {
-    const cursor = new CursorModel(0, 0, 0, 5, 0, 5);
-    this.cursorModel = cursor;
-  }
-  createBoardModel() {
-    const board = new Board(this.tiles, this.cursorModel, 0, 5, 0, 5);
-    this.boardModel = board;
-  }
-  createBoardView() {
-    const board = new BoardView(this, {}, this.boardModel);
-    this.boardView = board;
-  }
-  createCursorView() {
-    const [x, y] = this.cursorModel.getPosition();
-    this.cursor = new CursorView(
-      this,
-      this.boardView,
-      this.rexBoard,
-      x,
-      y,
-      this.boardViewCoodinateCalculator,
-    );
-  }
-  createTilesView() {
-    this.tilesView = new TilesView(
-      this,
-      this.boardView,
-      this.tiles,
-      this.boardViewCoodinateCalculator,
-    );
-  }
   createDice() {
     const dice = new Dice(this, CELL_SIZE_PX * 11, CELL_SIZE_PX * 8);
     dice.on("roll", async (value: number) => {

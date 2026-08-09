@@ -1,21 +1,24 @@
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter.js";
 import { Tiles } from "@/Tiles/Model.ts";
-import { Cursor } from "@/cursor/Model";
+import { CursorModel } from "@/cursor/Model";
 import { DIRECTION_OFFSET } from "@/Direction.ts";
-import { Tile } from "@/Tile/Model.ts";
+import { TileModel } from "@/Tile/types";
 import { BoardSize } from "@/types";
+import { TileTypeChecker } from "@/Tile/TileTypeChecker";
+import { TODO } from "untodo";
 type Position = [number, number];
 export class Board extends EventEmitter {
   tiles: Tiles;
-  cursor: Cursor;
+  cursor: CursorModel;
 
   constructor(
     tiles: Tiles,
-    cursor: Cursor,
+    cursor: CursorModel,
     private minX: number,
     private maxX: number,
     private minY: number,
     private maxY: number,
+    private readonly tileTypeChecker: TileTypeChecker,
   ) {
     super();
     this.tiles = tiles;
@@ -23,13 +26,13 @@ export class Board extends EventEmitter {
   }
   *moveCursor(
     times: number,
-    onOneMoveCallback?: (x: number, y: number, tile: Tile) => void,
+    onOneMoveCallback?: (x: number, y: number, tile: TileModel) => void,
     onFinishCallback?: () => void,
-  ): Generator<[number, number, Tile], void, unknown> {
+  ): Generator<[number, number, TileModel], void, unknown> {
     for (let i = 0; i < times; i++) {
       let [x, y] = this.cursor.getPosition();
       const tile = this.tiles.getTile(x, y);
-      if (tile === undefined) {
+      if (tile === undefined || !this.tileTypeChecker.isDirectionTile(tile)) {
         this.cursor.warp(0, 0);
         yield [0, 0, this.tiles.getTile(0, 0)!];
       } else {
@@ -48,6 +51,7 @@ export class Board extends EventEmitter {
       }
     }
     onFinishCallback?.();
+    TODO({ reason: "経路の探索/検索を分離する" });
   }
   private applyOffset(pos: Position, offset?: [number, number]): Position {
     if (!offset) return [0, 0];
