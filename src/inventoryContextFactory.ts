@@ -7,6 +7,7 @@ import { TilePickUp } from "./inventory/TilePickUp";
 import { Tiles } from "./Tiles/Model";
 import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalculator";
 import { TileTypeChecker } from "./Tile/TileTypeChecker";
+import { NormalTileFactory } from "./Tile/NormalTile/Factory";
 
 export class InventoryContextFactory {
   static create(
@@ -22,7 +23,10 @@ export class InventoryContextFactory {
     tilePickUp: TilePickUp;
   } {
     const inventoryModel = new InventoryModel();
-    const inventoryTileViewFactory = new InventoryTileViewFactory();
+    const inventoryTileViewFactory = new InventoryTileViewFactory(
+      scene,
+      new NormalTileFactory(),
+    );
     const inventoryView = new InventoryView(
       scene,
       CELL_SIZE_PX * 6,
