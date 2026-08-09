@@ -33,7 +33,7 @@ export class BoardContextFactory {
       minX,
       maxX,
       minY,
-      maxX,
+      maxY,
     );
     if (boardViewCoordinateCalculator.isOutside(defaultCursorPosition))
       throw new TypeError(`cursor position is invalid`);
