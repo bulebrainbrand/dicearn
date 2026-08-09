@@ -25,7 +25,6 @@ import { InventoryContextFactory } from "./inventoryContextFactory.ts";
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
   tiles!: Tiles;
-  tilesView!: TilesView;
   cursorModel!: CursorModel;
   cursor!: CursorView;
   private cursorAnimationQueue: Promise<void> = Promise.resolve();
@@ -33,25 +32,31 @@ export class GameScene extends Phaser.Scene {
   moneyObject!: Phaser.GameObjects.Text;
   boardViewCoodinateCalculator: BoardViewCoordinateCalculator =
     new BoardViewCoordinateCalculator(0, 5, 0, 5);
-  boardView!: BoardView;
   private boardPanZone!: Phaser.GameObjects.Zone;
   dayModel!: DayModel;
   dayView!: DayView;
-  tileTypeChecker!: TileTypeChecker;
-  inventoryTileViewFactory!: IInventoryTileViewFactory;
-  tileViewFactory!: ITileViewFactory;
   constructor() {
     super();
   }
   create() {
-    const { boardView, tiles, coordinateCalculator, tileTypeChecker } =
-      this.createBoardContext();
+    const {
+      boardModel,
+      boardView,
+      tiles,
+      coordinateCalculator,
+      tileTypeChecker,
+      cursorModel,
+    } = this.createBoardContext();
     this.createInventoryContext(
       boardView,
       tiles,
       coordinateCalculator,
       tileTypeChecker,
     );
+    this.boardModel = boardModel;
+    this.tiles = tiles;
+    this.cursorModel = cursorModel;
+    this.boardViewCoodinateCalculator = coordinateCalculator;
     this.createDay();
     this.createDice();
     this.createMoney();
