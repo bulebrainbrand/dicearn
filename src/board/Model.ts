@@ -11,10 +11,7 @@ export class Board extends EventEmitter {
   constructor(
     tiles: Tiles,
     cursor: CursorModel,
-    private minX: number,
-    private maxX: number,
-    private minY: number,
-    private maxY: number,
+    private readonly boardSize: BoardSize,
     private readonly routeSearcher: RouteSearcher,
   ) {
     super();
@@ -22,23 +19,7 @@ export class Board extends EventEmitter {
     this.cursor = cursor;
   }
 
-  updateBoardSize({ maxX, maxY, minX, minY }: BoardSize) {
-    this.minX = minX;
-    this.minY = minY;
-    this.maxX = maxX;
-    this.maxY = maxY;
-    this.tiles.updateBoardSize({ minX, minY, maxX, maxY });
-    this.cursor.updateBoardSize({ minX, minY, maxX, maxY });
-    this.routeSearcher.updateBoardSize({ minX, minY, maxX, maxY });
-    this.emit("updateBoardSize", { minX, minY, maxX, maxY });
-  }
-
-  getBoardSize() {
-    return {
-      minX: this.minX,
-      minY: this.minY,
-      maxX: this.maxX,
-      maxY: this.maxY,
-    };
+  getBoardSize(): BoardSize {
+    return this.boardSize;
   }
 }

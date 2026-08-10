@@ -2,7 +2,6 @@ import Phaser from "phaser";
 import Board from "phaser4-rex-plugins/plugins/board/board/Board";
 import {
   Tiles,
-  TilesModelBoardSizeUpdateEvent,
   TilesModelRemoveEvent,
   TilesModelSetEvent,
   TilesModelSwapEvent,
@@ -25,12 +24,8 @@ export class TilesView {
     private readonly tileViewFactory: TileViewFactory,
     private readonly tileTypeChecker: TileTypeChecker,
   ) {
-    const { maxX, maxY, minX, minY } = tilesModel.getBoardSize();
     this.tiles = new TilesDataStorage(
-      minX,
-      maxX,
-      minY,
-      maxY,
+      tilesModel.getBoardSize(),
       (tile) => {
         if (tile) tile.destroy();
       },
@@ -49,12 +44,6 @@ export class TilesView {
     tilesModel.addListener("remove", (arg: TilesModelRemoveEvent) => {
       this.removeTile(arg.x, arg.y);
     });
-    tilesModel.addListener(
-      "updateBoardSize",
-      (arg: TilesModelBoardSizeUpdateEvent) => {
-        this.updateBoardSize(arg);
-      },
-    );
     tilesModel.addListener("swap", (arg: TilesModelSwapEvent) =>
       this.swapTiles(arg),
     );
@@ -144,13 +133,5 @@ export class TilesView {
   }
   removeTile(x: number, y: number) {
     this.tiles.removeTile(x, y);
-  }
-  updateBoardSize(boardSize: {
-    minX: number;
-    minY: number;
-    maxX: number;
-    maxY: number;
-  }) {
-    this.tiles.updateBoardSize(boardSize);
   }
 }

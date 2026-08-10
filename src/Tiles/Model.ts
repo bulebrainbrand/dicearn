@@ -1,23 +1,18 @@
 import { TileModel } from "@/Tile/types";
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter";
 import { TilesDataStorage } from "./tilesDataStorage";
+import { BoardSize } from "@/types";
 export type TilesModelSetEvent = { x: number; y: number; newTile: TileModel };
 export type TilesModelRemoveEvent = { x: number; y: number };
-export type TilesModelBoardSizeUpdateEvent = {
-  minX: number;
-  minY: number;
-  maxX: number;
-  maxY: number;
-};
 export type TilesModelSwapEvent = {
   first: { x: number; y: number; data: TileModel | undefined };
   second: { x: number; y: number; data: TileModel | undefined };
 };
 export class Tiles extends EventEmitter {
   private tiles: TilesDataStorage<TileModel>;
-  constructor(minX: number, maxX: number, minY: number, maxY: number) {
+  constructor(private readonly boardSize: BoardSize) {
     super();
-    this.tiles = new TilesDataStorage(minX, maxX, minY, maxY, (tile) => {
+    this.tiles = new TilesDataStorage(boardSize, (tile) => {
       if (tile) this.emit("destroy", tile);
     });
   }
@@ -42,16 +37,7 @@ export class Tiles extends EventEmitter {
   forEach(fn: (tile: TileModel | undefined, x: number, y: number) => void) {
     this.tiles.forEach(fn);
   }
-  updateBoardSize(obj: {
-    minX: number;
-    minY: number;
-    maxX: number;
-    maxY: number;
-  }) {
-    this.tiles.updateBoardSize(obj);
-    this.emit("updateBoardSize", obj satisfies TilesModelBoardSizeUpdateEvent);
-  }
-  getBoardSize() {
-    return this.tiles.getBoardSize();
+  getBoardSize(): BoardSize {
+    return this.boardSize;
   }
 }
