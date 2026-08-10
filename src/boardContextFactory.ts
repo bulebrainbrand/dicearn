@@ -3,6 +3,8 @@ import {
   Position,
 } from "./board/BoardViewCoordinateCalculator";
 import { Board } from "./board/Model";
+import { RouteExecutor } from "./board/RouteExecutor";
+import { RouteSearcher } from "./board/RouteSearcher";
 import { MoneyCalculator } from "./board/MoneyCalculator";
 import { BoardView } from "./board/View";
 import { CursorModel } from "./cursor/Model";
@@ -30,6 +32,8 @@ export class BoardContextFactory {
     tileTypeChecker: TileTypeChecker;
     tileViewFactory: TileViewFactory;
     moneyCalculator: MoneyCalculator;
+    routeSearcher: RouteSearcher;
+    routeExecutor: RouteExecutor;
   } {
     const boardViewCoordinateCalculator = new BoardViewCoordinateCalculator(
       minX,
@@ -49,6 +53,15 @@ export class BoardContextFactory {
       maxY,
     );
     const tileTypeChecker = new TileTypeChecker();
+    const routeSearcher = new RouteSearcher(
+      tiles,
+      minX,
+      maxX,
+      minY,
+      maxY,
+      tileTypeChecker,
+    );
+    const routeExecutor = new RouteExecutor(cursorModel);
     const boardModel = new Board(
       tiles,
       cursorModel,
@@ -56,7 +69,7 @@ export class BoardContextFactory {
       maxX,
       minY,
       maxY,
-      tileTypeChecker,
+      routeSearcher,
     );
     const tileViewFactoryFactory = new TileViewFactoryFactory(
       scene,
@@ -92,6 +105,8 @@ export class BoardContextFactory {
       cursor: cursorView,
       cursorModel: cursorModel,
       moneyCalculator,
+      routeSearcher,
+      routeExecutor,
     };
   }
 }
