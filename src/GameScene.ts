@@ -18,6 +18,7 @@ import { TileTypeChecker } from "./Tile/TileTypeChecker.ts";
 import { NormalTileModel } from "./Tile/NormalTile/Model.ts";
 import { BoardContextFactory } from "./boardContextFactory.ts";
 import { InventoryContextFactory } from "./inventoryContextFactory.ts";
+import { MoneyCalculator } from "./board/MoneyCalculator.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -32,6 +33,7 @@ export class GameScene extends Phaser.Scene {
   private boardPanZone!: Phaser.GameObjects.Zone;
   dayModel!: DayModel;
   dayView!: DayView;
+  moneyCalculator!: MoneyCalculator;
   constructor() {
     super();
   }
@@ -44,6 +46,7 @@ export class GameScene extends Phaser.Scene {
       tileTypeChecker,
       cursorModel,
       cursor,
+      moneyCalculator,
     } = this.createBoardContext();
     const { inventoryModel } = this.createInventoryContext(
       boardView,
@@ -57,6 +60,7 @@ export class GameScene extends Phaser.Scene {
     this.cursorModel = cursorModel;
     this.boardViewCoodinateCalculator = coordinateCalculator;
     this.cursor = cursor;
+    this.moneyCalculator = moneyCalculator;
     this.createDay();
     this.createDice();
     this.createMoney();
@@ -178,11 +182,18 @@ export class GameScene extends Phaser.Scene {
     dice.on("roll", async (value: number) => {
       dice.setRollable(false);
       const gene = this.boardModel.moveCursor(value);
-      for (const _ of gene) {
+      let beforePosition = this.cursorModel.getPosition();
+      for (const [x, y] of gene) {
         // cursorModel の "move" イベント経由でキューに積まれたアニメーションが
         // 実際に終わるまで待ってから次の1マスへ進む
         await this.cursorAnimationQueue;
-        this.applyMoney(1);
+        this.applyMoney(
+          this.moneyCalculator.calcMoneyBySnapshotRoute(beforePosition, {
+            x,
+            y,
+          }),
+        );
+        beforePosition = { x, y };
       }
       this.dayModel.nextDay();
       dice.setRollable(true);

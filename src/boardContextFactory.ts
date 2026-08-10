@@ -3,6 +3,7 @@ import {
   Position,
 } from "./board/BoardViewCoordinateCalculator";
 import { Board } from "./board/Model";
+import { MoneyCalculator } from "./board/MoneyCalculator";
 import { BoardView } from "./board/View";
 import { CursorModel } from "./cursor/Model";
 import { CursorView } from "./cursor/View";
@@ -28,6 +29,7 @@ export class BoardContextFactory {
     coordinateCalculator: BoardViewCoordinateCalculator;
     tileTypeChecker: TileTypeChecker;
     tileViewFactory: TileViewFactory;
+    moneyCalculator: MoneyCalculator;
   } {
     const boardViewCoordinateCalculator = new BoardViewCoordinateCalculator(
       minX,
@@ -78,6 +80,7 @@ export class BoardContextFactory {
       defaultCursorPosition.y,
       boardViewCoordinateCalculator,
     );
+    const moneyCalculator = new MoneyCalculator(tiles);
     return {
       boardModel,
       boardView,
@@ -88,6 +91,7 @@ export class BoardContextFactory {
       coordinateCalculator: boardViewCoordinateCalculator,
       cursor: cursorView,
       cursorModel: cursorModel,
+      moneyCalculator,
     };
   }
 }

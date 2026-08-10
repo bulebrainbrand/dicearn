@@ -1,3 +1,4 @@
+import { Position } from "@/board/BoardViewCoordinateCalculator";
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter.js";
 
 export class CursorModel extends EventEmitter {
@@ -67,8 +68,8 @@ export class CursorModel extends EventEmitter {
     this.maxY = maxY;
     this.assetsValidPosition(this.x, this.y);
   }
-  getPosition(): [number, number] {
-    return [this.x, this.y];
+  getPosition(): Position {
+    return { x: this.x, y: this.y };
   }
   isMovable(): boolean {
     return this.movable;
