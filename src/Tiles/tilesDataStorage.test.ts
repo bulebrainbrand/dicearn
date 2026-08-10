@@ -13,4 +13,19 @@ describe("TilesDataStorage", () => {
     expect(storage.getTile(0, 0)).toBe("tile");
     expect(storage.getTile(-1, -1)).toBeUndefined();
   });
+
+  it("allows traversal of every cell including boundaries after expansion", () => {
+    const boardSize = new BoardSize(0, 0, 5, 5);
+    const storage = new TilesDataStorage<string>(boardSize);
+
+    boardSize.expand(1);
+
+    const visitedCells: string[] = [];
+    storage.forEach((data, x, y) => {
+      visitedCells.push(`${x},${y}`);
+    });
+
+    expect(visitedCells).toContain("-1,6");
+    expect(visitedCells.length).toBe(7 * 7);
+  });
 });

@@ -13,7 +13,7 @@ export class TilesDataStorage<T> {
   ) {
     this.tiles = Array.from(
       { length: boardSize.maxX - boardSize.minX + 1 },
-      () => Array(boardSize.maxY - boardSize.minY).fill(undefined),
+      () => Array(boardSize.maxY - boardSize.minY + 1).fill(undefined),
     );
     boardSize.on("change", (previous: BoardSizeValues) =>
       this.updateBoardSize(previous),
@@ -64,7 +64,7 @@ export class TilesDataStorage<T> {
       times(
         () =>
           this.tiles.unshift(
-            Array(previousMaxY - previousMinY).fill(undefined),
+            Array(previousMaxY - previousMinY + 1).fill(undefined),
           ),
         minXDiff,
       );
@@ -80,7 +80,7 @@ export class TilesDataStorage<T> {
     if (maxXDiff > 0) {
       times(
         () =>
-          this.tiles.push(Array(previousMaxY - previousMinY).fill(undefined)),
+          this.tiles.push(Array(previousMaxY - previousMinY + 1).fill(undefined)),
         maxXDiff,
       );
     }

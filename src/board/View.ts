@@ -22,6 +22,7 @@ export class BoardView extends RexBoard {
     boardSize: BoardSize,
   ) {
     super(scene, { ...DEFAULT_CONFIG, ...config });
+    this.updateBoardSize(boardSize);
     boardSize.on("change", () => this.updateBoardSize(boardSize));
   }
   updateBoardSize(boardSize: BoardSize) {
