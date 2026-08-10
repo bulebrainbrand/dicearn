@@ -1,12 +1,9 @@
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter.js";
 import { Tiles } from "@/Tiles/Model.ts";
 import { CursorModel } from "@/cursor/Model";
-import { DIRECTION_OFFSET } from "@/Direction.ts";
-import { TileModel } from "@/Tile/types";
 import { BoardSize } from "@/types";
-import { TileTypeChecker } from "@/Tile/TileTypeChecker";
-import { TODO } from "untodo";
-type Position = [number, number];
+import { RouteSearcher } from "./RouteSearcher";
+
 export class Board extends EventEmitter {
   tiles: Tiles;
   cursor: CursorModel;
@@ -18,52 +15,13 @@ export class Board extends EventEmitter {
     private maxX: number,
     private minY: number,
     private maxY: number,
-    private readonly tileTypeChecker: TileTypeChecker,
+    private readonly routeSearcher: RouteSearcher,
   ) {
     super();
     this.tiles = tiles;
     this.cursor = cursor;
   }
-  *moveCursor(
-    times: number,
-    onOneMoveCallback?: (x: number, y: number, tile: TileModel) => void,
-    onFinishCallback?: () => void,
-  ): Generator<[number, number, TileModel], void, unknown> {
-    for (let i = 0; i < times; i++) {
-      let { x, y } = this.cursor.getPosition();
-      const tile = this.tiles.getTile(x, y);
-      if (tile === undefined || !this.tileTypeChecker.isDirectionTile(tile)) {
-        this.cursor.warp(0, 0);
-        yield [0, 0, this.tiles.getTile(0, 0)!];
-      } else {
-        const [newX, newY] = this.covertPosToInside(
-          this.applyOffset([x, y], DIRECTION_OFFSET[tile.getDirection()]),
-        );
-        const nextTile = this.tiles.getTile(newX, newY);
-        if (nextTile === undefined) {
-          this.cursor.warp(0, 0);
-          yield [0, 0, this.tiles.getTile(0, 0)!];
-        } else {
-          this.cursor.move(newX, newY);
-          onOneMoveCallback?.(newX, newY, nextTile);
-          yield [newX, newY, nextTile];
-        }
-      }
-    }
-    onFinishCallback?.();
-    TODO({ reason: "経路の探索/検索を分離する" });
-  }
-  private applyOffset(pos: Position, offset?: [number, number]): Position {
-    if (!offset) return [0, 0];
-    return [pos[0] + offset[0], pos[1] + offset[1]];
-  }
-  private covertPosToInside(pos: Position): Position {
-    const x =
-      pos[0] < this.minX ? this.maxX : this.maxX < pos[0] ? this.minX : pos[0];
-    const y =
-      pos[1] < this.minY ? this.maxY : this.maxY < pos[1] ? this.minY : pos[1];
-    return [x, y];
-  }
+
   updateBoardSize({ maxX, maxY, minX, minY }: BoardSize) {
     this.minX = minX;
     this.minY = minY;
@@ -71,8 +29,10 @@ export class Board extends EventEmitter {
     this.maxY = maxY;
     this.tiles.updateBoardSize({ minX, minY, maxX, maxY });
     this.cursor.updateBoardSize({ minX, minY, maxX, maxY });
+    this.routeSearcher.updateBoardSize({ minX, minY, maxX, maxY });
     this.emit("updateBoardSize", { minX, minY, maxX, maxY });
   }
+
   getBoardSize() {
     return {
       minX: this.minX,

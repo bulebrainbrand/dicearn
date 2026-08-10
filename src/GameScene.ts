@@ -19,6 +19,8 @@ import { NormalTileModel } from "./Tile/NormalTile/Model.ts";
 import { BoardContextFactory } from "./boardContextFactory.ts";
 import { InventoryContextFactory } from "./inventoryContextFactory.ts";
 import { MoneyCalculator } from "./board/MoneyCalculator.ts";
+import { RouteExecutor } from "./board/RouteExecutor.ts";
+import { RouteSearcher } from "./board/RouteSearcher.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -34,6 +36,8 @@ export class GameScene extends Phaser.Scene {
   dayModel!: DayModel;
   dayView!: DayView;
   moneyCalculator!: MoneyCalculator;
+  routeSearcher!: RouteSearcher;
+  routeExecutor!: RouteExecutor;
   constructor() {
     super();
   }
@@ -47,6 +51,8 @@ export class GameScene extends Phaser.Scene {
       cursorModel,
       cursor,
       moneyCalculator,
+      routeSearcher,
+      routeExecutor,
     } = this.createBoardContext();
     const { inventoryModel } = this.createInventoryContext(
       boardView,
@@ -61,6 +67,8 @@ export class GameScene extends Phaser.Scene {
     this.boardViewCoodinateCalculator = coordinateCalculator;
     this.cursor = cursor;
     this.moneyCalculator = moneyCalculator;
+    this.routeSearcher = routeSearcher;
+    this.routeExecutor = routeExecutor;
     this.createDay();
     this.createDice();
     this.createMoney();
@@ -181,19 +189,19 @@ export class GameScene extends Phaser.Scene {
     const dice = new Dice(this, CELL_SIZE_PX * 11, CELL_SIZE_PX * 8);
     dice.on("roll", async (value: number) => {
       dice.setRollable(false);
-      const gene = this.boardModel.moveCursor(value);
-      let beforePosition = this.cursorModel.getPosition();
-      for (const [x, y] of gene) {
+      for (let i = 0; i < value; i++) {
+        const beforePosition = this.cursorModel.getPosition();
+        const transition = this.routeSearcher.search(beforePosition);
+        this.routeExecutor.execute(transition);
         // cursorModel の "move" イベント経由でキューに積まれたアニメーションが
         // 実際に終わるまで待ってから次の1マスへ進む
         await this.cursorAnimationQueue;
         this.applyMoney(
-          this.moneyCalculator.calcMoneyBySnapshotRoute(beforePosition, {
-            x,
-            y,
-          }),
+          this.moneyCalculator.calcMoneyBySnapshotRoute(
+            beforePosition,
+            transition.destination,
+          ),
         );
-        beforePosition = { x, y };
       }
       this.dayModel.nextDay();
       dice.setRollable(true);
