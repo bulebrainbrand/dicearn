@@ -1,11 +1,9 @@
 import { times } from "@/utils";
+import { BoardSize, BoardSizeValues } from "@/types";
 export class TilesDataStorage<T> {
   private tiles: (T | undefined)[][];
   constructor(
-    private minX: number,
-    private maxX: number,
-    private minY: number,
-    private maxY: number,
+    private readonly boardSize: BoardSize,
     private onRemoveCallback: (tile: T | undefined) => void = () => {},
     private onSetCallback: (
       x: number,
@@ -13,8 +11,12 @@ export class TilesDataStorage<T> {
       tile: T | undefined,
     ) => void = () => {},
   ) {
-    this.tiles = Array.from({ length: maxX - minX + 1 }, () =>
-      Array(maxY - minY).fill(undefined),
+    this.tiles = Array.from(
+      { length: boardSize.maxX - boardSize.minX + 1 },
+      () => Array(boardSize.maxY - boardSize.minY).fill(undefined),
+    );
+    boardSize.on("change", (previous: BoardSizeValues) =>
+      this.updateBoardSize(previous),
     );
   }
   getTile(x: number, y: number): T | undefined {
@@ -49,22 +51,21 @@ export class TilesDataStorage<T> {
     this.onSetCallback(x2, y2, first);
     return { first, second };
   }
-  updateBoardSize({
-    maxX,
-    maxY,
-    minX,
-    minY,
-  }: {
-    minX: number;
-    minY: number;
-    maxX: number;
-    maxY: number;
-  }) {
+  private updateBoardSize({
+    maxX: previousMaxX,
+    maxY: previousMaxY,
+    minX: previousMinX,
+    minY: previousMinY,
+  }: BoardSizeValues) {
+    const { minX, minY, maxX, maxY } = this.boardSize;
     // update minX
-    const minXDiff = this.minX - minX;
+    const minXDiff = previousMinX - minX;
     if (minXDiff > 0) {
       times(
-        () => this.tiles.unshift(Array(this.maxY - this.minY).fill(undefined)),
+        () =>
+          this.tiles.unshift(
+            Array(previousMaxY - previousMinY).fill(undefined),
+          ),
         minXDiff,
       );
     }
@@ -75,10 +76,11 @@ export class TilesDataStorage<T> {
       );
     }
     // update maxX
-    const maxXDiff = maxX - this.maxX;
+    const maxXDiff = maxX - previousMaxX;
     if (maxXDiff > 0) {
       times(
-        () => this.tiles.push(Array(this.maxY - this.minY).fill(undefined)),
+        () =>
+          this.tiles.push(Array(previousMaxY - previousMinY).fill(undefined)),
         maxXDiff,
       );
     }
@@ -89,7 +91,7 @@ export class TilesDataStorage<T> {
       );
     }
     // update minY
-    const minYDiff = this.minY - minY;
+    const minYDiff = previousMinY - minY;
     if (minYDiff > 0) {
       this.tiles.forEach((value) =>
         times(() => value.unshift(undefined), minYDiff),
@@ -101,7 +103,7 @@ export class TilesDataStorage<T> {
       );
     }
     // update maxY
-    const maxYDiff = maxY - this.maxY;
+    const maxYDiff = maxY - previousMaxY;
     if (maxYDiff > 0) {
       this.tiles.forEach((value) =>
         times(() => value.push(undefined), maxYDiff),
@@ -112,18 +114,6 @@ export class TilesDataStorage<T> {
         times(() => this.onRemoveCallback(value.pop()), Math.abs(maxYDiff)),
       );
     }
-    this.minX = minX;
-    this.minY = minY;
-    this.maxX = maxX;
-    this.maxY = maxY;
-  }
-  getBoardSize(): { minX: number; minY: number; maxX: number; maxY: number } {
-    return {
-      minX: this.minX,
-      minY: this.minY,
-      maxX: this.maxX,
-      maxY: this.maxY,
-    };
   }
   forEach(fn: (data: T | undefined, x: number, y: number) => void): void {
     for (const [x, arr] of this.tiles.entries()) {
@@ -133,18 +123,18 @@ export class TilesDataStorage<T> {
     }
   }
   private assetsValidPosition(x: number, y: number): void {
-    if (x < this.minX || this.maxX < x)
+    if (x < this.boardSize.minX || this.boardSize.maxX < x)
       throw new RangeError(
-        `expect ${this.minX}-${this.maxX} x coordinate but actual ${x}`,
+        `expect ${this.boardSize.minX}-${this.boardSize.maxX} x coordinate but actual ${x}`,
       );
-    if (y < this.minY || this.maxY < y)
+    if (y < this.boardSize.minY || this.boardSize.maxY < y)
       throw new RangeError(
-        `expect ${this.minY}-${this.maxY} y coordinate but actual ${y}`,
+        `expect ${this.boardSize.minY}-${this.boardSize.maxY} y coordinate but actual ${y}`,
       );
     if (isNaN(x) || isNaN(y))
       throw new TypeError(`caon't use NaN (x:${x},y:${y})`);
   }
   private convertPositionToIndex(x: number, y: number): [number, number] {
-    return [x - this.minX, y - this.minY];
+    return [x - this.boardSize.minX, y - this.boardSize.minY];
   }
 }

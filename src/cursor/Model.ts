@@ -1,17 +1,16 @@
 import { Position } from "@/board/BoardViewCoordinateCalculator";
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter.js";
+import { BoardSize } from "@/types";
 
 export class CursorModel extends EventEmitter {
   private movable: boolean = true;
   constructor(
     private x: number,
     private y: number,
-    private minX: number,
-    private maxX: number,
-    private minY: number,
-    private maxY: number,
+    private readonly boardSize: BoardSize,
   ) {
     super();
+    boardSize.on("change", () => this.assetsValidPosition(this.x, this.y));
   }
   /**
    * @fires Cursor#event:move
@@ -47,26 +46,9 @@ export class CursorModel extends EventEmitter {
     this.emit("warp", { new: [x, y] });
   }
   private assetsValidPosition(x: number, y: number) {
-    if (x < this.minX || x > this.maxX || y < this.minY || y > this.maxY) {
+    if (!this.boardSize.contains(x, y)) {
       throw new Error(`Invalid position: (${x}, ${y})`);
     }
-  }
-  updateBoardSize({
-    maxX,
-    maxY,
-    minX,
-    minY,
-  }: {
-    minX: number;
-    minY: number;
-    maxX: number;
-    maxY: number;
-  }) {
-    this.minX = minX;
-    this.minY = minY;
-    this.maxX = maxX;
-    this.maxY = maxY;
-    this.assetsValidPosition(this.x, this.y);
   }
   getPosition(): Position {
     return { x: this.x, y: this.y };

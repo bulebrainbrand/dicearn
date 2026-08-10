@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import { Board as RexBoard } from "phaser4-rex-plugins/plugins/board-components";
-import { Board } from "./Model";
 import { BoardSize } from "@/types";
 import { CELL_SIZE_PX } from "@/constants";
 const DEFAULT_CONFIG = {
@@ -20,12 +19,10 @@ export class BoardView extends RexBoard {
   constructor(
     scene: Phaser.Scene,
     config: RexBoard.IConfig,
-    boardModel: Board,
+    boardSize: BoardSize,
   ) {
     super(scene, { ...DEFAULT_CONFIG, ...config });
-    boardModel.addListener("updateBoardSize", (size: BoardSize) => {
-      this.updateBoardSize(size);
-    });
+    boardSize.on("change", () => this.updateBoardSize(boardSize));
   }
   updateBoardSize(boardSize: BoardSize) {
     this.setBoardWidth(boardSize.maxX - boardSize.minX + 1);

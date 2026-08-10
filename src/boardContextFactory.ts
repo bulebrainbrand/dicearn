@@ -14,12 +14,12 @@ import { TileViewFactoryFactory } from "./Tile/TileViewFactoryFactory";
 import { TileViewFactory } from "./Tile/types";
 import { Tiles } from "./Tiles/Model";
 import { TilesView } from "./Tiles/View";
-import { BoardSize } from "./types";
+import { BoardSize, BoardSizeValues } from "./types";
 
 export class BoardContextFactory {
   static create(
     scene: Phaser.Scene,
-    { maxX, maxY, minX, minY }: BoardSize,
+    initialBoardSize: BoardSizeValues,
     defaultCursorPosition: Position,
   ): {
     boardModel: Board;
@@ -34,50 +34,40 @@ export class BoardContextFactory {
     moneyCalculator: MoneyCalculator;
     routeSearcher: RouteSearcher;
     routeExecutor: RouteExecutor;
+    boardSize: BoardSize;
   } {
+    const boardSize = new BoardSize(
+      initialBoardSize.minX,
+      initialBoardSize.minY,
+      initialBoardSize.maxX,
+      initialBoardSize.maxY,
+    );
     const boardViewCoordinateCalculator = new BoardViewCoordinateCalculator(
-      minX,
-      maxX,
-      minY,
-      maxY,
+      boardSize,
     );
     if (boardViewCoordinateCalculator.isOutside(defaultCursorPosition))
       throw new TypeError(`cursor position is invalid`);
-    const tiles = new Tiles(minX, maxX, minY, maxY);
+    const tiles = new Tiles(boardSize);
     const cursorModel = new CursorModel(
       defaultCursorPosition.x,
       defaultCursorPosition.y,
-      minX,
-      maxX,
-      minY,
-      maxY,
+      boardSize,
     );
     const tileTypeChecker = new TileTypeChecker();
     const routeSearcher = new RouteSearcher(
       tiles,
-      minX,
-      maxX,
-      minY,
-      maxY,
+      boardSize,
       tileTypeChecker,
       defaultCursorPosition,
     );
     const routeExecutor = new RouteExecutor(cursorModel);
-    const boardModel = new Board(
-      tiles,
-      cursorModel,
-      minX,
-      maxX,
-      minY,
-      maxY,
-      routeSearcher,
-    );
+    const boardModel = new Board(tiles, cursorModel, boardSize, routeSearcher);
     const tileViewFactoryFactory = new TileViewFactoryFactory(
       scene,
       tileTypeChecker,
     );
     const tileViewFactory = tileViewFactoryFactory.create();
-    const boardView = new BoardView(scene, {}, boardModel);
+    const boardView = new BoardView(scene, {}, boardSize);
     const tilesView = new TilesView(
       scene,
       boardView,
@@ -108,6 +98,7 @@ export class BoardContextFactory {
       moneyCalculator,
       routeSearcher,
       routeExecutor,
+      boardSize,
     };
   }
 }

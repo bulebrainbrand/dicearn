@@ -11,10 +11,7 @@ export type RouteTransition =
 export class RouteSearcher {
   constructor(
     private readonly tiles: Tiles,
-    private minX: number,
-    private maxX: number,
-    private minY: number,
-    private maxY: number,
+    private readonly boardSize: BoardSize,
     private readonly tileTypeChecker: TileTypeChecker,
     private readonly resetPosition: Position,
   ) {}
@@ -35,17 +32,20 @@ export class RouteSearcher {
     return { kind: "move", destination };
   }
 
-  updateBoardSize({ maxX, maxY, minX, minY }: BoardSize) {
-    this.minX = minX;
-    this.minY = minY;
-    this.maxX = maxX;
-    this.maxY = maxY;
-  }
-
   private covertPosToInside(pos: Position): Position {
     return {
-      x: pos.x < this.minX ? this.maxX : this.maxX < pos.x ? this.minX : pos.x,
-      y: pos.y < this.minY ? this.maxY : this.maxY < pos.y ? this.minY : pos.y,
+      x:
+        pos.x < this.boardSize.minX
+          ? this.boardSize.maxX
+          : this.boardSize.maxX < pos.x
+            ? this.boardSize.minX
+            : pos.x,
+      y:
+        pos.y < this.boardSize.minY
+          ? this.boardSize.maxY
+          : this.boardSize.maxY < pos.y
+            ? this.boardSize.minY
+            : pos.y,
     };
   }
 }

@@ -21,6 +21,7 @@ import { InventoryContextFactory } from "./inventoryContextFactory.ts";
 import { MoneyCalculator } from "./board/MoneyCalculator.ts";
 import { RouteExecutor } from "./board/RouteExecutor.ts";
 import { RouteSearcher } from "./board/RouteSearcher.ts";
+import { BoardSize } from "./types.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -30,8 +31,8 @@ export class GameScene extends Phaser.Scene {
   private cursorAnimationQueue: Promise<void> = Promise.resolve();
   money: number = 0;
   moneyObject!: Phaser.GameObjects.Text;
-  boardViewCoodinateCalculator: BoardViewCoordinateCalculator =
-    new BoardViewCoordinateCalculator(0, 5, 0, 5);
+  boardViewCoodinateCalculator!: BoardViewCoordinateCalculator;
+  boardSize!: BoardSize;
   private boardPanZone!: Phaser.GameObjects.Zone;
   dayModel!: DayModel;
   dayView!: DayView;
@@ -53,6 +54,7 @@ export class GameScene extends Phaser.Scene {
       moneyCalculator,
       routeSearcher,
       routeExecutor,
+      boardSize,
     } = this.createBoardContext();
     const { inventoryModel } = this.createInventoryContext(
       boardView,
@@ -69,6 +71,7 @@ export class GameScene extends Phaser.Scene {
     this.moneyCalculator = moneyCalculator;
     this.routeSearcher = routeSearcher;
     this.routeExecutor = routeExecutor;
+    this.boardSize = boardSize;
     this.createDay();
     this.createDice();
     this.createMoney();
@@ -214,15 +217,7 @@ export class GameScene extends Phaser.Scene {
       if (this.money >= 5) {
         this.applyMoney(-5);
         console.log("Bought Upsize Grid");
-        const gridSize = this.boardModel.getBoardSize();
-        const newGridSize = {
-          minX: gridSize.minX - 1,
-          minY: gridSize.minY - 1,
-          maxX: gridSize.maxX + 1,
-          maxY: gridSize.maxY + 1,
-        };
-        this.boardModel.updateBoardSize(newGridSize);
-        this.boardViewCoodinateCalculator.updateGridSize(newGridSize);
+        this.boardSize.expand(1);
         return true;
       }
       return false;
