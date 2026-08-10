@@ -2,7 +2,11 @@ import Phaser from "phaser";
 import { Board, MiniBoard } from "phaser4-rex-plugins/plugins/board-components";
 import { TileView } from "@/Tile/types";
 import { Tiles } from "@/Tiles/Model";
-import { InventoryModel } from "./Model";
+import {
+  InventoryItemName,
+  InventoryModel,
+  InventoryModelEvent,
+} from "./Model";
 import { BoardViewCoordinateCalculator } from "@/board/BoardViewCoordinateCalculator";
 import { INVENTORY_DEPTH } from "@/layor";
 import { InventoryTileView, InventoryTileViewFactory } from "./types";
@@ -27,20 +31,23 @@ export class InventoryView extends MiniBoard {
 
     inventoryModel.addListener(
       "updateAmount",
-      (name: string, amount: number) => {
+      ({ name, amount }: InventoryModelEvent["updateAmount"]) => {
         this.items[name].updateAmount(amount);
       },
     );
     inventoryModel.addListener(
       "newItem",
-      (name: string, index: number, amount: number) => {
+      ({ name, amount, index }: InventoryModelEvent["newItem"]) => {
         this.createItem(name, amount, index);
       },
     );
     this.setDepth(INVENTORY_DEPTH);
     this.setScrollFactor(0, 0);
   }
-  private makeInventoryTileViewPlacable(name: string, item: InventoryTileView) {
+  private makeInventoryTileViewPlacable(
+    name: InventoryItemName,
+    item: InventoryTileView,
+  ) {
     item.setDepth(INVENTORY_DEPTH);
     item.setInteractive({ draggable: true });
     let clone: TileView | undefined = undefined;
@@ -71,7 +78,7 @@ export class InventoryView extends MiniBoard {
       this.tiles.setTile(tileXY.x, tileXY.y, item.createTileModelForTiles());
     });
   }
-  private createItem(name: string, amount: number, index: number) {
+  private createItem(name: InventoryItemName, amount: number, index: number) {
     if (this.items[name] !== undefined) return;
     const inventoryTileView = this.inventoryTileViewFactory.create(name);
     this.addChess(inventoryTileView, index, 0, 0);

@@ -22,6 +22,7 @@ import { MoneyCalculator } from "./board/MoneyCalculator.ts";
 import { RouteExecutor } from "./board/RouteExecutor.ts";
 import { RouteSearcher } from "./board/RouteSearcher.ts";
 import { BoardSize } from "./types.ts";
+import { BufferTileModel } from "./Tile/BufferTIle/Model.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -141,7 +142,9 @@ export class GameScene extends Phaser.Scene {
         this.tiles.setTile(
           x,
           y,
-          new NormalTileModel(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)]),
+          Math.random() > 0.5
+            ? new NormalTileModel(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)])
+            : new BufferTileModel(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)]),
         ),
       ),
     );

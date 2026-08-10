@@ -1,5 +1,4 @@
-import { NormalTileModel } from "./NormalTile/Model";
-import { TileName } from "./TileName";
+import { TILE_NAME_SET, TileModelUnion } from "./TileDifinition";
 import {
   DirectionTileModel,
   MovaleTileModel,
@@ -8,12 +7,14 @@ import {
 } from "./types";
 
 export class TileTypeChecker {
-  isNormalTile(tile: TileModel): tile is NormalTileModel {
-    return tile.name === "normal";
-  }
-  getName(tile: TileModel): TileName {
+  getName<T extends TileModelUnion>(tile: T): T["name"] {
     const name = tile.name;
-    return name;
+    if (TILE_NAME_SET.has(name)) return name;
+    throw new TypeError(`unexpected tile name: "${name}"`, { cause: tile });
+  }
+  assertRegisteredTile(tile: TileModel): asserts tile is TileModelUnion {
+    if (TILE_NAME_SET.has(tile.name)) return;
+    throw new TypeError(`unexpected tile: "${tile.name}"`);
   }
   isMovable(tileModel: TileModel): tileModel is MovaleTileModel {
     return "getMovable" in tileModel;

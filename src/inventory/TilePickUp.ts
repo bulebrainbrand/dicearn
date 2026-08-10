@@ -1,7 +1,7 @@
 import { Tiles } from "@/Tiles/Model";
 import { InventoryModel } from "./Model";
-import { TileModel } from "@/Tile/types";
 import { TileTypeChecker } from "@/Tile/TileTypeChecker";
+import { TileModelUnion } from "@/Tile/TileDifinition";
 
 export class TilePickUp {
   constructor(
@@ -9,7 +9,7 @@ export class TilePickUp {
     tiles: Tiles,
     tileTypeChecker: TileTypeChecker,
   ) {
-    tiles.addListener("destroy", (tile: TileModel) => {
+    tiles.addListener("destroy", (tile: TileModelUnion) => {
       const name = tileTypeChecker.getName(tile);
       inventoryModel.addTile(name, 1);
     });
