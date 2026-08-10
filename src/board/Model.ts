@@ -30,7 +30,7 @@ export class Board extends EventEmitter {
     onFinishCallback?: () => void,
   ): Generator<[number, number, TileModel], void, unknown> {
     for (let i = 0; i < times; i++) {
-      let [x, y] = this.cursor.getPosition();
+      let { x, y } = this.cursor.getPosition();
       const tile = this.tiles.getTile(x, y);
       if (tile === undefined || !this.tileTypeChecker.isDirectionTile(tile)) {
         this.cursor.warp(0, 0);
