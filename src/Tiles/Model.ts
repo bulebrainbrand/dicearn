@@ -40,4 +40,7 @@ export class Tiles extends EventEmitter {
   getBoardSize(): BoardSize {
     return this.boardSize;
   }
+  getAdjacentTile(x: number, y: number) {
+    return this.tiles.getAdjacent(x, y);
+  }
 }

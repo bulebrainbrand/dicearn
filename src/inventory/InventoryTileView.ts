@@ -1,11 +1,10 @@
 import Phaser from "phaser";
 import { TileFactory, TileModel, TileView } from "@/Tile/types";
-import { InventoryTileView } from "./types";
-import { NormalTileView } from "@/Tile/NormalTile/View";
+import { InventoryTileView as IInventoryTileView } from "./types";
 
-export class NormalInventoryTileView
+export class InventoryTileView
   extends Phaser.GameObjects.Container
-  implements InventoryTileView
+  implements IInventoryTileView
 {
   tileView: TileView;
   private text: Phaser.GameObjects.Text;
@@ -13,7 +12,7 @@ export class NormalInventoryTileView
     scene: Phaser.Scene,
     x: number,
     y: number,
-    private tileViewFactory: TileFactory<TileModel, NormalTileView>,
+    private tileViewFactory: TileFactory<TileModel, TileView>,
     amount: number,
   ) {
     super(scene, x, y);

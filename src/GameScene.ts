@@ -64,6 +64,7 @@ export class GameScene extends Phaser.Scene {
       tileTypeChecker,
     );
     inventoryModel.addTile("normal", 1);
+    inventoryModel.addTile("buffer", 1);
     this.boardModel = boardModel;
     this.tiles = tiles;
     this.cursorModel = cursorModel;

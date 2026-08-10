@@ -1,5 +1,6 @@
 import { Tiles } from "@/Tiles/Model";
 import { Position } from "./BoardViewCoordinateCalculator";
+import { TileModel } from "@/Tile/types";
 
 export type MoveRoute = { x: number; y: number }[];
 
@@ -15,6 +16,18 @@ export class MoneyCalculator {
     return sum;
   }
   calcMoneyBySnapshotRoute(start: Position, end: Position): number {
-    return 1;
+    const bufferTileCount = this.countTile(
+      end,
+      (tile) => tile.name === "buffer",
+    );
+    const isEndNormal = this.tiles.getTile(end.x, end.y)?.name === "normal";
+    return (isEndNormal ? 1 : 0) * 2 ** bufferTileCount;
+  }
+  private countTile(pos: Position, checker: (tileModel: TileModel) => boolean) {
+    return this.tiles
+      .getAdjacentTile(pos.x, pos.y)
+      .filter((tile) => tile !== undefined)
+      .map(checker)
+      .reduce((amount, bool) => amount + (bool ? 1 : 0), 0);
   }
 }
