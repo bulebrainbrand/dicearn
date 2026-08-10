@@ -60,6 +60,7 @@ export class BoardContextFactory {
       minY,
       maxY,
       tileTypeChecker,
+      defaultCursorPosition,
     );
     const routeExecutor = new RouteExecutor(cursorModel);
     const boardModel = new Board(

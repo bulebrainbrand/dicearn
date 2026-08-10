@@ -16,12 +16,13 @@ export class RouteSearcher {
     private minY: number,
     private maxY: number,
     private readonly tileTypeChecker: TileTypeChecker,
+    private readonly resetPosition: Position,
   ) {}
 
   search(position: Position): RouteTransition {
     const tile = this.tiles.getTile(position.x, position.y);
     if (tile === undefined || !this.tileTypeChecker.isDirectionTile(tile)) {
-      return { kind: "reset", destination: { x: 0, y: 0 } };
+      return { kind: "reset", destination: this.resetPosition };
     }
     const offset = DIRECTION_OFFSET[tile.getDirection()];
     const destination = this.covertPosToInside({
@@ -29,7 +30,7 @@ export class RouteSearcher {
       y: position.y + offset[1],
     });
     if (this.tiles.getTile(destination.x, destination.y) === undefined) {
-      return { kind: "reset", destination: { x: 0, y: 0 } };
+      return { kind: "reset", destination: this.resetPosition };
     }
     return { kind: "move", destination };
   }
