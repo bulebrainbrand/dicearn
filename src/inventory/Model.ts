@@ -16,6 +16,15 @@ export class InventoryModel extends EventEmitter {
     this.tileAmounts = {};
   }
   addTile(name: InventoryItemName, amount: number) {
+    if (
+      !Number.isInteger(amount) ||
+      amount < 0 ||
+      !Number.isSafeInteger(amount)
+    ) {
+      throw new TypeError(
+        `amount must be a non-negative safe integer, got ${amount}`,
+      );
+    }
     if (this.tileAmounts[name] === undefined) {
       this.tileAmounts[name] = { amount, index: this.index++ };
       this.emit("newItem", {

@@ -129,7 +129,7 @@ export class TilesDataStorage<T> {
       [x + 1, y],
       [x, y + 1],
       [x - 1, y],
-      [x, y + 1],
+      [x, y - 1],
     ];
     return pos
       .filter(([x, y]) => this.isValidPosition(x, y))

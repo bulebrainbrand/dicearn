@@ -9,7 +9,7 @@ export class BufferTileView
   implements TileView
 {
   private sprite: Phaser.GameObjects.Rectangle;
-  readonly name: string = "normal";
+  readonly name: string = "buffer";
   constructor(scene: Phaser.Scene, dir: Direction) {
     super(scene, 0, 0);
     scene.add.existing(this);

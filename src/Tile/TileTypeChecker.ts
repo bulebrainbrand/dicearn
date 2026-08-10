@@ -1,4 +1,8 @@
-import { TILE_NAME_SET, TileModelUnion } from "./TileDifinition";
+import {
+  TILE_DIFINITION,
+  TILE_NAME_SET,
+  TileModelUnion,
+} from "./TileDifinition";
 import {
   DirectionTileModel,
   MovaleTileModel,
@@ -13,8 +17,16 @@ export class TileTypeChecker {
     throw new TypeError(`unexpected tile name: "${name}"`, { cause: tile });
   }
   assertRegisteredTile(tile: TileModel): asserts tile is TileModelUnion {
-    if (TILE_NAME_SET.has(tile.name)) return;
-    throw new TypeError(`unexpected tile: "${tile.name}"`);
+    if (!TILE_NAME_SET.has(tile.name)) {
+      throw new TypeError(`unexpected tile: "${tile.name}"`);
+    }
+    const definition =
+      TILE_DIFINITION[tile.name as keyof typeof TILE_DIFINITION];
+    if (!(tile instanceof definition.modelConstructor)) {
+      throw new TypeError(
+        `tile "${tile.name}" has incompatible runtime type`,
+      );
+    }
   }
   isMovable(tileModel: TileModel): tileModel is MovaleTileModel {
     return "getMovable" in tileModel;
