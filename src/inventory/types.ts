@@ -1,4 +1,5 @@
 import { TileModel } from "@/Tile/types";
+import { InventoryItemName } from "./Model";
 
 export interface InventoryTileView extends Phaser.GameObjects.Container {
   updateAmount(amount: number): void;
@@ -6,5 +7,5 @@ export interface InventoryTileView extends Phaser.GameObjects.Container {
   createTileModelForTiles(): TileModel;
 }
 export interface InventoryTileViewFactory {
-  create(name: string): InventoryTileView;
+  create(name: InventoryItemName): InventoryTileView;
 }

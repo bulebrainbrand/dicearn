@@ -1,9 +1,8 @@
 import { Direction } from "@/Direction";
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter";
-import { TileName } from "./TileName";
 
 export interface TileModel extends EventEmitter {
-  readonly name: TileName;
+  readonly name: string;
 }
 
 export interface DirectionTileModel extends TileModel {

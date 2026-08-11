@@ -1,5 +1,13 @@
+import { TileNameUnion } from "@/Tile/TileDifinition";
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter";
-type InventoryData = Record<string, { amount: number; index: number }>;
+export type InventoryItemName = TileNameUnion;
+export type InventoryModelEvent = {
+  newItem: { name: InventoryItemName; index: number; amount: number };
+  updateAmount: { name: InventoryItemName; amount: number };
+};
+type InventoryData = Partial<
+  Record<InventoryItemName, { amount: number; index: number }>
+>;
 export class InventoryModel extends EventEmitter {
   private tileAmounts: InventoryData;
   private index: number = 0;
@@ -7,40 +15,49 @@ export class InventoryModel extends EventEmitter {
     super();
     this.tileAmounts = {};
   }
-  addTile(name: string, amount: number) {
-    if (this.has(name) === false) {
-      this.tileAmounts[name] = { amount, index: this.index++ };
-      this.emit(
-        "newItem",
-        name,
-        this.tileAmounts[name].index,
-        this.tileAmounts[name].amount,
+  addTile(name: InventoryItemName, amount: number) {
+    if (
+      !Number.isInteger(amount) ||
+      amount < 0 ||
+      !Number.isSafeInteger(amount)
+    ) {
+      throw new TypeError(
+        `amount must be a non-negative safe integer, got ${amount}`,
       );
+    }
+    if (this.tileAmounts[name] === undefined) {
+      this.tileAmounts[name] = { amount, index: this.index++ };
+      this.emit("newItem", {
+        name,
+        index: this.tileAmounts[name].index,
+        amount,
+      } satisfies InventoryModelEvent["newItem"]);
       return;
     }
     this.tileAmounts[name].amount += amount;
-    this.emit("updateAmount", name, this.tileAmounts[name].amount);
+    this.emit("updateAmount", {
+      name,
+      amount: this.tileAmounts[name].amount,
+    } satisfies InventoryModelEvent["updateAmount"]);
   }
-  useTile(name: string) {
+  useTile(name: InventoryItemName) {
     if (this.tileAmounts[name] === undefined)
       throw new TypeError(`unexpected inventory name "${name}"`);
     if (this.tileAmounts[name].amount === 0)
       throw new TypeError(`can't use tile when tile amount is 0`);
     this.tileAmounts[name].amount--;
-    this.emit("updateAmount", name, this.tileAmounts[name].amount);
+    this.emit("updateAmount", {
+      name,
+      amount: this.tileAmounts[name].amount,
+    } satisfies InventoryModelEvent["updateAmount"]);
   }
-  getAmount(name: string): number {
-    if (this.tileAmounts[name] === undefined)
-      throw new TypeError(`unexpected inventory name "${name}"`);
+  getAmount(name: InventoryItemName): number {
+    if (this.tileAmounts[name] === undefined) return 0;
     return this.tileAmounts[name].amount;
   }
-  getIndex(name: string): number {
-    if (this.tileAmounts[name] === undefined)
-      throw new TypeError(`unexpected inventory name "${name}"`);
+  getIndex(name: InventoryItemName): number {
+    if (this.tileAmounts[name] === undefined) return 0;
     return this.tileAmounts[name].index;
-  }
-  has(name: string) {
-    return Boolean(this.tileAmounts[name]);
   }
   getAmounts(): Readonly<InventoryData> {
     return this.tileAmounts;

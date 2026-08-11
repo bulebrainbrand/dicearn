@@ -80,7 +80,9 @@ export class TilesDataStorage<T> {
     if (maxXDiff > 0) {
       times(
         () =>
-          this.tiles.push(Array(previousMaxY - previousMinY + 1).fill(undefined)),
+          this.tiles.push(
+            Array(previousMaxY - previousMinY + 1).fill(undefined),
+          ),
         maxXDiff,
       );
     }
@@ -121,6 +123,23 @@ export class TilesDataStorage<T> {
         fn(tile, x, y);
       }
     }
+  }
+  getAdjacent(x: number, y: number): (T | undefined)[] {
+    const pos: [number, number][] = [
+      [x + 1, y],
+      [x, y + 1],
+      [x - 1, y],
+      [x, y - 1],
+    ];
+    return pos
+      .filter(([x, y]) => this.isValidPosition(x, y))
+      .map(([x, y]) => this.getTile(x, y));
+  }
+  private isValidPosition(x: number, y: number): boolean {
+    if (x < this.boardSize.minX || this.boardSize.maxX < x) return false;
+    if (y < this.boardSize.minY || this.boardSize.maxY < y) return false;
+    if (isNaN(x) || isNaN(y)) return false;
+    return true;
   }
   private assetsValidPosition(x: number, y: number): void {
     if (x < this.boardSize.minX || this.boardSize.maxX < x)

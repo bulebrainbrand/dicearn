@@ -10,11 +10,11 @@ import { BoardView } from "./board/View";
 import { CursorModel } from "./cursor/Model";
 import { CursorView } from "./cursor/View";
 import { TileTypeChecker } from "./Tile/TileTypeChecker";
-import { TileViewFactoryFactory } from "./Tile/TileViewFactoryFactory";
-import { TileViewFactory } from "./Tile/types";
+import { TileViewFactory as ITileViewFactory } from "./Tile/types";
 import { Tiles } from "./Tiles/Model";
 import { TilesView } from "./Tiles/View";
 import { BoardSize, BoardSizeValues } from "./types";
+import { TileViewFactory } from "./Tile/TileViewFactory";
 
 export class BoardContextFactory {
   static create(
@@ -30,7 +30,7 @@ export class BoardContextFactory {
     cursor: CursorView;
     coordinateCalculator: BoardViewCoordinateCalculator;
     tileTypeChecker: TileTypeChecker;
-    tileViewFactory: TileViewFactory;
+    tileViewFactory: ITileViewFactory;
     moneyCalculator: MoneyCalculator;
     routeSearcher: RouteSearcher;
     routeExecutor: RouteExecutor;
@@ -62,11 +62,7 @@ export class BoardContextFactory {
     );
     const routeExecutor = new RouteExecutor(cursorModel);
     const boardModel = new Board(tiles, cursorModel, boardSize, routeSearcher);
-    const tileViewFactoryFactory = new TileViewFactoryFactory(
-      scene,
-      tileTypeChecker,
-    );
-    const tileViewFactory = tileViewFactoryFactory.create();
+    const tileViewFactory = new TileViewFactory(scene, tileTypeChecker);
     const boardView = new BoardView(scene, {}, boardSize);
     const tilesView = new TilesView(
       scene,
