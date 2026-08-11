@@ -5,7 +5,6 @@ import { TileView } from "../types";
 import { DirectionTileDrawer } from "../DirectionTileDrawer";
 import { BufferIconDrawer } from "./BufferTileIconDrawer";
 import { BuffAreaDrawer } from "./BuffAreaDrawer";
-import { FIXME } from "untodo";
 import { HOVER_TILE_DEPTH, TILE_DEPTH } from "@/layor";
 export class BufferTileView
   extends Phaser.GameObjects.Container
@@ -39,13 +38,8 @@ export class BufferTileView
     this.scene.input.on("pointerdown", () => {
       this.toNoHover();
     });
-    this.scene.input.on("pointerup", () => {
-      const { x, y } = this.scene.input.activePointer.position;
-      console.log(x, y);
-      if (this.getBounds().contains(x, y)) {
-        this.toHover();
-      }
-      FIXME({ reason: "なんかconatinsがうまくいかない?" });
+    this.on("pointerup", () => {
+      this.toHover();
     });
   }
   private drawTile(dir: Direction): void {
