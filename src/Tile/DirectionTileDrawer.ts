@@ -9,7 +9,6 @@ export class DirectionTileDrawer {
     const lineWidth = 12;
     const inset = lineWidth / 2;
     const half = CELL_SIZE_PX / 2 - inset;
-    g.clear();
 
     g.fillStyle(this.theme.backgroundColor);
     g.fillRect(
@@ -34,6 +33,6 @@ export class DirectionTileDrawer {
     g.lineTo(0, -half - 24);
     g.lineTo(half / 2, -half);
     g.fill();
-    g.rotateCanvas(0);
+    g.rotateCanvas(-DIRECTION_RADIAN[dir]);
   }
 }

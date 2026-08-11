@@ -40,7 +40,6 @@ export class NormalTileFactory implements TileFactory<
     model: NormalTileModel;
     view: NormalTileView;
     theme: DirectionTileTheme;
-    drawer: DirectionTileDrawer;
   } {
     const model = new NormalTileModel(dir);
     const theme = this.createTheme();
@@ -49,7 +48,7 @@ export class NormalTileFactory implements TileFactory<
     model.addListener("changeDirection", (dir: Direction) =>
       view.changeDirection(dir),
     );
-    return { model, view, theme, drawer };
+    return { model, view, theme };
   }
   private createTheme() {
     return new DirectionTileTheme(

@@ -25,6 +25,7 @@ export class NormalTileView
   }
   private drawTile(dir: Direction): void {
     const g = this.graphics;
+    g.clear();
     this.directionTileDrawer.draw(g, dir);
   }
   changeDirection(dir: Direction): void {

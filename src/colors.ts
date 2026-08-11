@@ -10,3 +10,7 @@ export const BASE_COLOR = "#9CCFBF";
 export const ACCENT_COLOR = "#F3B6C2";
 
 export const PRIMARY_COLOR = "#5FBF9A";
+
+export const SIGNAL_COLOR = "#8BBFCE";
+
+export const LIGHT_COLOR = "#F6D6A7";
