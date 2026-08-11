@@ -1,30 +1,33 @@
 import Phaser from "phaser";
-import { CELL_SIZE_PX } from "@/constants.ts";
+import { ACTUAL_CELL_SIZE_PX } from "@/constants.ts";
 import { Direction } from "@/Direction.ts";
-import { CELL_COLOR } from "@/Tile/NormalTile/constants";
 import { TileView } from "../types";
+import { DirectionTileDrawer } from "../DirectionTileDrawer";
 
 export class NormalTileView
   extends Phaser.GameObjects.Container
   implements TileView
 {
-  private sprite: Phaser.GameObjects.Rectangle;
+  private graphics: Phaser.GameObjects.Graphics;
   readonly name: string = "normal";
-  constructor(scene: Phaser.Scene, dir: Direction) {
+  constructor(
+    scene: Phaser.Scene,
+    dir: Direction,
+    private readonly directionTileDrawer: DirectionTileDrawer,
+  ) {
     super(scene, 0, 0);
     scene.add.existing(this);
-    const sprite = scene.add.rectangle(
-      0,
-      0,
-      CELL_SIZE_PX,
-      CELL_SIZE_PX,
-      CELL_COLOR[dir],
-    );
-    this.sprite = sprite;
-    this.add(sprite);
-    this.setSize(sprite.width, sprite.height);
+    const graphics = scene.add.graphics();
+    this.graphics = graphics;
+    this.add(graphics);
+    this.drawTile(dir);
+    this.setSize(ACTUAL_CELL_SIZE_PX, ACTUAL_CELL_SIZE_PX);
+  }
+  private drawTile(dir: Direction): void {
+    const g = this.graphics;
+    this.directionTileDrawer.draw(g, dir);
   }
   changeDirection(dir: Direction): void {
-    this.sprite.setFillStyle(CELL_COLOR[dir]);
+    this.drawTile(dir);
   }
 }
