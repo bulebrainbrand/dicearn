@@ -6,6 +6,7 @@ import { DirectionTileDrawer } from "../DirectionTileDrawer";
 import { BufferIconDrawer } from "./BufferTileIconDrawer";
 import { BuffAreaDrawer } from "./BuffAreaDrawer";
 import { FIXME } from "untodo";
+import { HOVER_TILE_DEPTH, TILE_DEPTH } from "@/layor";
 export class BufferTileView
   extends Phaser.GameObjects.Container
   implements TileView
@@ -28,6 +29,24 @@ export class BufferTileView
     this.drawTile(dir);
     this.setSize(ACTUAL_CELL_SIZE_PX, ACTUAL_CELL_SIZE_PX);
     this.setInteractive();
+    this.on("pointerover", () => {
+      if (this.scene.input.activePointer.isDown) return;
+      this.toHover();
+    });
+    this.on("pointerout", () => {
+      this.toNoHover();
+    });
+    this.scene.input.on("pointerdown", () => {
+      this.toNoHover();
+    });
+    this.scene.input.on("pointerup", () => {
+      const { x, y } = this.scene.input.activePointer.position;
+      console.log(x, y);
+      if (this.getBounds().contains(x, y)) {
+        this.toHover();
+      }
+      FIXME({ reason: "なんかconatinsがうまくいかない?" });
+    });
   }
   private drawTile(dir: Direction): void {
     const g = this.graphics;
@@ -36,10 +55,19 @@ export class BufferTileView
     this.bufferIconDrawer.draw(g);
     if (this.isHover) this.buffAreaDrawer.draw(g);
   }
+  private toHover() {
+    this.isHover = true;
+    console.log(this.isHover);
+    this.setDepth(HOVER_TILE_DEPTH);
+    this.drawTile(this.dir);
+  }
+  private toNoHover() {
+    this.isHover = false;
+    this.setDepth(TILE_DEPTH);
+    this.drawTile(this.dir);
+  }
   changeDirection(dir: Direction): void {
     this.dir = dir;
     this.drawTile(dir);
   }
 }
-
-FIXME({ reason: "isHoverを変更する何かを作る" });

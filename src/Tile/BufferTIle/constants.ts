@@ -15,6 +15,6 @@ export const TILE_ARROW_COLOR = TILE_BOARDER_COLOR;
 
 export const ICON_COLOR =
   Phaser.Display.Color.HexStringToColor(SIGNAL_COLOR).color;
-
-export const BUFF_AREA_COLOR =
-  Phaser.Display.Color.HexStringToColor(LIGHT_COLOR).color;
+const instance = Phaser.Display.Color.HexStringToColor(LIGHT_COLOR);
+instance.alpha = 256 * 0.5;
+export const BUFF_AREA_COLOR = instance;
