@@ -4,8 +4,8 @@ import { Direction } from "@/Direction.ts";
 import { TileView } from "../types";
 import { DirectionTileDrawer } from "../DirectionTileDrawer";
 import { BufferIconDrawer } from "./BufferTileIconDrawer";
-import { BuffAreaDrawer } from "./BuffAreaDrawer";
 import { HOVER_TILE_DEPTH, TILE_DEPTH } from "@/layor";
+import { TileOverlayDrawer } from "../TileOverlayDrawer";
 export class BufferTileView
   extends Phaser.GameObjects.Container
   implements TileView
@@ -18,7 +18,7 @@ export class BufferTileView
     private dir: Direction,
     private readonly directionTileDrawer: DirectionTileDrawer,
     private readonly bufferIconDrawer: BufferIconDrawer,
-    private readonly buffAreaDrawer: BuffAreaDrawer,
+    private readonly tileOverlayDrawer: TileOverlayDrawer,
   ) {
     super(scene, 0, 0);
     scene.add.existing(this);
@@ -47,7 +47,12 @@ export class BufferTileView
     g.clear();
     this.directionTileDrawer.draw(g, dir);
     this.bufferIconDrawer.draw(g);
-    if (this.isHover) this.buffAreaDrawer.draw(g);
+    if (this.isHover) {
+      this.tileOverlayDrawer.draw(g, { x: 1, y: 0 });
+      this.tileOverlayDrawer.draw(g, { x: 0, y: 1 });
+      this.tileOverlayDrawer.draw(g, { x: -1, y: 0 });
+      this.tileOverlayDrawer.draw(g, { x: 0, y: -1 });
+    }
   }
   private toHover() {
     this.isHover = true;

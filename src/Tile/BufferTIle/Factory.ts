@@ -13,7 +13,7 @@ import {
 import { DirectionTileTheme } from "../TileTheme";
 import { DirectionTileDrawer } from "../DirectionTileDrawer";
 import { BufferIconDrawer } from "./BufferTileIconDrawer";
-import { BuffAreaDrawer } from "./BuffAreaDrawer";
+import { TileOverlayDrawer } from "../TileOverlayDrawer";
 
 export class BufferTileFactory implements TileFactory<
   BufferTileModel,
@@ -23,13 +23,13 @@ export class BufferTileFactory implements TileFactory<
     const theme = this.createTheme();
     const drawer = new DirectionTileDrawer(theme);
     const iconDrawer = new BufferIconDrawer(ICON_COLOR);
-    const buffAreaDrawer = new BuffAreaDrawer(BUFF_AREA_COLOR);
+    const tileOverlayDrawer = new TileOverlayDrawer(BUFF_AREA_COLOR);
     const view = new BufferTileView(
       scene,
       model.getDirection(),
       drawer,
       iconDrawer,
-      buffAreaDrawer,
+      tileOverlayDrawer,
     );
     model.addListener("changeDirection", (dir: Direction) =>
       view.changeDirection(dir),
@@ -41,8 +41,14 @@ export class BufferTileFactory implements TileFactory<
     const theme = this.createTheme();
     const drawer = new DirectionTileDrawer(theme);
     const iconDrawer = new BufferIconDrawer(ICON_COLOR);
-    const buffAreaDrawer = new BuffAreaDrawer(BUFF_AREA_COLOR);
-    return new BufferTileView(scene, dir, drawer, iconDrawer, buffAreaDrawer);
+    const tileOverlayDrawer = new TileOverlayDrawer(BUFF_AREA_COLOR);
+    return new BufferTileView(
+      scene,
+      dir,
+      drawer,
+      iconDrawer,
+      tileOverlayDrawer,
+    );
   }
   model(dir: Direction = this.DEFAULT_DIR): BufferTileModel {
     return new BufferTileModel(dir);
@@ -59,13 +65,13 @@ export class BufferTileFactory implements TileFactory<
     const theme = this.createTheme();
     const tileDrawer = new DirectionTileDrawer(theme);
     const iconDrawer = new BufferIconDrawer(ICON_COLOR);
-    const buffAreaDrawer = new BuffAreaDrawer(BUFF_AREA_COLOR);
+    const tileOverlayDrawer = new TileOverlayDrawer(BUFF_AREA_COLOR);
     const view = new BufferTileView(
       scene,
       dir,
       tileDrawer,
       iconDrawer,
-      buffAreaDrawer,
+      tileOverlayDrawer,
     );
     model.addListener("changeDirection", (dir: Direction) =>
       view.changeDirection(dir),
