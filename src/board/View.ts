@@ -1,14 +1,14 @@
 import Phaser from "phaser";
 import { Board as RexBoard } from "phaser4-rex-plugins/plugins/board-components";
 import { BoardSize } from "@/types";
-import { CELL_SIZE_PX } from "@/constants";
+import { CELL_GAP_PX, CELL_SIZE_PX } from "@/constants";
 const DEFAULT_CONFIG = {
   grid: {
     gridType: "quadGrid", // 'quadGrid' | 'hexagonGrid'
     x: 0, // グリッド原点のワールドX座標
     y: 0, // グリッド原点のワールドY座標
-    cellWidth: CELL_SIZE_PX,
-    cellHeight: CELL_SIZE_PX,
+    cellWidth: CELL_SIZE_PX + CELL_GAP_PX,
+    cellHeight: CELL_SIZE_PX + CELL_GAP_PX,
     type: "orthogonal",
   },
 

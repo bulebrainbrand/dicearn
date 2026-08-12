@@ -1,7 +1,9 @@
+import { ACCENT_COLOR } from "@/colors";
 import { CELL_SIZE_PX } from "@/constants";
-
-export const CURSOR_RADIUS = CELL_SIZE_PX / 2;
-export const CURSOR_COLOR = 0x000000;
+import Phaser from "phaser";
+export const CURSOR_RADIUS = CELL_SIZE_PX / 3;
+export const CURSOR_COLOR =
+  Phaser.Display.Color.HexStringToColor(ACCENT_COLOR).color;
 
 export const CURSOR_TILE_Z = 1;
 export const CURSOR_DEPTH = 1;
