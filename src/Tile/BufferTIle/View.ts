@@ -35,7 +35,7 @@ export class BufferTileView
     this.on("pointerout", () => {
       this.toNoHover();
     });
-    this.scene.input.on("pointerdown", () => {
+    this.on("pointerdown", () => {
       this.toNoHover();
     });
     this.on("pointerup", () => {
