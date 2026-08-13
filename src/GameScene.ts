@@ -25,6 +25,10 @@ import { BufferTileModel } from "./Tile/BufferTIle/Model.ts";
 import { MoneyModel, MoneyModelEvent } from "./Money/Model.ts";
 import { MoneyView } from "./Money/View.ts";
 import { INK_COLOR } from "./colors.ts";
+import { RewordChoice } from "./RewordChoice/Model.ts";
+import { RewordChoiceView } from "./RewordChoice/View.ts";
+import { RewordGenerator } from "./RewordChoice/RewordGenerator.ts";
+import { InventoryModel } from "./inventory/Model.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -41,6 +45,7 @@ export class GameScene extends Phaser.Scene {
   moneyCalculator!: MoneyCalculator;
   routeSearcher!: RouteSearcher;
   routeExecutor!: RouteExecutor;
+  inventoryModel!: InventoryModel;
   constructor() {
     super();
   }
@@ -75,6 +80,7 @@ export class GameScene extends Phaser.Scene {
     this.routeSearcher = routeSearcher;
     this.routeExecutor = routeExecutor;
     this.boardSize = boardSize;
+    this.inventoryModel = inventoryModel;
     this.createDay();
     this.createDice();
     this.createMoney();
@@ -82,6 +88,7 @@ export class GameScene extends Phaser.Scene {
     this.registorEventListener();
     this.initTiles();
     this.createBoardPanZone();
+    this.createReword();
     const pan = this.rexGestures.add.pan(this.boardPanZone, { threshold: 10 });
     pan.on("panstart", () => {
       console.log("panstart");
@@ -95,7 +102,14 @@ export class GameScene extends Phaser.Scene {
       console.log("panEnd");
     });
   }
-
+  private createReword() {
+    const model = new RewordChoice();
+    const view = new RewordChoiceView(this, 0, 0, model);
+    const generator = new RewordGenerator(this.inventoryModel, this.boardSize);
+    this.dayModel.addListener("nextDay", () => {
+      model.show(generator.generate());
+    });
+  }
   private createBoardPanZone() {
     this.boardPanZone = this.add
       .zone(0, 0, this.scale.width, this.scale.height)
