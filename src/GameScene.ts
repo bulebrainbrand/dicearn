@@ -9,7 +9,6 @@ import { CursorModel } from "@/cursor/Model.ts";
 import { CELL_SIZE_PX } from "@/constants.ts";
 import { CursorView } from "./cursor/View.ts";
 import { Pan } from "phaser4-rex-plugins/plugins/gestures";
-import { MONEY_DEPTH } from "./layor.ts";
 import { BoardView } from "./board/View.ts";
 import { DayModel } from "./day/Model.ts";
 import { DayView } from "./day/View.ts";
@@ -23,6 +22,9 @@ import { RouteExecutor } from "./board/RouteExecutor.ts";
 import { RouteSearcher } from "./board/RouteSearcher.ts";
 import { BoardSize } from "./types.ts";
 import { BufferTileModel } from "./Tile/BufferTIle/Model.ts";
+import { MoneyModel, MoneyModelEvent } from "./Money/Model.ts";
+import { MoneyView } from "./Money/View.ts";
+import { INK_COLOR } from "./colors.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -30,8 +32,7 @@ export class GameScene extends Phaser.Scene {
   cursorModel!: CursorModel;
   cursor!: CursorView;
   private cursorAnimationQueue: Promise<void> = Promise.resolve();
-  money: number = 0;
-  moneyObject!: Phaser.GameObjects.Text;
+  private money!: MoneyModel;
   boardViewCoodinateCalculator!: BoardViewCoordinateCalculator;
   boardSize!: BoardSize;
   private boardPanZone!: Phaser.GameObjects.Zone;
@@ -106,6 +107,20 @@ export class GameScene extends Phaser.Scene {
       this.boardPanZone.setSize(this.scale.width, this.scale.height);
     });
   }
+  private createMoney() {
+    this.money = new MoneyModel(0);
+    const view = new MoneyView(
+      this,
+      this.scale.width / 2,
+      this.scale.height / 8,
+      INK_COLOR,
+    );
+    this.money.addListener(
+      "updateMoney",
+      (arg: MoneyModelEvent["updateMoney"]) => view.updateMoney(arg),
+    );
+    this.money.applyMoney(0);
+  }
   createBoardContext() {
     return BoardContextFactory.create(
       this,
@@ -171,26 +186,6 @@ export class GameScene extends Phaser.Scene {
       this.dayView.updateDay(day);
     });
   }
-  createMoney() {
-    const money = this.add.text(
-      CELL_SIZE_PX * 9,
-      CELL_SIZE_PX * 8,
-      String(this.money),
-      { color: "#000000", fontSize: "256px" },
-    );
-    this.moneyObject = money;
-    money.setOrigin(0.5, 0.5);
-    this.syncMoney();
-    money.setScrollFactor(0, 0);
-    money.setDepth(MONEY_DEPTH);
-  }
-  applyMoney(num: number) {
-    this.money += num;
-    this.syncMoney();
-  }
-  syncMoney() {
-    this.moneyObject.text = String(this.money);
-  }
 
   createDice() {
     const dice = new Dice(this, CELL_SIZE_PX * 11, CELL_SIZE_PX * 8);
@@ -203,7 +198,7 @@ export class GameScene extends Phaser.Scene {
         // cursorModel の "move" イベント経由でキューに積まれたアニメーションが
         // 実際に終わるまで待ってから次の1マスへ進む
         await this.cursorAnimationQueue;
-        this.applyMoney(
+        this.money.applyMoney(
           this.moneyCalculator.calcMoneyBySnapshotRoute(
             beforePosition,
             transition.destination,
@@ -218,8 +213,8 @@ export class GameScene extends Phaser.Scene {
     const shop = new Shop(this, CELL_SIZE_PX * 15, CELL_SIZE_PX * 3);
     this.add.existing(shop);
     shop.addItem("Upsize Grid", () => {
-      if (this.money >= 5) {
-        this.applyMoney(-5);
+      if (this.money.getMoney() >= 5) {
+        this.money.applyMoney(-5);
         console.log("Bought Upsize Grid");
         this.boardSize.expand(1);
         return true;
@@ -228,7 +223,7 @@ export class GameScene extends Phaser.Scene {
     });
   }
   checkMoney(needMoney: number) {
-    if (this.money < needMoney) {
+    if (this.money.getMoney() < needMoney) {
       console.log("game over");
     } else {
       console.log("pass");
