@@ -226,9 +226,10 @@ export class GameScene extends Phaser.Scene {
           ),
         );
       }
-      this.dayModel.nextDay();
       dice.setRollable(true);
+      this.dayModel.nextDay();
     });
+    this.dice = dice;
   }
   createShop() {
     const shop = new Shop(this, CELL_SIZE_PX * 15, CELL_SIZE_PX * 3);
