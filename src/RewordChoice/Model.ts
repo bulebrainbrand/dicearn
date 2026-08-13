@@ -23,13 +23,15 @@ export class RewordChoice extends EventEmitter {
   public choice(index: 0 | 1 | 2): void {
     if (this.status.type === "hidden")
       throw new TypeError(`can't choice when reword is hidden`);
+    const callback = this.status.rewords[index]?.callback;
     this.emit("choice", {
       index,
       rewords: this.status.rewords,
     } satisfies RewordChoiceModelEvent["choice"]);
-    this.status.rewords[index]?.callback();
+    callback?.();
   }
   public show(rewords: Rewords) {
+    if (this.status.type === "shown") throw new TypeError(`can't re-show`);
     this.status = { rewords, type: "shown" };
     this.emit("show", { rewords } satisfies RewordChoiceModelEvent["show"]);
   }
