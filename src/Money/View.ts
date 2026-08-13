@@ -24,8 +24,9 @@ export class MoneyView extends Phaser.GameObjects.Container {
     this.setDepth(MONEY_DEPTH);
   }
   updateMoney({ money, diff }: MoneyModelEvent["updateMoney"]) {
+    this.text.text = String(money);
     if (diff === 0) return;
-    const segment = money > 0 ? "+" : "-";
+    const segment = diff > 0 ? "+" : "-";
     const text = this.scene.add.text(
       0,
       -100,
@@ -39,7 +40,9 @@ export class MoneyView extends Phaser.GameObjects.Container {
       y: text.y - 50,
       alpha: 0,
       duration: 500,
+      onComplete: () => {
+        text.destroy();
+      },
     });
-    this.text.text = String(money);
   }
 }
