@@ -46,6 +46,7 @@ export class GameScene extends Phaser.Scene {
   routeSearcher!: RouteSearcher;
   routeExecutor!: RouteExecutor;
   inventoryModel!: InventoryModel;
+  dice!: Dice;
   constructor() {
     super();
   }
@@ -108,6 +109,12 @@ export class GameScene extends Phaser.Scene {
     const generator = new RewordGenerator(this.inventoryModel, this.boardSize);
     this.dayModel.addListener("nextDay", () => {
       model.show(generator.generate());
+    });
+    model.on("hide", () => {
+      this.dice.setRollable(true);
+    });
+    model.on("show", () => {
+      this.dice.setRollable(false);
     });
   }
   private createBoardPanZone() {
