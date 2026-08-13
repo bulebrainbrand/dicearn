@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { Reword, RewordChoice, RewordChoiceModelEvent, Rewords } from "./Model";
 import { RewordView } from "./RewordView";
 import { REWORD_DEPTH } from "@/layor";
-import { REWORD_WIDTH_PX } from "./constants";
+import { REWORD_WIDTH_PX, REWORDS_GAP_PX } from "./constants";
 
 export class RewordChoiceView extends Phaser.GameObjects.Container {
   constructor(
@@ -37,7 +37,7 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
       .forEach((container, i) => {
         this.add(container);
         container.setInteractive();
-        container.setPosition(i * REWORD_WIDTH_PX, 0);
+        container.setPosition(i * (REWORD_WIDTH_PX + REWORDS_GAP_PX), -200);
         container.on("pointerdown", () => {
           // 3 element taple. so actually, `i` is 0 | 1 | 2
           // oxlint-disable-next-line typescript/no-unsafe-type-assertion
