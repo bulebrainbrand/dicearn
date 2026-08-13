@@ -104,7 +104,7 @@ export class GameScene extends Phaser.Scene {
   }
   private createReword() {
     const model = new RewordChoice();
-    const view = new RewordChoiceView(this, 0, 0, model);
+    const view = new RewordChoiceView(this, 300, 300, model);
     const generator = new RewordGenerator(this.inventoryModel, this.boardSize);
     this.dayModel.addListener("nextDay", () => {
       model.show(generator.generate());

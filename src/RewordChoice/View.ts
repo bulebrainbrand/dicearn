@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { Reword, RewordChoice, RewordChoiceModelEvent, Rewords } from "./Model";
 import { RewordView } from "./RewordView";
+import { REWORD_DEPTH } from "@/layor";
 
 export class RewordChoiceView extends Phaser.GameObjects.Container {
   constructor(
@@ -22,6 +23,9 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
       "choice",
       (arg: RewordChoiceModelEvent["choice"]) => this.choice(arg.index),
     );
+    this.setScrollFactor(0, 0);
+    this.setSize(300, 500);
+    this.setVisible(false);
   }
   private show(rewords: Rewords): void {
     rewords
@@ -39,6 +43,7 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
         });
       });
     this.setVisible(true);
+    this.setDepth(REWORD_DEPTH);
   }
   private hide(): void {
     this.removeAll(true);
