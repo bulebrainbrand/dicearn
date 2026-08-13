@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import { RewordChoice, RewordChoiceModelEvent, Rewords } from "./Model";
-import { TODO } from "untodo";
+import { Reword, RewordChoice, RewordChoiceModelEvent, Rewords } from "./Model";
+import { RewordView } from "./RewordView";
 
 export class RewordChoiceView extends Phaser.GameObjects.Container {
   constructor(
@@ -16,7 +16,7 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
     );
     rewordChoiceModel.addListener(
       "hide",
-      (arg: RewordChoiceModelEvent["hide"]) => this.hide(),
+      (_arg: RewordChoiceModelEvent["hide"]) => this.hide(),
     );
     rewordChoiceModel.addListener(
       "choice",
@@ -24,12 +24,34 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
     );
   }
   private show(rewords: Rewords): void {
-    TODO({ reason: "後回し" });
+    rewords
+      .map((data) =>
+        data ? this.createReword(data) : this.createUndefinedReword(),
+      )
+      .forEach((container, i) => {
+        this.add(container);
+        container.setInteractive();
+        container.setPosition(i * 100, 0);
+        container.on("pointerdown", () => {
+          // 3 element taple. so actually, `i` is 0 | 1 | 2
+          // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+          this.rewordChoiceModel.choice(i as 0 | 1 | 2);
+        });
+      });
+    this.setVisible(true);
   }
   private hide(): void {
-    TODO({ reason: "後回し" });
+    this.removeAll(true);
+    this.setVisible(false);
   }
-  private choice(index: number): void {
-    TODO({ reason: "後回し" });
+  private choice(_index: number): void {
+    this.rewordChoiceModel.hide();
+  }
+  private createReword({ name, desc }: Reword) {
+    const rewordSprite = new RewordView(this.scene, 0, 0, name, desc);
+    return rewordSprite;
+  }
+  private createUndefinedReword() {
+    return this.scene.add.container(0, 0);
   }
 }
