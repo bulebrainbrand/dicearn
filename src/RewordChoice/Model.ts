@@ -27,6 +27,7 @@ export class RewordChoice extends EventEmitter {
       index,
       rewords: this.status.rewords,
     } satisfies RewordChoiceModelEvent["choice"]);
+    this.status.rewords[index]?.callback();
   }
   public show(rewords: Rewords) {
     this.status = { rewords, type: "shown" };
