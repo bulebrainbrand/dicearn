@@ -1,11 +1,3 @@
-export const MONEY_DEPTH = 3;
-export const DICE_DEPTH = 3;
-export const TILE_DEPTH = 0;
-export const HOVER_TILE_DEPTH = 1;
-export const INVENTORY_DEPTH = 3;
-
-export const REWORD_DEPTH = 5;
-
 export class DepthRange {
   constructor(
     readonly min: number,
@@ -23,3 +15,11 @@ export class DepthRange {
     return this.min + offset;
   }
 }
+
+export const BOARD_DEPTH_RANGE = new DepthRange(0, 10);
+export const CURSOR_DEPTH_RANGE = new DepthRange(11, 20);
+export const DICE_DEPTH_RANGE = new DepthRange(21, 30);
+export const MONEY_DEPTH_RANGE = new DepthRange(31, 40);
+export const INVENTORY_DEPTH_RANGE = new DepthRange(41, 50);
+export const DRAGGING_DEPTH_RANGE = new DepthRange(1001, 1010);
+export const REWORDS_DEPTH_RANGE = new DepthRange(100, 110);

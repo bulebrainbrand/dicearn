@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { Reword, RewordChoice, RewordChoiceModelEvent, Rewords } from "./Model";
 import { RewordView } from "./RewordView";
-import { REWORD_DEPTH } from "@/layer";
+import { REWORDS_DEPTH_RANGE } from "@/layer";
 import {
   REWORD_HEIGHT_PX,
   REWORD_WIDTH_PX,
@@ -64,7 +64,7 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
       )
       .setOrigin(0, 0)
       .setInteractive()
-      .setDepth(0);
+      .setDepth(REWORDS_DEPTH_RANGE.getDepth(1));
     this.add(this.backgroundRectangle);
 
     // Create reword containers
@@ -75,7 +75,7 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
     this.rewordContainers.forEach((container, i) => {
       this.add(container);
       container.setInteractive();
-      container.setDepth(3);
+      container.setDepth(REWORDS_DEPTH_RANGE.getDepth(2));
       container.on("pointerdown", () => {
         // 3 element taple. so actually, `i` is 0 | 1 | 2
         // oxlint-disable-next-line typescript/no-unsafe-type-assertion
@@ -87,7 +87,7 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
     this.layout(width, height);
 
     this.setVisible(true);
-    this.setDepth(REWORD_DEPTH);
+    this.setDepth(REWORDS_DEPTH_RANGE.getDepth(0));
   }
   private hide(): void {
     this.removeAll(true);

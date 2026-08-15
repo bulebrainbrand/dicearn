@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { DICE_DEPTH } from "./layer";
+import { DICE_DEPTH_RANGE } from "./layer";
 export class Dice extends Phaser.GameObjects.Container {
   private maxDiceValue: number = 6;
   private minDiceValue: number = 1;
@@ -23,7 +23,7 @@ export class Dice extends Phaser.GameObjects.Container {
     });
     this.setScrollFactor(0, 0, true);
     dice.setScrollFactor(0);
-    this.setDepth(DICE_DEPTH);
+    this.setDepth(DICE_DEPTH_RANGE.getDepth(0));
   }
   private roll() {
     return Phaser.Math.Between(this.minDiceValue, this.maxDiceValue);
