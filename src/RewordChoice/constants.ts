@@ -14,3 +14,7 @@ export const REWORD_BACKGROUND_COLOR = Phaser.Display.Color.HexStringToColor(
 ).color;
 
 export const REWORDS_GAP_PX = 50;
+
+export const REWORDS_BACKGROUND_COLOR = 0xffffff;
+
+export const REWORDS_BACKGROUND_ALPTA = 0.5;
