@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { MONEY_FADEOUT_TEXT_SIZE_PX, MONEY_TEXT_SIZE_PX } from "./constants";
 import { MoneyModelEvent } from "./Model";
-import { MONEY_DEPTH } from "@/layor";
+import { MONEY_DEPTH_RANGE } from "@/layer";
 
 export class MoneyView extends Phaser.GameObjects.Container {
   private text: Phaser.GameObjects.Text;
@@ -21,7 +21,7 @@ export class MoneyView extends Phaser.GameObjects.Container {
     this.text = text;
     text.setOrigin(0.5, 0.5);
     this.setScrollFactor(0, 0);
-    this.setDepth(MONEY_DEPTH);
+    this.setDepth(MONEY_DEPTH_RANGE.getDepth(0));
   }
   updateMoney({ money, diff }: MoneyModelEvent["updateMoney"]) {
     this.text.text = String(money);

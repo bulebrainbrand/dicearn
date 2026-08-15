@@ -4,7 +4,7 @@ import { Direction } from "@/Direction.ts";
 import { TileView } from "../types";
 import { DirectionTileDrawer } from "../DirectionTileDrawer";
 import { BufferIconDrawer } from "./BufferTileIconDrawer";
-import { HOVER_TILE_DEPTH, TILE_DEPTH } from "@/layor";
+import { BOARD_DEPTH_RANGE } from "@/layer";
 import { TileOverlayDrawer } from "../TileOverlayDrawer";
 export class BufferTileView
   extends Phaser.GameObjects.Container
@@ -57,12 +57,12 @@ export class BufferTileView
   private toHover() {
     this.isHover = true;
     console.log(this.isHover);
-    this.setDepth(HOVER_TILE_DEPTH);
+    this.setDepth(BOARD_DEPTH_RANGE.getDepth(2));
     this.drawTile(this.dir);
   }
   private toNoHover() {
     this.isHover = false;
-    this.setDepth(TILE_DEPTH);
+    this.setDepth(BOARD_DEPTH_RANGE.getDepth(1));
     this.drawTile(this.dir);
   }
   changeDirection(dir: Direction): void {

@@ -1,11 +1,6 @@
 import Phaser from "phaser";
 import Board from "phaser4-rex-plugins/plugins/board/board/Board.js";
-import {
-  CURSOR_COLOR,
-  CURSOR_DEPTH,
-  CURSOR_RADIUS,
-  CURSOR_TILE_Z,
-} from "./constants";
+import { CURSOR_COLOR, CURSOR_RADIUS, CURSOR_TILE_Z } from "./constants";
 
 import {
   BoardViewCoordinateCalculator,
@@ -14,6 +9,7 @@ import {
 import BoardPlugin from "phaser4-rex-plugins/plugins/board-plugin";
 import MoveTo from "phaser4-rex-plugins/plugins/board/moveto/MoveTo";
 import { CELL_SIZE_PX } from "@/constants";
+import { CURSOR_DEPTH_RANGE } from "@/layer";
 export class CursorView extends Phaser.GameObjects.Container {
   private moveToPosititon: MoveTo;
   private setToPosition: MoveTo;
@@ -26,7 +22,7 @@ export class CursorView extends Phaser.GameObjects.Container {
     private readonly boardViewCoodinateCalculator: BoardViewCoordinateCalculator,
   ) {
     super(scene, CELL_SIZE_PX * tileX, CELL_SIZE_PX * tileY);
-    this.setDepth(CURSOR_DEPTH);
+    this.setDepth(CURSOR_DEPTH_RANGE.getDepth(0));
     const arc = scene.add.circle(0, 0, CURSOR_RADIUS, CURSOR_COLOR);
     this.add(arc);
     scene.add.existing(this);

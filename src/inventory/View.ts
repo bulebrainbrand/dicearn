@@ -8,7 +8,7 @@ import {
   InventoryModelEvent,
 } from "./Model";
 import { BoardViewCoordinateCalculator } from "@/board/BoardViewCoordinateCalculator";
-import { INVENTORY_DEPTH } from "@/layor";
+import { DRAGGING_DEPTH_RANGE, INVENTORY_DEPTH_RANGE } from "@/layer";
 import { InventoryTileView, InventoryTileViewFactory } from "./types";
 
 export class InventoryView extends MiniBoard {
@@ -41,14 +41,14 @@ export class InventoryView extends MiniBoard {
         this.createItem(name, amount, index);
       },
     );
-    this.setDepth(INVENTORY_DEPTH);
+    this.setDepth(INVENTORY_DEPTH_RANGE.getDepth(0));
     this.setScrollFactor(0, 0);
   }
   private makeInventoryTileViewPlacable(
     name: InventoryItemName,
     item: InventoryTileView,
   ) {
-    item.setDepth(INVENTORY_DEPTH);
+    item.setDepth(INVENTORY_DEPTH_RANGE.getDepth(1));
     item.setInteractive({ draggable: true });
     let clone: TileView | undefined = undefined;
     item.on("dragstart", () => {
@@ -56,7 +56,7 @@ export class InventoryView extends MiniBoard {
         return;
       }
       clone = item.createClone();
-      clone.setDepth(1000);
+      clone.setDepth(DRAGGING_DEPTH_RANGE.getDepth(0));
     });
     item.on("drag", (pointer: Phaser.Input.Pointer) => {
       if (clone === undefined) return;

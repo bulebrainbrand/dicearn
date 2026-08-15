@@ -6,4 +6,3 @@ export const CURSOR_COLOR =
   Phaser.Display.Color.HexStringToColor(ACCENT_COLOR).color;
 
 export const CURSOR_TILE_Z = 1;
-export const CURSOR_DEPTH = 1;
