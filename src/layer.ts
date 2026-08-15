@@ -5,6 +5,8 @@ export class DepthRange {
   ) {
     if (Number.isNaN(min) || Number.isNaN(max))
       throw new TypeError(`can't set min/max to NaN`);
+    if (min > max)
+      throw new RangeError(`min (${min}) must not be greater than max (${max})`);
   }
   getDepth(offset: number) {
     if (Number.isNaN(offset)) throw new TypeError(`can't use NaN offset`);
