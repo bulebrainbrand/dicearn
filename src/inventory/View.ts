@@ -8,7 +8,7 @@ import {
   InventoryModelEvent,
 } from "./Model";
 import { BoardViewCoordinateCalculator } from "@/board/BoardViewCoordinateCalculator";
-import { INVENTORY_DEPTH } from "@/layor";
+import { INVENTORY_DEPTH } from "@/layer";
 import { InventoryTileView, InventoryTileViewFactory } from "./types";
 
 export class InventoryView extends MiniBoard {

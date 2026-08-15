@@ -4,7 +4,7 @@ import { Direction } from "@/Direction.ts";
 import { TileView } from "../types";
 import { DirectionTileDrawer } from "../DirectionTileDrawer";
 import { BufferIconDrawer } from "./BufferTileIconDrawer";
-import { HOVER_TILE_DEPTH, TILE_DEPTH } from "@/layor";
+import { HOVER_TILE_DEPTH, TILE_DEPTH } from "@/layer";
 import { TileOverlayDrawer } from "../TileOverlayDrawer";
 export class BufferTileView
   extends Phaser.GameObjects.Container

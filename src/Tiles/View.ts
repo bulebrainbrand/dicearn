@@ -9,7 +9,7 @@ import {
 import Drag from "phaser4-rex-plugins/plugins/input/drag/Drag";
 import { TilesDataStorage } from "./tilesDataStorage";
 import { TILE_TILE_Z } from "./constants";
-import { TILE_DEPTH } from "@/layor";
+import { TILE_DEPTH } from "@/layer";
 import { BoardViewCoordinateCalculator } from "@/board/BoardViewCoordinateCalculator";
 import { Direction } from "@/Direction";
 import { TileModel, TileView, TileViewFactory } from "@/Tile/types";

@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { Reword, RewordChoice, RewordChoiceModelEvent, Rewords } from "./Model";
 import { RewordView } from "./RewordView";
-import { REWORD_DEPTH } from "@/layor";
+import { REWORD_DEPTH } from "@/layer";
 import {
   REWORD_HEIGHT_PX,
   REWORD_WIDTH_PX,
@@ -112,10 +112,7 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
 
     // Position each reword container
     this.rewordContainers.forEach((container, i) => {
-      container.setPosition(
-        left + i * (REWORD_WIDTH_PX + REWORDS_GAP_PX),
-        top,
-      );
+      container.setPosition(left + i * (REWORD_WIDTH_PX + REWORDS_GAP_PX), top);
     });
   }
   private choice(_index: number): void {

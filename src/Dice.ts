@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { DICE_DEPTH } from "./layor";
+import { DICE_DEPTH } from "./layer";
 export class Dice extends Phaser.GameObjects.Container {
   private maxDiceValue: number = 6;
   private minDiceValue: number = 1;

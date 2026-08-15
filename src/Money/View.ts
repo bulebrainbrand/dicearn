@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { MONEY_FADEOUT_TEXT_SIZE_PX, MONEY_TEXT_SIZE_PX } from "./constants";
 import { MoneyModelEvent } from "./Model";
-import { MONEY_DEPTH } from "@/layor";
+import { MONEY_DEPTH } from "@/layer";
 
 export class MoneyView extends Phaser.GameObjects.Container {
   private text: Phaser.GameObjects.Text;
