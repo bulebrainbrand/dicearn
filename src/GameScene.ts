@@ -2,7 +2,6 @@ import * as Phaser from "phaser";
 import { DIRECTION_TAPLE } from "./Direction.ts";
 import { Tiles } from "./Tiles/Model.ts";
 import { Dice } from "./Dice.ts";
-import { Shop } from "./Shop.ts";
 import { Board } from "./board/Model.ts";
 import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalculator.ts";
 import { CursorModel } from "@/cursor/Model.ts";
@@ -85,7 +84,6 @@ export class GameScene extends Phaser.Scene {
     this.createDay();
     this.createDice();
     this.createMoney();
-    this.createShop();
     this.registorEventListener();
     this.initTiles();
     this.createBoardPanZone();
@@ -105,7 +103,7 @@ export class GameScene extends Phaser.Scene {
   }
   private createReword() {
     const model = new RewordChoice();
-    const view = new RewordChoiceView(this, 300, 300, model);
+    const view = new RewordChoiceView(this, 0, 0, model);
     const generator = new RewordGenerator(this.inventoryModel, this.boardSize);
     this.dayModel.addListener("nextDay", () => {
       model.show(generator.generate());
@@ -230,19 +228,6 @@ export class GameScene extends Phaser.Scene {
       this.dayModel.nextDay();
     });
     this.dice = dice;
-  }
-  createShop() {
-    const shop = new Shop(this, CELL_SIZE_PX * 15, CELL_SIZE_PX * 3);
-    this.add.existing(shop);
-    shop.addItem("Upsize Grid", () => {
-      if (this.money.getMoney() >= 5) {
-        this.money.applyMoney(-5);
-        console.log("Bought Upsize Grid");
-        this.boardSize.expand(1);
-        return true;
-      }
-      return false;
-    });
   }
   checkMoney(needMoney: number) {
     if (this.money.getMoney() < needMoney) {
