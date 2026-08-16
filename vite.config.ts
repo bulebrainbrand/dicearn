@@ -37,5 +37,6 @@ export default defineConfig({
       check: ["vpr lint", "vpr test"],
     },
   },
+  server: { host: true },
   staged: { "*.{ts}": "vpr check && vpr fmt" },
 });
