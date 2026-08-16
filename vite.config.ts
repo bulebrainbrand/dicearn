@@ -2,6 +2,30 @@
 import path from "node:path";
 import { defineConfig } from "vite-plus";
 export default defineConfig({
+  build: {
+    rolldownOptions: {
+      input: "index.html",
+      output: {
+        codeSplitting: {
+          groups: [
+            {
+              name: "phaser-vendor",
+              test: /node_modules[\\/](?:phaser)/,
+              priority: 20, // large-libsより優先
+            },
+            {
+              name: "large-libs",
+              test: /node_modules/,
+              minSize: 100000, // 100KB
+              maxSize: 200000, // 250KB
+              priority: 10,
+            },
+          ],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1600,
+  },
   lint: {
     options: { typeAware: true, typeCheck: true },
     jsPlugins: [{ name: "untodo", specifier: "untodo/eslint" }],
