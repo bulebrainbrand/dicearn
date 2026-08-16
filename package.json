@@ -19,6 +19,7 @@
     "vite-plus": "^0.2.8",
     "wrangler": "^4.123.0"
   },
+  "packageManager": "pnpm@10.11.1",
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
