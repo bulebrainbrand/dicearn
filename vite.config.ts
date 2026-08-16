@@ -34,8 +34,10 @@ export default defineConfig({
       lint: ["vp lint"],
       test: ["vp test --run  --passWithNoTests"],
       fmt: ["vp fmt"],
+      dev: ["vp dev --host"],
       check: ["vpr lint", "vpr test"],
     },
   },
+  server: { host: true },
   staged: { "*.{ts}": "vpr check && vpr fmt" },
 });
