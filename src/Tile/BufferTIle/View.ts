@@ -11,7 +11,7 @@ export class BufferTileView
   implements TileView
 {
   private graphics: Phaser.GameObjects.Graphics;
-  private isHover: boolean = false;
+  private shouldShowBuffArea: boolean = false;
   readonly name: string = "buffer";
   constructor(
     scene: Phaser.Scene,
@@ -29,17 +29,13 @@ export class BufferTileView
     this.setSize(ACTUAL_CELL_SIZE_PX, ACTUAL_CELL_SIZE_PX);
     this.setInteractive();
     this.on("pointerover", () => {
-      if (this.scene.input.activePointer.isDown) return;
-      this.toHover();
+      this.showBuffArea();
     });
     this.on("pointerout", () => {
-      this.toNoHover();
+      this.hideBuffArea();
     });
     this.on("pointerdown", () => {
-      this.toNoHover();
-    });
-    this.on("pointerup", () => {
-      this.toHover();
+      this.showBuffArea();
     });
   }
   private drawTile(dir: Direction): void {
@@ -47,21 +43,21 @@ export class BufferTileView
     g.clear();
     this.directionTileDrawer.draw(g, dir);
     this.bufferIconDrawer.draw(g);
-    if (this.isHover) {
+    if (this.shouldShowBuffArea) {
       this.tileOverlayDrawer.draw(g, { x: 1, y: 0 });
       this.tileOverlayDrawer.draw(g, { x: 0, y: 1 });
       this.tileOverlayDrawer.draw(g, { x: -1, y: 0 });
       this.tileOverlayDrawer.draw(g, { x: 0, y: -1 });
     }
   }
-  private toHover() {
-    this.isHover = true;
-    console.log(this.isHover);
+  private showBuffArea() {
+    this.shouldShowBuffArea = true;
+    console.log(this.shouldShowBuffArea);
     this.setDepth(BOARD_DEPTH_RANGE.getDepth(2));
     this.drawTile(this.dir);
   }
-  private toNoHover() {
-    this.isHover = false;
+  private hideBuffArea() {
+    this.shouldShowBuffArea = false;
     this.setDepth(BOARD_DEPTH_RANGE.getDepth(1));
     this.drawTile(this.dir);
   }
