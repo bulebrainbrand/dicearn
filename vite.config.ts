@@ -35,9 +35,11 @@ export default defineConfig({
       test: ["vp test --run  --passWithNoTests"],
       fmt: ["vp fmt"],
       dev: ["vp dev --host"],
+      tunnel: ["cloudflared tunnel --url http://localhost:5173"],
       check: ["vpr lint", "vpr test"],
     },
+    cache: { tasks: false },
   },
-  server: { host: true },
+  server: { host: true, allowedHosts: true },
   staged: { "*.{ts}": "vpr check && vpr fmt" },
 });
