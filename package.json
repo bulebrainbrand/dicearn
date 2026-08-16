@@ -16,14 +16,13 @@
     "@typescript-eslint/utils": "^8.66.0",
     "@vitest/coverage-v8": "4.1.10",
     "untodo": "^0.0.1",
-    "vite-plus": "^0.2.8",
+    "vite-plus": "^0.2.9",
     "wrangler": "^4.123.0"
   },
-  "packageManager": "pnpm@10.11.1",
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "^11.20.0 || ^10.0.0",
+      "version": "^11.20.0",
       "onFail": "warn"
     }
   }
