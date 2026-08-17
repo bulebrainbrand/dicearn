@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { Pan, Pinch } from "phaser4-rex-plugins/plugins/gestures";
 
 export class CameraController {
+  readonly background: Phaser.GameObjects.Zone;
   constructor(scene: Phaser.Scene) {
     const background = scene.add
       .zone(0, 0, scene.scale.width, scene.scale.height)
@@ -12,6 +13,7 @@ export class CameraController {
     background.on("resize", () => {
       background.setSize(scene.scale.width, scene.scale.height);
     });
+    this.background = background;
     scene.rexGestures.add
       .pan(background, { threshold: 10 })
       .on("pan", (pan: Pan) => {
@@ -31,7 +33,7 @@ export class CameraController {
         _: Phaser.GameObjects.GameObject,
         dx: number,
         dy: number,
-        dz: number,
+        _dz: number,
       ) => {
         const DY_FACTOR = 0.02;
         // x * -0.1 + 1でズームを計算

@@ -23,6 +23,7 @@ export class InventoryView extends MiniBoard {
     private readonly inventoryModel: InventoryModel,
     private readonly inventoryTileViewFactory: InventoryTileViewFactory,
     private readonly boardViewCoordinateCalculator: BoardViewCoordinateCalculator,
+    private readonly gameContainer: Phaser.GameObjects.Container,
   ) {
     super(scene, x, y, config);
     scene.add.existing(this);
@@ -57,6 +58,7 @@ export class InventoryView extends MiniBoard {
       }
       clone = item.createClone();
       clone.setDepth(DRAGGING_DEPTH_RANGE.getDepth(0));
+      this.gameContainer.add(clone);
     });
     item.on("drag", (pointer: Phaser.Input.Pointer) => {
       if (clone === undefined) return;

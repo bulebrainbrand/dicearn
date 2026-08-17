@@ -21,6 +21,7 @@ export class BoardContextFactory {
     scene: Phaser.Scene,
     initialBoardSize: BoardSizeValues,
     defaultCursorPosition: Position,
+    chessContainer: Phaser.GameObjects.Container,
   ): {
     boardModel: Board;
     boardView: BoardView;
@@ -67,6 +68,7 @@ export class BoardContextFactory {
     const tilesView = new TilesView(
       scene,
       boardView,
+      chessContainer,
       tiles,
       boardViewCoordinateCalculator,
       tileViewFactory,

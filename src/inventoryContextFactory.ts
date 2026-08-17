@@ -15,6 +15,7 @@ export class InventoryContextFactory {
     tiles: Tiles,
     boardViewCoordinateCalculator: BoardViewCoordinateCalculator,
     tileTypeChecker: TileTypeChecker,
+    gameContainer: Phaser.GameObjects.Container,
   ): {
     inventoryModel: InventoryModel;
     inventoryView: InventoryView;
@@ -42,6 +43,7 @@ export class InventoryContextFactory {
       inventoryModel,
       inventoryTileViewFactory,
       boardViewCoordinateCalculator,
+      gameContainer,
     );
     const tilePickUp = new TilePickUp(inventoryModel, tiles, tileTypeChecker);
     return {

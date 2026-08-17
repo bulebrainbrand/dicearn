@@ -19,6 +19,7 @@ export class TilesView {
   constructor(
     private scene: Phaser.Scene,
     private board: Board,
+    private chessContainer: Phaser.GameObjects.Container,
     private tilesModel: Tiles,
     private boardViewCoordinateCalculator: BoardViewCoordinateCalculator,
     private readonly tileViewFactory: TileViewFactory,
@@ -51,6 +52,7 @@ export class TilesView {
   private createTileSprite(x: number, y: number, tile: TileModel): TileView {
     const sprite = this.tileViewFactory.create(tile);
     this.board.addChess(sprite, x, y, TILE_TILE_Z, true);
+    this.chessContainer.add(sprite);
     this.tiles.setTile(x, y, sprite);
     sprite.setDepth(BOARD_DEPTH_RANGE.getDepth(0));
     sprite.setInteractive({ draggable: true });
