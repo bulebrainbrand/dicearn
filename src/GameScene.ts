@@ -79,6 +79,7 @@ export class GameScene extends Phaser.Scene {
     );
     inventoryModel.addTile("normal", 1);
     inventoryModel.addTile("buffer", 1);
+    this.UIContainer.add(inventoryView);
     this.boardModel = boardModel;
     this.tiles = tiles;
     this.cursorModel = cursorModel;
