@@ -21,8 +21,6 @@ export class Dice extends Phaser.GameObjects.Container {
         this.emit("roll", rollValue);
       }
     });
-    this.setScrollFactor(0, 0, true);
-    dice.setScrollFactor(0);
     this.setDepth(DICE_DEPTH_RANGE.getDepth(0));
   }
   private roll() {

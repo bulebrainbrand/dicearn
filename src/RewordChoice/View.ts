@@ -36,7 +36,6 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
       (arg: RewordChoiceModelEvent["choice"]) => this.choice(arg.index),
     );
     const { width, height } = scene.scale;
-    this.setScrollFactor(0, 0);
     this.setSize(width, height);
     this.setVisible(false);
 

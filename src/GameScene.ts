@@ -7,7 +7,6 @@ import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalcul
 import { CursorModel } from "@/cursor/Model.ts";
 import { CELL_SIZE_PX } from "@/constants.ts";
 import { CursorView } from "./cursor/View.ts";
-import { Pan } from "phaser4-rex-plugins/plugins/gestures";
 import { BoardView } from "./board/View.ts";
 import { DayModel } from "./day/Model.ts";
 import { DayView } from "./day/View.ts";
@@ -29,6 +28,7 @@ import { RewordChoiceView } from "./RewordChoice/View.ts";
 import { RewordGenerator } from "./RewordChoice/RewordGenerator.ts";
 import { InventoryModel } from "./inventory/Model.ts";
 import { CameraController } from "./CameraController.ts";
+import { UI_DEPTH_RANGE } from "./layer.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -47,10 +47,12 @@ export class GameScene extends Phaser.Scene {
   routeExecutor!: RouteExecutor;
   inventoryModel!: InventoryModel;
   dice!: Dice;
+  UIContainer!: Phaser.GameObjects.Container;
   constructor() {
     super();
   }
   create() {
+    this.createUIContainer();
     const {
       boardModel,
       boardView,
@@ -89,6 +91,13 @@ export class GameScene extends Phaser.Scene {
     this.initTiles();
     this.createReword();
     new CameraController(this);
+    this.UIContainer.setScrollFactor(0, 0, true);
+  }
+  private createUIContainer() {
+    this.UIContainer = this.add
+      .container(0, 0)
+      .setScrollFactor(0, 0)
+      .setDepth(UI_DEPTH_RANGE.getDepth(0));
   }
   private createReword() {
     const model = new RewordChoice();
@@ -103,6 +112,7 @@ export class GameScene extends Phaser.Scene {
     model.on("show", () => {
       this.dice.setRollable(false);
     });
+    this.UIContainer.add(view);
   }
   private createMoney() {
     this.money = new MoneyModel(0);
@@ -117,6 +127,7 @@ export class GameScene extends Phaser.Scene {
       (arg: MoneyModelEvent["updateMoney"]) => view.updateMoney(arg),
     );
     this.money.applyMoney(0);
+    this.UIContainer.add(view);
   }
   createBoardContext() {
     return BoardContextFactory.create(
@@ -147,6 +158,7 @@ export class GameScene extends Phaser.Scene {
     );
     this.dayModel = model;
     this.dayView = view;
+    this.UIContainer.add(view);
   }
 
   initTiles() {
@@ -206,6 +218,7 @@ export class GameScene extends Phaser.Scene {
       this.dayModel.nextDay();
     });
     this.dice = dice;
+    this.UIContainer.add(dice);
   }
   checkMoney(needMoney: number) {
     if (this.money.getMoney() < needMoney) {
