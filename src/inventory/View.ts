@@ -74,7 +74,11 @@ export class InventoryView extends MiniBoard {
       if (clone === undefined) return;
       clone.destroy();
       clone = undefined;
-      const tileXY = this.board.worldXYToTileXY(pointer.worldX, pointer.worldY);
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+      const { x, y } = pointer.positionToCamera(
+        this.scene.cameras.main,
+      ) as Phaser.Math.Vector2;
+      const tileXY = this.board.worldXYToTileXY(x, y);
       if (this.boardViewCoordinateCalculator.isOutside(tileXY)) {
         return;
       }
