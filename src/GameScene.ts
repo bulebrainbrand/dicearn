@@ -29,6 +29,7 @@ import { RewordGenerator } from "./RewordChoice/RewordGenerator.ts";
 import { InventoryModel } from "./inventory/Model.ts";
 import { CameraController } from "./CameraController.ts";
 import { UI_DEPTH_RANGE } from "./layer.ts";
+import { InventoryView } from "./inventory/View.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -39,7 +40,7 @@ export class GameScene extends Phaser.Scene {
   private money!: MoneyModel;
   boardViewCoodinateCalculator!: BoardViewCoordinateCalculator;
   boardSize!: BoardSize;
-  private boardPanZone!: Phaser.GameObjects.Zone;
+  inventoryView!: InventoryView;
   dayModel!: DayModel;
   dayView!: DayView;
   moneyCalculator!: MoneyCalculator;
@@ -48,11 +49,15 @@ export class GameScene extends Phaser.Scene {
   inventoryModel!: InventoryModel;
   dice!: Dice;
   UIContainer!: Phaser.GameObjects.Container;
+  GameContainer!: Phaser.GameObjects.Container;
+  boardView!: BoardView;
   constructor() {
     super();
   }
   create() {
     this.createUIContainer();
+    this.createGameContainer();
+    this.createUICamera();
     const {
       boardModel,
       boardView,
@@ -66,7 +71,7 @@ export class GameScene extends Phaser.Scene {
       routeExecutor,
       boardSize,
     } = this.createBoardContext();
-    const { inventoryModel } = this.createInventoryContext(
+    const { inventoryModel, inventoryView } = this.createInventoryContext(
       boardView,
       tiles,
       coordinateCalculator,
@@ -74,6 +79,7 @@ export class GameScene extends Phaser.Scene {
     );
     inventoryModel.addTile("normal", 1);
     inventoryModel.addTile("buffer", 1);
+    this.UIContainer.add(inventoryView);
     this.boardModel = boardModel;
     this.tiles = tiles;
     this.cursorModel = cursorModel;
@@ -83,21 +89,35 @@ export class GameScene extends Phaser.Scene {
     this.routeSearcher = routeSearcher;
     this.routeExecutor = routeExecutor;
     this.boardSize = boardSize;
+    this.boardView = boardView;
     this.inventoryModel = inventoryModel;
+    this.inventoryView = inventoryView;
     this.createDay();
     this.createDice();
     this.createMoney();
     this.registorEventListener();
     this.initTiles();
     this.createReword();
-    new CameraController(this);
+    const cameraController = new CameraController(this);
+    this.GameContainer.addAt(cameraController.background, 0);
     this.UIContainer.setScrollFactor(0, 0, true);
+    this.initCameras();
+  }
+  private createUICamera() {
+    this.cameras.add(0, 0, this.scale.width, this.scale.height, false, "UI");
   }
   private createUIContainer() {
     this.UIContainer = this.add
       .container(0, 0)
       .setScrollFactor(0, 0)
       .setDepth(UI_DEPTH_RANGE.getDepth(0));
+  }
+  private createGameContainer() {
+    this.GameContainer = this.add.container(0, 0);
+  }
+  private initCameras() {
+    this.cameras.main.ignore(this.UIContainer);
+    this.cameras.getCamera("UI")?.ignore(this.GameContainer);
   }
   private createReword() {
     const model = new RewordChoice();
@@ -130,10 +150,13 @@ export class GameScene extends Phaser.Scene {
     this.UIContainer.add(view);
   }
   createBoardContext() {
+    const chessContainer = this.add.container();
+    this.GameContainer.add(chessContainer);
     return BoardContextFactory.create(
       this,
       { maxX: 5, maxY: 5, minX: 0, minY: 0 },
       { x: 0, y: 0 },
+      chessContainer,
     );
   }
   createInventoryContext(
@@ -148,6 +171,7 @@ export class GameScene extends Phaser.Scene {
       tiles,
       boardViewCoordinateCalculator,
       tileTypeChecker,
+      this.GameContainer,
     );
   }
   createDay() {

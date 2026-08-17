@@ -18,6 +18,8 @@ export class InventoryTileView
     super(scene, x, y);
     scene.add.existing(this);
     const tileView = tileViewFactory.view(scene);
+    // なんかinteractiveじゃなくしたらInventoryViewのdrag(InventoryTileViewのdragイベントが発動する)がきく。恐らく、tileViewがContainerより上にあるせいで、こいつがinputを吸ってる
+    tileView.disableInteractive();
     this.add(tileView);
     this.tileView = tileView;
     this.text = scene.add.text(0, 0, String(amount), {

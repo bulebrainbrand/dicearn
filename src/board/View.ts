@@ -29,4 +29,15 @@ export class BoardView extends RexBoard {
     this.setBoardWidth(boardSize.maxX - boardSize.minX + 1);
     this.setBoardHeight(boardSize.maxY - boardSize.minY + 1);
   }
+  addChess(
+    gameObject: Phaser.GameObjects.GameObject,
+    tileX: number,
+    tileY: number,
+    tileZ: number | string,
+    align?: boolean,
+  ): this {
+    super.addChess(gameObject, tileX, tileY, tileZ, align);
+    this.scene.cameras.getCamera("UI")?.ignore(gameObject);
+    return this;
+  }
 }

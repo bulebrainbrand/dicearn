@@ -52,7 +52,6 @@ export class BufferTileView
   }
   private showBuffArea() {
     this.shouldShowBuffArea = true;
-    console.log(this.shouldShowBuffArea);
     this.setDepth(BOARD_DEPTH_RANGE.getDepth(2));
     this.drawTile(this.dir);
   }
