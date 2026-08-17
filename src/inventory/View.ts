@@ -59,6 +59,7 @@ export class InventoryView extends MiniBoard {
       }
       clone = item.createClone();
       clone.setDepth(DRAGGING_DEPTH_RANGE.getDepth(0));
+      clone.setInteractive();
       this.gameContainer.add(clone);
     });
     item.on("drag", (pointer: Phaser.Input.Pointer) => {
