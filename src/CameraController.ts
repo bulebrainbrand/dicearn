@@ -1,3 +1,4 @@
+import Phaser from "phaser";
 import { Pan, Pinch } from "phaser4-rex-plugins/plugins/gestures";
 
 export class CameraController {
@@ -23,5 +24,28 @@ export class CameraController {
       console.log(pinch.scaleFactor);
       cam.zoom *= pinch.scaleFactor;
     });
+    scene.input.on(
+      "wheel",
+      (
+        pointer: Phaser.Input.Pointer,
+        _: Phaser.GameObjects.GameObject,
+        dx: number,
+        dy: number,
+        dz: number,
+      ) => {
+        const DY_FACTOR = 0.02;
+        // x * -0.1 + 1でズームを計算
+        const zoom = dy * DY_FACTOR * -0.1 + 1;
+        const cam = scene.cameras.main;
+        const newZoom = Phaser.Math.Clamp(cam.zoom * zoom, 0.5, 4);
+        const before = cam.getWorldPoint(pointer.x, pointer.y);
+        scene.cameras.main.zoom = newZoom;
+
+        cam.preRender();
+        const after = cam.getWorldPoint(pointer.x, pointer.y);
+        cam.scrollX += before.x - after.x;
+        cam.scrollY += before.y - after.y;
+      },
+    );
   }
 }
