@@ -20,7 +20,6 @@ export class MoneyView extends Phaser.GameObjects.Container {
     this.add(text);
     this.text = text;
     text.setOrigin(0.5, 0.5);
-    this.setScrollFactor(0, 0);
     this.setDepth(MONEY_DEPTH_RANGE.getDepth(0));
   }
   updateMoney({ money, diff }: MoneyModelEvent["updateMoney"]) {

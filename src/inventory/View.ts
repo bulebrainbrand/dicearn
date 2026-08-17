@@ -41,8 +41,8 @@ export class InventoryView extends MiniBoard {
         this.createItem(name, amount, index);
       },
     );
-    this.setDepth(INVENTORY_DEPTH_RANGE.getDepth(0));
     this.setScrollFactor(0, 0);
+    this.setDepth(INVENTORY_DEPTH_RANGE.getDepth(0));
   }
   private makeInventoryTileViewPlacable(
     name: InventoryItemName,
