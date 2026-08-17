@@ -28,6 +28,7 @@ import { RewordChoice } from "./RewordChoice/Model.ts";
 import { RewordChoiceView } from "./RewordChoice/View.ts";
 import { RewordGenerator } from "./RewordChoice/RewordGenerator.ts";
 import { InventoryModel } from "./inventory/Model.ts";
+import { CameraController } from "./CameraController.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -86,20 +87,8 @@ export class GameScene extends Phaser.Scene {
     this.createMoney();
     this.registorEventListener();
     this.initTiles();
-    this.createBoardPanZone();
     this.createReword();
-    const pan = this.rexGestures.add.pan(this.boardPanZone, { threshold: 10 });
-    pan.on("panstart", () => {
-      console.log("panstart");
-    });
-    pan.on("pan", (pan: Pan) => {
-      const cam = this.cameras.main;
-      cam.scrollX -= pan.dx / cam.zoom;
-      cam.scrollY -= pan.dy / cam.zoom;
-    });
-    pan.on("panend", (_pan: Pan) => {
-      console.log("panEnd");
-    });
+    new CameraController(this);
   }
   private createReword() {
     const model = new RewordChoice();
@@ -113,17 +102,6 @@ export class GameScene extends Phaser.Scene {
     });
     model.on("show", () => {
       this.dice.setRollable(false);
-    });
-  }
-  private createBoardPanZone() {
-    this.boardPanZone = this.add
-      .zone(0, 0, this.scale.width, this.scale.height)
-      .setOrigin(0)
-      .setScrollFactor(0)
-      .setDepth(-1)
-      .setInteractive();
-    this.scale.on("resize", () => {
-      this.boardPanZone.setSize(this.scale.width, this.scale.height);
     });
   }
   private createMoney() {
