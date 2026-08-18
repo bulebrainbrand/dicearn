@@ -1,6 +1,5 @@
 import { Tiles } from "@/Tiles/Model";
 import { Position } from "./BoardViewCoordinateCalculator";
-import { TileModel } from "@/Tile/types";
 import { RouteKind } from "./types";
 import { TileModelUnion, TileNameUnion } from "@/Tile/TileDifinition";
 
