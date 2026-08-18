@@ -30,8 +30,8 @@ import { InventoryModel } from "./inventory/Model.ts";
 import { CameraController } from "./CameraController.ts";
 import { UI_DEPTH_RANGE } from "./layer.ts";
 import { InventoryView } from "./inventory/View.ts";
-import { GetaTileModel } from "./Tile/GetaTile/Model.ts";
 import { DiceResultCalculator } from "./DiceResultCalculator.ts";
+import { MarkTileModel } from "./Tile/MarkTile/Model.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -199,7 +199,7 @@ export class GameScene extends Phaser.Scene {
         ),
       ),
     );
-    this.tiles.setTile(1, 1, new GetaTileModel("u"));
+    this.tiles.setTile(1, 1, new MarkTileModel("u"));
   }
   registorEventListener() {
     this.cursorModel.addListener(
@@ -243,6 +243,7 @@ export class GameScene extends Phaser.Scene {
           this.moneyCalculator.calcMoneyBySnapshotRoute(
             beforePosition,
             transition.destination,
+            transition.kind,
           ),
         );
       }

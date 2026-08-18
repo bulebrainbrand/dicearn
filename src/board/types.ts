@@ -1,0 +1,1 @@
+export type RouteKind = "move" | "reset" | "warp";

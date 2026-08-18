@@ -2,6 +2,8 @@ import { BufferTileFactory } from "./BufferTIle/Factory";
 import { BufferTileModel } from "./BufferTIle/Model";
 import { GetaTileFactory } from "./GetaTile/Factory";
 import { GetaTileModel } from "./GetaTile/Model";
+import { MarkTileFactory } from "./MarkTile/Factory";
+import { MarkTileModel } from "./MarkTile/Model";
 import { NormalTileFactory } from "./NormalTile/Factory";
 import { NormalTileModel } from "./NormalTile/Model";
 import { TileFactory, TileModel, TileView } from "./types";
@@ -16,6 +18,7 @@ export const TILE_DIFINITION = {
     modelConstructor: BufferTileModel,
   },
   geta: { factory: new GetaTileFactory(), modelConstructor: GetaTileModel },
+  mark: { factory: new MarkTileFactory(), modelConstructor: MarkTileModel },
 } as const satisfies Record<
   string,
   {

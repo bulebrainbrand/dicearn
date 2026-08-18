@@ -1,6 +1,7 @@
 import Phaser from "phaser";
-import { TileFactory, TileModel, TileView } from "@/Tile/types";
+import { TileFactory, TileView } from "@/Tile/types";
 import { InventoryTileView as IInventoryTileView } from "./types";
+import { TileModelUnion } from "@/Tile/TileDifinition";
 
 export class InventoryTileView
   extends Phaser.GameObjects.Container
@@ -12,7 +13,7 @@ export class InventoryTileView
     scene: Phaser.Scene,
     x: number,
     y: number,
-    private tileViewFactory: TileFactory<TileModel, TileView>,
+    private tileViewFactory: TileFactory<TileModelUnion, TileView>,
     amount: number,
   ) {
     super(scene, x, y);
@@ -29,7 +30,7 @@ export class InventoryTileView
     this.add(this.text);
     this.setSize(tileView.width, tileView.height);
   }
-  createTileModelForTiles(): TileModel {
+  createTileModelForTiles(): TileModelUnion {
     return this.tileViewFactory.model();
   }
   updateAmount(amount: number) {

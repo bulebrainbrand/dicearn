@@ -31,6 +31,13 @@ export class RewordGenerator {
         },
       },
       {
+        name: "mark tile",
+        desc: "get 1 mark tile. +10 money when warp to this tile",
+        callback: () => {
+          this.inventoryModel.addTile("mark", 1);
+        },
+      },
+      {
         name: "upgrade board",
         desc: "board size +1",
         callback: () => {

@@ -5,7 +5,7 @@ export class RouteExecutor {
   constructor(private readonly cursor: CursorModel) {}
 
   execute({ kind, destination }: RouteTransition) {
-    if (kind === "reset") {
+    if (kind === "reset" || kind === "warp") {
       this.cursor.warp(destination.x, destination.y);
       return;
     }
