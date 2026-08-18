@@ -21,11 +21,10 @@ export class TileTypeChecker {
       throw new TypeError(`unexpected tile: "${tile.name}"`);
     }
     const definition =
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       TILE_DIFINITION[tile.name as keyof typeof TILE_DIFINITION];
     if (!(tile instanceof definition.modelConstructor)) {
-      throw new TypeError(
-        `tile "${tile.name}" has incompatible runtime type`,
-      );
+      throw new TypeError(`tile "${tile.name}" has incompatible runtime type`);
     }
   }
   isMovable(tileModel: TileModel): tileModel is MovaleTileModel {
