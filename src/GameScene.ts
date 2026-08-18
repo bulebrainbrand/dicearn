@@ -243,6 +243,7 @@ export class GameScene extends Phaser.Scene {
           this.moneyCalculator.calcMoneyBySnapshotRoute(
             beforePosition,
             transition.destination,
+            transition.kind,
           ),
         );
       }

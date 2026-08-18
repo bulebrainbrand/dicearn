@@ -3,10 +3,9 @@ import { TileTypeChecker } from "@/Tile/TileTypeChecker";
 import { Tiles } from "@/Tiles/Model.ts";
 import { BoardSize } from "@/types";
 import { Position } from "./BoardViewCoordinateCalculator";
+import { RouteKind } from "./types";
 
-export type RouteTransition =
-  | { kind: "move"; destination: Position }
-  | { kind: "reset"; destination: Position };
+export type RouteTransition = { kind: RouteKind; destination: Position };
 
 export class RouteSearcher {
   constructor(

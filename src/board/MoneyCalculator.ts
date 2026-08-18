@@ -1,8 +1,16 @@
 import { Tiles } from "@/Tiles/Model";
 import { Position } from "./BoardViewCoordinateCalculator";
 import { TileModel } from "@/Tile/types";
+import { RouteKind } from "./types";
+import { TileNameUnion } from "@/Tile/TileDifinition";
 
-export type MoveRoute = { x: number; y: number }[];
+export type MoveRoute = { x: number; y: number; kind: RouteKind }[];
+
+const MONEY_BY_TILE = {
+  buffer: { move: 0, reset: 0, warp: 0 },
+  geta: { move: 0, reset: 0, warp: 0 },
+  normal: { move: 1, reset: 0, warp: 1 },
+} as const satisfies Record<TileNameUnion, Record<RouteKind, number>>;
 
 export class MoneyCalculator {
   constructor(private readonly tiles: Tiles) {}
@@ -10,18 +18,24 @@ export class MoneyCalculator {
     let current = start;
     let sum = 0;
     for (const r of route) {
-      sum += this.calcMoneyBySnapshotRoute(current, r);
+      sum += this.calcMoneyBySnapshotRoute(current, r, r.kind);
       current = r;
     }
     return sum;
   }
-  calcMoneyBySnapshotRoute(start: Position, end: Position): number {
+  calcMoneyBySnapshotRoute(
+    start: Position,
+    end: Position,
+    kind: RouteKind,
+  ): number {
     const bufferTileCount = this.countTile(
       end,
       (tile) => tile.name === "buffer",
     );
-    const isEndNormal = this.tiles.getTile(end.x, end.y)?.name === "normal";
-    return (isEndNormal ? 1 : 0) * 2 ** bufferTileCount;
+    const moneyAmount =
+      // @ts-expect-error
+      MONEY_BY_TILE[this.tiles.getTile(end.x, end.y)?.name][kind];
+    return moneyAmount * 2 ** bufferTileCount;
   }
   private countTile(pos: Position, checker: (tileModel: TileModel) => boolean) {
     return this.tiles
