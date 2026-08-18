@@ -32,9 +32,9 @@ export class MoneyCalculator {
       end,
       (tile) => tile.name === "buffer",
     );
-    const moneyAmount =
-      // @ts-expect-error
-      MONEY_BY_TILE[this.tiles.getTile(end.x, end.y)?.name][kind];
+    const endTile = this.tiles.getTile(end.x, end.y);
+
+    const moneyAmount = endTile ? MONEY_BY_TILE[endTile.name][kind] : 0;
     return moneyAmount * 2 ** bufferTileCount;
   }
   private countTile(
