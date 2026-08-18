@@ -38,9 +38,7 @@ export class RewordGenerator {
         },
       },
     ];
-    const select = rewords
-      .keys()
-      .toArray()
+    const select = Array.from(rewords.keys())
       .sort(() => Math.random() - 0.5)
       .slice(0, 3)
       .sort((a, b) => a - b);
