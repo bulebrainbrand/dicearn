@@ -38,10 +38,12 @@ export class RewordGenerator {
         },
       },
     ];
-    const select = Array.from(rewords.keys())
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 3)
-      .sort((a, b) => a - b);
+    const indices = Array.from(rewords.keys());
+    for (let i = 0; i < 3; i++) {
+      const j = i + Math.floor(Math.random() * (indices.length - i));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    const select = indices.slice(0, 3).sort((a, b) => a - b);
     return [rewords[select[0]], rewords[select[1]], rewords[select[2]]];
   }
 }
