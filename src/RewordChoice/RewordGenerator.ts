@@ -25,7 +25,7 @@ export class RewordGenerator {
       },
       {
         name: "geta  tile",
-        desc: "get 1 buffer tile. it will plus one to each dice result",
+        desc: "get 1 geta tile. it will plus one to each dice result",
         callback: () => {
           this.inventoryModel.addTile("geta", 1);
         },
