@@ -124,6 +124,24 @@ export class TilesDataStorage<T> {
       }
     }
   }
+  find(fn: (data: T | undefined, x: number, y: number) => boolean) {
+    for (const [x, arr] of this.tiles.entries()) {
+      for (const [y, tile] of arr.entries()) {
+        if (fn(tile, x, y)) {
+          return { data: tile, x, y };
+        }
+      }
+    }
+  }
+  some(fn: (data: T | undefined, x: number, y: number) => boolean) {
+    for (const [x, arr] of this.tiles.entries()) {
+      for (const [y, tile] of arr.entries()) {
+        if (fn(tile, x, y)) {
+          return true;
+        }
+      }
+    }
+  }
   getAdjacent(x: number, y: number): (T | undefined)[] {
     const pos: [number, number][] = [
       [x + 1, y],
