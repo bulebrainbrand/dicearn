@@ -31,7 +31,7 @@ export class RewordGenerator {
         },
       },
       {
-        name: "mark  tile",
+        name: "mark tile",
         desc: "get 1 mark tile. +10 money when warp to this tile",
         callback: () => {
           this.inventoryModel.addTile("mark", 1);
