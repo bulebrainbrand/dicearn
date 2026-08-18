@@ -43,4 +43,10 @@ export class Tiles extends EventEmitter {
   getAdjacentTile(x: number, y: number) {
     return this.tiles.getAdjacent(x, y);
   }
+  find(fn: (data: TileModel | undefined, x: number, y: number) => boolean) {
+    return this.tiles.find(fn);
+  }
+  some(fn: (data: TileModel | undefined, x: number, y: number) => boolean) {
+    return this.tiles.some(fn);
+  }
 }

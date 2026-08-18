@@ -8,7 +8,7 @@ export class RewordGenerator {
     private readonly boardSize: BoardSize,
   ) {}
   generate(): Rewords {
-    return [
+    const rewords = [
       {
         name: "normal tile",
         desc: "get 1 normal tile",
@@ -24,6 +24,13 @@ export class RewordGenerator {
         },
       },
       {
+        name: "geta  tile",
+        desc: "get 1 geta tile. it will plus one to each dice result",
+        callback: () => {
+          this.inventoryModel.addTile("geta", 1);
+        },
+      },
+      {
         name: "upgrade board",
         desc: "board size +1",
         callback: () => {
@@ -31,5 +38,12 @@ export class RewordGenerator {
         },
       },
     ];
+    const indices = Array.from(rewords.keys());
+    for (let i = 0; i < 3; i++) {
+      const j = i + Math.floor(Math.random() * (indices.length - i));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+    const select = indices.slice(0, 3).sort((a, b) => a - b);
+    return [rewords[select[0]], rewords[select[1]], rewords[select[2]]];
   }
 }
