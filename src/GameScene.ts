@@ -31,6 +31,7 @@ import { CameraController } from "./CameraController.ts";
 import { UI_DEPTH_RANGE } from "./layer.ts";
 import { InventoryView } from "./inventory/View.ts";
 import { GetaTileModel } from "./Tile/GetaTile/Model.ts";
+import { DiceResultCalculator } from "./DiceResultCalculator.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -223,7 +224,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   createDice() {
-    const dice = new Dice(this, CELL_SIZE_PX * 11, CELL_SIZE_PX * 8);
+    const dice = new Dice(
+      this,
+      CELL_SIZE_PX * 11,
+      CELL_SIZE_PX * 8,
+      new DiceResultCalculator(this.tiles),
+    );
     dice.on("roll", async (value: number) => {
       dice.setRollable(false);
       for (let i = 0; i < value; i++) {
