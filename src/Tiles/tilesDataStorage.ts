@@ -120,27 +120,29 @@ export class TilesDataStorage<T> {
   forEach(fn: (data: T | undefined, x: number, y: number) => void): void {
     for (const [x, arr] of this.tiles.entries()) {
       for (const [y, tile] of arr.entries()) {
-        fn(tile, x, y);
+        fn(tile, ...this.convertIndexToPosition(x, y));
       }
     }
   }
   find(fn: (data: T | undefined, x: number, y: number) => boolean) {
     for (const [x, arr] of this.tiles.entries()) {
       for (const [y, tile] of arr.entries()) {
-        if (fn(tile, x, y)) {
-          return { data: tile, x, y };
+        const [px, py] = this.convertIndexToPosition(x, y);
+        if (fn(tile, px, py)) {
+          return { data: tile, x: px, y: py };
         }
       }
     }
   }
-  some(fn: (data: T | undefined, x: number, y: number) => boolean) {
+  some(fn: (data: T | undefined, x: number, y: number) => boolean): boolean {
     for (const [x, arr] of this.tiles.entries()) {
       for (const [y, tile] of arr.entries()) {
-        if (fn(tile, x, y)) {
+        if (fn(tile, ...this.convertIndexToPosition(x, y))) {
           return true;
         }
       }
     }
+    return false;
   }
   getAdjacent(x: number, y: number): (T | undefined)[] {
     const pos: [number, number][] = [
@@ -173,5 +175,8 @@ export class TilesDataStorage<T> {
   }
   private convertPositionToIndex(x: number, y: number): [number, number] {
     return [x - this.boardSize.minX, y - this.boardSize.minY];
+  }
+  private convertIndexToPosition(x: number, y: number): [number, number] {
+    return [x + this.boardSize.minX, y + this.boardSize.minY];
   }
 }
