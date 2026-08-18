@@ -12,8 +12,9 @@ import { TILE_TILE_Z } from "./constants";
 import { BOARD_DEPTH_RANGE } from "@/layer";
 import { BoardViewCoordinateCalculator } from "@/board/BoardViewCoordinateCalculator";
 import { Direction } from "@/Direction";
-import { TileModel, TileView, TileViewFactory } from "@/Tile/types";
+import { TileView, TileViewFactory } from "@/Tile/types";
 import { TileTypeChecker } from "@/Tile/TileTypeChecker";
+import { TileModelUnion } from "@/Tile/TileDifinition";
 export class TilesView {
   private tiles: TilesDataStorage<TileView>;
   constructor(
@@ -49,7 +50,11 @@ export class TilesView {
       this.swapTiles(arg),
     );
   }
-  private createTileSprite(x: number, y: number, tile: TileModel): TileView {
+  private createTileSprite(
+    x: number,
+    y: number,
+    tile: TileModelUnion,
+  ): TileView {
     const sprite = this.tileViewFactory.create(tile);
     this.board.addChess(sprite, x, y, TILE_TILE_Z, true);
     this.chessContainer.add(sprite);
@@ -116,7 +121,7 @@ export class TilesView {
       sprite.getData("y") !== tileXY.y
     );
   }
-  setTile(x: number, y: number, tile: TileModel) {
+  setTile(x: number, y: number, tile: TileModelUnion) {
     this.createTileSprite(x, y, tile);
   }
   swapTiles({ first, second }: TilesModelSwapEvent) {

@@ -2,7 +2,7 @@ import { Tiles } from "@/Tiles/Model";
 import { Position } from "./BoardViewCoordinateCalculator";
 import { TileModel } from "@/Tile/types";
 import { RouteKind } from "./types";
-import { TileNameUnion } from "@/Tile/TileDifinition";
+import { TileModelUnion, TileNameUnion } from "@/Tile/TileDifinition";
 
 export type MoveRoute = { x: number; y: number; kind: RouteKind }[];
 
@@ -37,7 +37,10 @@ export class MoneyCalculator {
       MONEY_BY_TILE[this.tiles.getTile(end.x, end.y)?.name][kind];
     return moneyAmount * 2 ** bufferTileCount;
   }
-  private countTile(pos: Position, checker: (tileModel: TileModel) => boolean) {
+  private countTile(
+    pos: Position,
+    checker: (tileModel: TileModelUnion) => boolean,
+  ) {
     return this.tiles
       .getAdjacentTile(pos.x, pos.y)
       .filter((tile) => tile !== undefined)
