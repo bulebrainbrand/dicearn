@@ -1,5 +1,5 @@
-import { AbstrustMovableRotatableTile } from "../AbstructTile/Model";
+import { AbstrastMovableRotatableTile } from "../AbstractTile/Model";
 
-export class MarkTileModel extends AbstrustMovableRotatableTile {
+export class MarkTileModel extends AbstrastMovableRotatableTile {
   readonly name = "mark";
 }

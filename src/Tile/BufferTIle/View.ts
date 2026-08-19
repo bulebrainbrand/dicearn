@@ -4,8 +4,8 @@ import { DirectionTileDrawer } from "../DirectionTileDrawer";
 import { BufferIconDrawer } from "./BufferTileIconDrawer";
 import { BOARD_DEPTH_RANGE } from "@/layer";
 import { TileOverlayDrawer } from "../TileOverlayDrawer";
-import { AbstructDirectionTileView } from "../AbstructTile/View";
-export class BufferTileView extends AbstructDirectionTileView {
+import { AbstractDirectionTileView } from "../AbstractTile/View";
+export class BufferTileView extends AbstractDirectionTileView {
   private shouldShowBuffArea: boolean = false;
   readonly name: string = "buffer";
   constructor(

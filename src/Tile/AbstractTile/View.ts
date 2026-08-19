@@ -4,12 +4,12 @@ import { Direction } from "@/Direction.ts";
 import { TileView } from "../types";
 import { DirectionTileDrawer } from "../DirectionTileDrawer";
 
-export class AbstructDirectionTileView
+export abstract class AbstractDirectionTileView
   extends Phaser.GameObjects.Container
   implements TileView
 {
   readonly graphics: Phaser.GameObjects.Graphics;
-  readonly name: string = "abstruct";
+  abstract readonly name: string;
   constructor(
     scene: Phaser.Scene,
     private readonly directionTileDrawer: DirectionTileDrawer,

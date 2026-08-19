@@ -1,8 +1,8 @@
 import { Direction } from "@/Direction";
-import { AbstructDirectionTileView } from "../AbstructTile/View";
+import { AbstractDirectionTileView } from "../AbstractTile/View";
 import { DirectionTileDrawer } from "../DirectionTileDrawer";
 
-export class NormalTileView extends AbstructDirectionTileView {
+export class NormalTileView extends AbstractDirectionTileView {
   readonly name = "normal";
   constructor(
     scene: Phaser.Scene,

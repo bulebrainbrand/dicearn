@@ -2,9 +2,9 @@ import Phaser from "phaser";
 import { Direction } from "@/Direction.ts";
 import { DirectionTileDrawer } from "../DirectionTileDrawer";
 import { MarkIconDrawer } from "./MarkTileIconDrawer";
-import { AbstructDirectionTileView } from "../AbstructTile/View";
+import { AbstractDirectionTileView } from "../AbstractTile/View";
 
-export class MarkTileView extends AbstructDirectionTileView {
+export class MarkTileView extends AbstractDirectionTileView {
   readonly name: string = "mark";
   private readonly getaIconDrawer: MarkIconDrawer;
   constructor(

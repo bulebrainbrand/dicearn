@@ -2,9 +2,9 @@ import Phaser from "phaser";
 import { Direction } from "@/Direction.ts";
 import { DirectionTileDrawer } from "../DirectionTileDrawer";
 import { GetaIconDrawer } from "./GetaTileIconDrawer";
-import { AbstructDirectionTileView } from "../AbstructTile/View";
+import { AbstractDirectionTileView } from "../AbstractTile/View";
 
-export class GetaTileView extends AbstructDirectionTileView {
+export class GetaTileView extends AbstractDirectionTileView {
   readonly name = "geta";
   constructor(
     scene: Phaser.Scene,
