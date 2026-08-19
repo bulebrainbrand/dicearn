@@ -24,11 +24,11 @@ export class RewordChoice extends EventEmitter {
     if (this.status.type === "hidden")
       throw new TypeError(`can't choice when reword is hidden`);
     const callback = this.status.rewords[index]?.callback;
+    callback?.();
     this.emit("choice", {
       index,
       rewords: this.status.rewords,
     } satisfies RewordChoiceModelEvent["choice"]);
-    callback?.();
   }
   public show(rewords: Rewords) {
     if (this.status.type === "shown") throw new TypeError(`can't re-show`);

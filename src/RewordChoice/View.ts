@@ -65,7 +65,7 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
       .setInteractive()
       .setDepth(REWORDS_DEPTH_RANGE.getDepth(1));
     this.add(this.backgroundRectangle);
-
+    this.scene.cameras.main.ignore(this.backgroundRectangle);
     // Create reword containers
     this.rewordContainers = rewords.map((data) =>
       data ? this.createReword(data) : this.createUndefinedReword(),
@@ -75,6 +75,7 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
       this.add(container);
       container.setInteractive();
       container.setDepth(REWORDS_DEPTH_RANGE.getDepth(2));
+      this.scene.cameras.main.ignore(container);
       container.on("pointerdown", () => {
         // 3 element taple. so actually, `i` is 0 | 1 | 2
         // oxlint-disable-next-line typescript/no-unsafe-type-assertion
@@ -115,7 +116,9 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
     });
   }
   private choice(_index: number): void {
-    this.rewordChoiceModel.hide();
+    this.scene.time.delayedCall(0, () => {
+      this.rewordChoiceModel.hide();
+    });
   }
   private createReword({ name, desc }: Reword) {
     const rewordSprite = new RewordView(this.scene, 0, 0, name, desc);
