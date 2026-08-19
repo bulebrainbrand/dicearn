@@ -90,10 +90,13 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
     this.setDepth(REWORDS_DEPTH_RANGE.getDepth(0));
   }
   private hide(): void {
-    this.removeAll(true);
-    this.backgroundRectangle = null;
-    this.rewordContainers = [];
+    this.disableInteractive();
     this.setVisible(false);
+    this.scene.time.delayedCall(0, () => {
+      this.removeAll(true);
+      this.backgroundRectangle = null;
+      this.rewordContainers = [];
+    });
   }
 
   private layout(width: number, height: number): void {
@@ -116,9 +119,7 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
     });
   }
   private choice(_index: number): void {
-    this.scene.time.delayedCall(0, () => {
-      this.rewordChoiceModel.hide();
-    });
+    this.rewordChoiceModel.hide();
   }
   private createReword({ name, desc }: Reword) {
     const rewordSprite = new RewordView(this.scene, 0, 0, name, desc);
