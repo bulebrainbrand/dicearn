@@ -54,7 +54,7 @@ export class InventoryView extends MiniBoard {
     item.setDepth(INVENTORY_DEPTH_RANGE.getDepth(1));
     item.setInteractive({ draggable: true });
     let clone: TileView | undefined = undefined;
-    item.on("dragstart", () => {
+    item.on("dragstart", (pointer: Phaser.Input.Pointer) => {
       if (this.inventoryModel.getAmount(name) === 0) {
         return;
       }
@@ -62,6 +62,12 @@ export class InventoryView extends MiniBoard {
       clone.setDepth(DRAGGING_DEPTH_RANGE.getDepth(0));
       clone.setInteractive();
       this.gameContainer.add(clone);
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+      const { x, y } = pointer.positionToCamera(
+        this.scene.cameras.main,
+      ) as Phaser.Math.Vector2;
+      clone.setX(x);
+      clone.setY(y);
     });
     item.on("drag", (pointer: Phaser.Input.Pointer) => {
       if (clone === undefined) return;
