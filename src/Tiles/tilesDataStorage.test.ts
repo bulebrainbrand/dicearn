@@ -26,6 +26,6 @@ describe("TilesDataStorage", () => {
     });
 
     expect(visitedCells).toContain("-1,6");
-    expect(visitedCells.length).toBe(7 * 7);
+    expect(visitedCells.length).toBe(8 * 8);
   });
 });
