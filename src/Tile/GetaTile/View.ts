@@ -1,37 +1,23 @@
 import Phaser from "phaser";
-import { ACTUAL_CELL_SIZE_PX } from "@/constants.ts";
 import { Direction } from "@/Direction.ts";
-import { TileView } from "../types";
 import { DirectionTileDrawer } from "../DirectionTileDrawer";
 import { GetaIconDrawer } from "./GetaTileIconDrawer";
+import { AbstractDirectionTileView } from "../AbstractTile/View";
 
-export class GetaTileView
-  extends Phaser.GameObjects.Container
-  implements TileView
-{
-  private graphics: Phaser.GameObjects.Graphics;
-  readonly name: string = "geta";
+export class GetaTileView extends AbstractDirectionTileView {
+  readonly name = "geta";
   constructor(
     scene: Phaser.Scene,
     dir: Direction,
-    private readonly directionTileDrawer: DirectionTileDrawer,
+    directionTileDrawer: DirectionTileDrawer,
     private readonly getaIconDrawer: GetaIconDrawer,
   ) {
-    super(scene, 0, 0);
-    scene.add.existing(this);
-    const graphics = scene.add.graphics();
-    this.graphics = graphics;
-    this.add(graphics);
+    super(scene, directionTileDrawer);
     this.drawTile(dir);
-    this.setSize(ACTUAL_CELL_SIZE_PX, ACTUAL_CELL_SIZE_PX);
   }
-  private drawTile(dir: Direction): void {
+  protected drawTile(dir: Direction): void {
+    super.drawTile(dir);
     const g = this.graphics;
-    g.clear();
-    this.directionTileDrawer.draw(g, dir);
     this.getaIconDrawer.draw(g);
-  }
-  changeDirection(dir: Direction): void {
-    this.drawTile(dir);
   }
 }

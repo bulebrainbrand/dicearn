@@ -18,7 +18,7 @@ export interface RotatableTileModel extends DirectionTileModel {
   changeDirection(dir: Direction): void;
 }
 
-export interface MovaleTileModel extends TileModel {
+export interface MovableTileModel extends TileModel {
   getMovable(): boolean;
 }
 
