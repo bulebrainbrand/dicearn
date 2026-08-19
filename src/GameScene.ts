@@ -266,10 +266,10 @@ export class GameScene extends Phaser.Scene {
       dice.enable();
       this.dayModel.nextDay();
     });
-    dice.on("enable", () => {
+    dice.on("enableRoll", () => {
       diceView.enableRoll();
     });
-    dice.on("disable", () => {
+    dice.on("disableRoll", () => {
       diceView.disableRoll();
     });
     dice.on("roll", (result: number) => {
