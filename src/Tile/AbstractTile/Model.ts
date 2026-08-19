@@ -29,3 +29,16 @@ export abstract class AbstrastMovableRotatableTile
     return true;
   }
 }
+
+export abstract class AbstrastMovableTile
+  extends EventEmitter
+  implements MovableTileModel
+{
+  abstract readonly name: string;
+  constructor() {
+    super();
+  }
+  getMovable(): boolean {
+    return true;
+  }
+}

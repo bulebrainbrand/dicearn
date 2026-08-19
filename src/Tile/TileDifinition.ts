@@ -6,6 +6,8 @@ import { MarkTileFactory } from "./MarkTile/Factory";
 import { MarkTileModel } from "./MarkTile/Model";
 import { NormalTileFactory } from "./NormalTile/Factory";
 import { NormalTileModel } from "./NormalTile/Model";
+import { RandomTileFactory } from "./RandomTile/Factory";
+import { RandomTileModel } from "./RandomTile/Model";
 import { TileFactory, TileModel, TileView } from "./types";
 
 export const TILE_DIFINITION = {
@@ -19,6 +21,10 @@ export const TILE_DIFINITION = {
   },
   geta: { factory: new GetaTileFactory(), modelConstructor: GetaTileModel },
   mark: { factory: new MarkTileFactory(), modelConstructor: MarkTileModel },
+  random: {
+    factory: new RandomTileFactory(),
+    modelConstructor: RandomTileModel,
+  },
 } as const satisfies Record<
   string,
   {
