@@ -4,3 +4,5 @@ export const ACTUAL_CELL_SIZE_PX = CELL_SIZE_PX + CELL_GAP_PX;
 export const GAME_PARENT_ELEMENT_ID = "app";
 export const GAME_WIDTH = 19 * CELL_SIZE_PX;
 export const GAME_HEIGHT = 9 * CELL_SIZE_PX;
+
+export const DEBUG = true;
