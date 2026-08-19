@@ -3,12 +3,7 @@ import { TileFactory } from "../types";
 import { RandomTileModel } from "./Model";
 import { RandomTileView } from "./View";
 import { TileTheme } from "../TileTheme";
-import {
-  TILE_BACKGRAOUND_COLOR,
-  TILE_BOARDER_COLOR,
-  ICON_COLOR,
-} from "./constants";
-import { RandomIconDrawer } from "./RandomTileIconDrawer";
+import { TILE_BACKGRAOUND_COLOR, TILE_BOARDER_COLOR } from "./constants";
 import { TileDrawer } from "../TileDrawer";
 
 export class RandomTileFactory implements TileFactory<
@@ -18,15 +13,13 @@ export class RandomTileFactory implements TileFactory<
   withModel(scene: Phaser.Scene): RandomTileView {
     const theme = this.createTheme();
     const drawer = new TileDrawer(theme);
-    const iconDrawer = new RandomIconDrawer(ICON_COLOR);
-    const view = new RandomTileView(scene, drawer, iconDrawer);
+    const view = new RandomTileView(scene, drawer);
     return view;
   }
   view(scene: Phaser.Scene): RandomTileView {
     const theme = this.createTheme();
     const drawer = new TileDrawer(theme);
-    const iconDrawer = new RandomIconDrawer(ICON_COLOR);
-    return new RandomTileView(scene, drawer, iconDrawer);
+    return new RandomTileView(scene, drawer);
   }
   model(): RandomTileModel {
     return new RandomTileModel();
@@ -39,8 +32,7 @@ export class RandomTileFactory implements TileFactory<
     const model = new RandomTileModel();
     const theme = this.createTheme();
     const drawer = new TileDrawer(theme);
-    const iconDrawer = new RandomIconDrawer(ICON_COLOR);
-    const view = new RandomTileView(scene, drawer, iconDrawer);
+    const view = new RandomTileView(scene, drawer);
     return { model, view, theme };
   }
   private createTheme() {

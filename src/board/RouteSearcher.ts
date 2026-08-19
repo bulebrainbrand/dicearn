@@ -57,8 +57,8 @@ export class RouteSearcher {
   private getRandomPosition(): Position {
     const { maxX, maxY, minX, minY } = this.boardSize;
     while (true) {
-      const x = Math.floor(Math.random() * (maxX - minX + 1)) + 1;
-      const y = Math.floor(Math.random() * (maxY - minY + 1)) + 1;
+      const x = Math.floor(Math.random() * (maxX - minX + 1));
+      const y = Math.floor(Math.random() * (maxY - minY + 1));
       if (this.tiles.getTile(x, y) !== undefined) return { x, y };
     }
   }

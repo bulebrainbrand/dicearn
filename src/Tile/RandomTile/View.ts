@@ -1,21 +1,15 @@
 import Phaser from "phaser";
-import { RandomIconDrawer } from "./RandomTileIconDrawer";
 import { AbstractTileView } from "../AbstractTile/View";
 import { TileDrawer } from "../TileDrawer";
 
 export class RandomTileView extends AbstractTileView {
   readonly name = "random";
-  constructor(
-    scene: Phaser.Scene,
-    tileDrawer: TileDrawer,
-    private readonly getaIconDrawer: RandomIconDrawer,
-  ) {
+  constructor(scene: Phaser.Scene, tileDrawer: TileDrawer) {
     super(scene, tileDrawer);
+    this.add(this.scene.add.image(0, 0, "random_tile_icon"));
     this.drawTile();
   }
   protected drawTile(): void {
     super.drawTile();
-    const g = this.graphics;
-    this.getaIconDrawer.draw(g);
   }
 }
