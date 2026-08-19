@@ -1,9 +1,11 @@
 import { Direction } from "@/Direction";
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter";
 import { TileTheme } from "./TileTheme";
+import { RouteKind } from "@/board/types";
 
 export interface TileModel extends EventEmitter {
   readonly name: string;
+  onStandMoney(kind: RouteKind): number;
 }
 
 export interface DirectionTileModel extends TileModel {

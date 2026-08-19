@@ -1,6 +1,7 @@
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter.js";
 import { Direction } from "@/Direction.ts";
 import { MovableTileModel, RotatableTileModel } from "../types";
+import { RouteKind } from "@/board/types";
 
 export abstract class AbstrastMovableRotatableTile
   extends EventEmitter
@@ -28,6 +29,8 @@ export abstract class AbstrastMovableRotatableTile
   getMovable(): boolean {
     return true;
   }
+
+  abstract onStandMoney(kind: RouteKind): number;
 }
 
 export abstract class AbstrastMovableTile
@@ -41,4 +44,5 @@ export abstract class AbstrastMovableTile
   getMovable(): boolean {
     return true;
   }
+  abstract onStandMoney(kind: RouteKind): number;
 }
