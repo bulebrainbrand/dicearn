@@ -17,7 +17,13 @@ export class RouteSearcher {
 
   search(position: Position): RouteTransition {
     const tile = this.tiles.getTile(position.x, position.y);
-    if (tile === undefined || !this.tileTypeChecker.isDirectionTile(tile)) {
+    if (tile === undefined) {
+      return { kind: "reset", destination: this.resetPosition };
+    }
+    if (tile.name === "random") {
+      return { kind: "warp", destination: this.getRandomPosition() };
+    }
+    if (this.tileTypeChecker.isDirectionTile(tile) === false) {
       return { kind: "reset", destination: this.resetPosition };
     }
     const offset = DIRECTION_OFFSET[tile.getDirection()];
@@ -28,6 +34,7 @@ export class RouteSearcher {
     if (this.tiles.getTile(destination.x, destination.y) === undefined) {
       return { kind: "reset", destination: this.resetPosition };
     }
+
     return { kind: "move", destination };
   }
 
@@ -46,5 +53,13 @@ export class RouteSearcher {
             ? this.boardSize.minY
             : pos.y,
     };
+  }
+  private getRandomPosition(): Position {
+    const { maxX, maxY, minX, minY } = this.boardSize;
+    while (true) {
+      const x = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
+      const y = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
+      if (this.tiles.getTile(x, y) !== undefined) return { x, y };
+    }
   }
 }

@@ -31,7 +31,7 @@ import { CameraController } from "./CameraController.ts";
 import { UI_DEPTH_RANGE } from "./layer.ts";
 import { InventoryView } from "./inventory/View.ts";
 import { DiceResultCalculator } from "./DiceResultCalculator.ts";
-import { MarkTileModel } from "./Tile/MarkTile/Model.ts";
+import { RandomTileModel } from "./Tile/RandomTile/Model.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -55,6 +55,12 @@ export class GameScene extends Phaser.Scene {
   boardView!: BoardView;
   constructor() {
     super();
+  }
+  preload() {
+    this.load.svg("random_tile_icon", "/question.svg", {
+      width: 80,
+      height: 80,
+    });
   }
   create() {
     this.createUIContainer();
@@ -199,7 +205,7 @@ export class GameScene extends Phaser.Scene {
         ),
       ),
     );
-    this.tiles.setTile(1, 1, new MarkTileModel("u"));
+    this.tiles.setTile(1, 1, new RandomTileModel());
   }
   registorEventListener() {
     this.cursorModel.addListener(

@@ -38,6 +38,13 @@ export class RewordGenerator {
         },
       },
       {
+        name: "random tile",
+        desc: "warp to everywhere",
+        callback: () => {
+          this.inventoryModel.addTile("random", 1);
+        },
+      },
+      {
         name: "upgrade board",
         desc: "board size +1",
         callback: () => {

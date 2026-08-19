@@ -10,6 +10,7 @@ const MONEY_BY_TILE = {
   geta: { move: 0, reset: 0, warp: 0 },
   normal: { move: 1, reset: 0, warp: 1 },
   mark: { move: 0, reset: 0, warp: 10 },
+  random: { move: 2, reset: 0, warp: 2 },
 } as const satisfies Record<TileNameUnion, Record<RouteKind, number>>;
 
 export class MoneyCalculator {
