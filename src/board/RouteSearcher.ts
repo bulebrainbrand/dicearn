@@ -31,7 +31,7 @@ export class RouteSearcher {
       x: position.x + offset[0],
       y: position.y + offset[1],
     });
-    if (tile === undefined) {
+    if (this.tiles.getTile(destination.x, destination.y) === undefined) {
       return { kind: "reset", destination: this.resetPosition };
     }
 
