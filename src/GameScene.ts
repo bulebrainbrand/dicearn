@@ -1,7 +1,6 @@
 import * as Phaser from "phaser";
 import { DIRECTION_TAPLE } from "./Direction.ts";
 import { Tiles } from "./Tiles/Model.ts";
-import { Dice } from "./Dice.ts";
 import { Board } from "./board/Model.ts";
 import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalculator.ts";
 import { CursorModel } from "@/cursor/Model.ts";
@@ -32,6 +31,8 @@ import { UI_DEPTH_RANGE } from "./layer.ts";
 import { InventoryView } from "./inventory/View.ts";
 import { DiceResultCalculator } from "./DiceResultCalculator.ts";
 import { RandomTileModel } from "./Tile/RandomTile/Model.ts";
+import { DiceModel } from "./Dice/Model.ts";
+import { DiceView } from "./Dice/View.ts";
 
 export class GameScene extends Phaser.Scene {
   boardModel!: Board;
@@ -49,7 +50,7 @@ export class GameScene extends Phaser.Scene {
   routeSearcher!: RouteSearcher;
   routeExecutor!: RouteExecutor;
   inventoryModel!: InventoryModel;
-  dice!: Dice;
+  dice!: DiceModel;
   UIContainer!: Phaser.GameObjects.Container;
   GameContainer!: Phaser.GameObjects.Container;
   boardView!: BoardView;
@@ -143,10 +144,10 @@ export class GameScene extends Phaser.Scene {
       model.show(generator.generate());
     });
     model.on("hide", () => {
-      this.dice.setRollable(true);
+      this.dice.enable();
     });
     model.on("show", () => {
-      this.dice.setRollable(false);
+      this.dice.disable();
     });
     this.UIContainer.add(view);
   }
@@ -238,14 +239,15 @@ export class GameScene extends Phaser.Scene {
   }
 
   createDice() {
-    const dice = new Dice(
+    const dice = new DiceModel(new DiceResultCalculator(this.tiles));
+    const diceView = new DiceView(
       this,
       CELL_SIZE_PX * 11,
       CELL_SIZE_PX * 8,
-      new DiceResultCalculator(this.tiles),
+      dice,
     );
     dice.on("roll", async (value: number) => {
-      dice.setRollable(false);
+      dice.disable();
       for (let i = 0; i < value; i++) {
         const beforePosition = this.cursorModel.getPosition();
         const transition = this.routeSearcher.search(beforePosition);
@@ -261,11 +263,20 @@ export class GameScene extends Phaser.Scene {
           ),
         );
       }
-      dice.setRollable(true);
+      dice.enable();
       this.dayModel.nextDay();
     });
+    dice.on("enableRoll", () => {
+      diceView.enableRoll();
+    });
+    dice.on("disableRoll", () => {
+      diceView.disableRoll();
+    });
+    dice.on("roll", (result: number) => {
+      diceView.showRollResult(result);
+    });
     this.dice = dice;
-    this.UIContainer.add(dice);
+    this.UIContainer.add(diceView);
   }
   checkMoney(needMoney: number) {
     if (this.money.getMoney() < needMoney) {
