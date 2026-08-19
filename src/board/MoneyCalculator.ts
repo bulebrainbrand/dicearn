@@ -1,17 +1,9 @@
 import { Tiles } from "@/Tiles/Model";
 import { Position } from "./BoardViewCoordinateCalculator";
 import { RouteKind } from "./types";
-import { TileModelUnion, TileNameUnion } from "@/Tile/TileDifinition";
+import { TileModelUnion } from "@/Tile/TileDifinition";
 
 export type MoveRoute = { x: number; y: number; kind: RouteKind }[];
-
-const MONEY_BY_TILE = {
-  buffer: { move: 0, reset: 0, warp: 0 },
-  geta: { move: 0, reset: 0, warp: 0 },
-  normal: { move: 1, reset: 0, warp: 1 },
-  mark: { move: 0, reset: 0, warp: 10 },
-  random: { move: 2, reset: 0, warp: 2 },
-} as const satisfies Record<TileNameUnion, Record<RouteKind, number>>;
 
 export class MoneyCalculator {
   constructor(private readonly tiles: Tiles) {}
@@ -35,7 +27,13 @@ export class MoneyCalculator {
     );
     const endTile = this.tiles.getTile(end.x, end.y);
 
-    const moneyAmount = endTile ? MONEY_BY_TILE[endTile.name][kind] : 0;
+    const moneyAmount = endTile ? endTile.onStandMoney(kind) : 0;
+    if (moneyAmount < 0) {
+      throw new TypeError(`can't earn negative money`);
+    }
+    if (Number.isNaN(moneyAmount)) {
+      throw new TypeError(`can't earn NaN money`);
+    }
     return moneyAmount * 2 ** bufferTileCount;
   }
   private countTile(
