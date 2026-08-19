@@ -5,7 +5,7 @@ import { Dice } from "./Dice.ts";
 import { Board } from "./board/Model.ts";
 import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalculator.ts";
 import { CursorModel } from "@/cursor/Model.ts";
-import { CELL_SIZE_PX } from "@/constants.ts";
+import { CELL_SIZE_PX, DEBUG } from "@/constants.ts";
 import { CursorView } from "./cursor/View.ts";
 import { BoardView } from "./board/View.ts";
 import { DayModel } from "./day/Model.ts";
@@ -110,6 +110,14 @@ export class GameScene extends Phaser.Scene {
     this.GameContainer.addAt(cameraController.background, 0);
     this.UIContainer.setScrollFactor(0, 0, true);
     this.initCameras();
+    if (DEBUG) {
+      this.input.on(
+        "pointerdown",
+        (a: Phaser.Input.Pointer, b: Phaser.GameObjects.GameObject) => {
+          console.log("clicked gameobject:", b);
+        },
+      );
+    }
   }
   private createUICamera() {
     this.cameras.add(0, 0, this.scale.width, this.scale.height, false, "UI");
