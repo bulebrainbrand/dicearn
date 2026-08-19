@@ -1,10 +1,10 @@
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter.js";
 import { Direction } from "@/Direction.ts";
-import { MovaleTileModel, RotatableTileModel } from "../types";
+import { MovableTileModel, RotatableTileModel } from "../types";
 
-export abstract class AbstrustMovableRotetableTile
+export abstract class AbstrustMovableRotatableTile
   extends EventEmitter
-  implements RotatableTileModel, MovaleTileModel
+  implements RotatableTileModel, MovableTileModel
 {
   readonly name: string = "abstruct";
   constructor(private dir: Direction) {

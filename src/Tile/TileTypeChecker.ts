@@ -5,7 +5,7 @@ import {
 } from "./TileDifinition";
 import {
   DirectionTileModel,
-  MovaleTileModel,
+  MovableTileModel,
   RotatableTileModel,
   TileModel,
 } from "./types";
@@ -27,7 +27,7 @@ export class TileTypeChecker {
       throw new TypeError(`tile "${tile.name}" has incompatible runtime type`);
     }
   }
-  isMovable(tileModel: TileModel): tileModel is MovaleTileModel {
+  isMovable(tileModel: TileModel): tileModel is MovableTileModel {
     return "getMovable" in tileModel;
   }
   isDirectionTile(tileModel: TileModel): tileModel is DirectionTileModel {
