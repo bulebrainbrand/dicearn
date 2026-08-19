@@ -18,7 +18,7 @@ export class InventoryView extends MiniBoard {
     x: number,
     y: number,
     config: MiniBoard.IConfig,
-    private readonly board: Board<Phaser.GameObjects.GameObject>,
+    private readonly boardView: Board<Phaser.GameObjects.GameObject>,
     private readonly tiles: Tiles,
     private readonly inventoryModel: InventoryModel,
     private readonly inventoryTileViewFactory: InventoryTileViewFactory,
@@ -29,7 +29,6 @@ export class InventoryView extends MiniBoard {
     scene.add.existing(this);
 
     this.items = {};
-
     inventoryModel.addListener(
       "updateAmount",
       ({ name, amount }: InventoryModelEvent["updateAmount"]) => {
@@ -40,6 +39,8 @@ export class InventoryView extends MiniBoard {
       "newItem",
       ({ name, amount, index }: InventoryModelEvent["newItem"]) => {
         this.createItem(name, amount, index);
+        console.log("Inventory newItem:", name, amount, "index:", index);
+        console.log("InventoryView bounds:", this.getBounds());
       },
     );
     this.setScrollFactor(0, 0);
@@ -79,7 +80,7 @@ export class InventoryView extends MiniBoard {
       const { x, y } = pointer.positionToCamera(
         this.scene.cameras.main,
       ) as Phaser.Math.Vector2;
-      const tileXY = this.board.worldXYToTileXY(x, y);
+      const tileXY = this.boardView.worldXYToTileXY(x, y);
       if (this.boardViewCoordinateCalculator.isOutside(tileXY)) {
         return;
       }
