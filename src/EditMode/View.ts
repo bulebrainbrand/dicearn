@@ -23,6 +23,7 @@ export class EditModeButton extends Phaser.GameObjects.Container {
     model.on("enable", () => {
       this.enable();
     });
+    this.add(button);
   }
   disable() {
     this.button.fillColor = 0xffffcc;
