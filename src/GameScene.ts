@@ -233,6 +233,7 @@ export class GameScene extends Phaser.Scene {
       this,
       CELL_SIZE_PX * 11,
       CELL_SIZE_PX * 8,
+      this.cursor,
       dice,
     );
     dice.on("roll", async (value: number) => {
@@ -265,7 +266,7 @@ export class GameScene extends Phaser.Scene {
       diceView.showRollResult(result);
     });
     this.dice = dice;
-    this.UIContainer.add(diceView);
+    this.GameContainer.add(diceView);
   }
   checkMoney(needMoney: number) {
     if (this.money.getMoney() < needMoney) {
