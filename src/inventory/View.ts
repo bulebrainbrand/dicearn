@@ -100,7 +100,9 @@ export class InventoryView extends MiniBoard {
   private createItem(name: InventoryItemName, amount: number, index: number) {
     if (this.items[name] !== undefined) return;
     const inventoryTileView = this.inventoryTileViewFactory.create(name);
-    this.scene.cameras.main.ignore(inventoryTileView);
+    this.scene.cameras.main.ignore(
+      inventoryTileView.getGameObjectsForCameraIgnore(),
+    );
     this.addChess(inventoryTileView, index, 0, 0);
     this.makeInventoryTileViewPlacable(name, inventoryTileView);
     inventoryTileView.updateAmount(amount);

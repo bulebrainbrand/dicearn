@@ -5,6 +5,7 @@ export interface InventoryTileView extends Phaser.GameObjects.Container {
   updateAmount(amount: number): void;
   createClone(): Phaser.GameObjects.Container;
   createTileModelForTiles(): TileModelUnion;
+  getGameObjectsForCameraIgnore(): Phaser.GameObjects.GameObject[];
 }
 export interface InventoryTileViewFactory {
   create(name: InventoryItemName): InventoryTileView;

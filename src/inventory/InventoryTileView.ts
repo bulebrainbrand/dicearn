@@ -46,4 +46,16 @@ export class InventoryTileView
     this.scene.add.existing(tile);
     return tile;
   }
+  getGameObjectsForCameraIgnore(): Phaser.GameObjects.GameObject[] {
+    return [this, ...this.collectDescendants(this)];
+  }
+  private collectDescendants(
+    container: Phaser.GameObjects.Container,
+  ): Phaser.GameObjects.GameObject[] {
+    return container.list.flatMap((child) =>
+      child instanceof Phaser.GameObjects.Container
+        ? [child, ...this.collectDescendants(child)]
+        : [child],
+    );
+  }
 }
