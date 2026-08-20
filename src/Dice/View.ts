@@ -1,36 +1,26 @@
 import Phaser from "phaser";
 import { DICE_DEPTH_RANGE } from "@/layer";
 import { DiceModel } from "./Model";
-import { BUTTON_COLOR } from "./constants";
 import { INK_COLOR } from "@/colors";
+import { CursorView } from "@/cursor/View";
 
 export class DiceView extends Phaser.GameObjects.Container {
-  private text: Phaser.GameObjects.Text;
-  private button: Phaser.GameObjects.Arc;
   private canRoll: boolean;
   constructor(
     scene: Phaser.Scene,
     x: number,
     y: number,
+    cursor: CursorView,
     private readonly diceModel: DiceModel,
   ) {
     super(scene, x, y);
     this.canRoll = diceModel.canRoll();
     scene.add.existing(this);
-    const text = scene.add.text(0, 0, "-", {
-      fontSize: "256px",
-      color: INK_COLOR,
+    scene.events.on("postupdate", () => {
+      console.log("1");
+      this.setPosition(cursor.x, cursor.y);
     });
-    this.text = text;
-    const button = scene.add.circle(0, 0, 128, BUTTON_COLOR);
-    this.add(button);
-    this.add(text);
-    this.button = button;
-    text.setOrigin(0.5, 0.5);
-    this.setSize(
-      Math.max(text.width, button.width),
-      Math.max(text.height, button.height),
-    );
+    this.setSize(cursor.width, cursor.height);
     this.setInteractive();
     this.on("pointerdown", () => {
       if (this.canRoll) {
@@ -45,9 +35,22 @@ export class DiceView extends Phaser.GameObjects.Container {
   }
   enableRoll() {
     this.canRoll = true;
-    this.text.text = "-";
   }
   showRollResult(result: number) {
-    this.text.text = String(result);
+    const text = this.scene.add.text(this.x, this.y, String(result), {
+      fontSize: "128px",
+      color: INK_COLOR,
+    });
+    text.setOrigin(0.5, 0.5);
+    this.scene.cameras.getCamera("UI")?.ignore(text);
+    this.scene.tweens.add({
+      targets: text,
+      y: text.y - 256,
+      duration: 800,
+      alpha: 0,
+      onComplete: () => {
+        text.destroy();
+      },
+    });
   }
 }
