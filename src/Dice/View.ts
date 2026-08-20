@@ -17,7 +17,6 @@ export class DiceView extends Phaser.GameObjects.Container {
     this.canRoll = diceModel.canRoll();
     scene.add.existing(this);
     scene.events.on("postupdate", () => {
-      console.log("1");
       this.setPosition(cursor.x, cursor.y);
     });
     this.setSize(cursor.width, cursor.height);
