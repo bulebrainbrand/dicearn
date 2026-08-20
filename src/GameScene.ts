@@ -1,7 +1,6 @@
 import * as Phaser from "phaser";
 import { DIRECTION_TAPLE } from "./Direction.ts";
 import { Tiles } from "./Tiles/Model.ts";
-import { Board } from "./board/Model.ts";
 import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalculator.ts";
 import { CursorModel } from "@/cursor/Model.ts";
 import { CELL_SIZE_PX, DEBUG } from "@/constants.ts";
@@ -28,22 +27,18 @@ import { RewordGenerator } from "./RewordChoice/RewordGenerator.ts";
 import { InventoryModel } from "./inventory/Model.ts";
 import { CameraController } from "./CameraController.ts";
 import { UI_DEPTH_RANGE } from "./layer.ts";
-import { InventoryView } from "./inventory/View.ts";
 import { DiceResultCalculator } from "./DiceResultCalculator.ts";
 import { RandomTileModel } from "./Tile/RandomTile/Model.ts";
 import { DiceModel } from "./Dice/Model.ts";
 import { DiceView } from "./Dice/View.ts";
 
 export class GameScene extends Phaser.Scene {
-  boardModel!: Board;
   tiles!: Tiles;
   cursorModel!: CursorModel;
   cursor!: CursorView;
   private cursorAnimationQueue: Promise<void> = Promise.resolve();
   private money!: MoneyModel;
-  boardViewCoodinateCalculator!: BoardViewCoordinateCalculator;
   boardSize!: BoardSize;
-  inventoryView!: InventoryView;
   dayModel!: DayModel;
   dayView!: DayView;
   moneyCalculator!: MoneyCalculator;
@@ -53,7 +48,6 @@ export class GameScene extends Phaser.Scene {
   dice!: DiceModel;
   UIContainer!: Phaser.GameObjects.Container;
   GameContainer!: Phaser.GameObjects.Container;
-  boardView!: BoardView;
   constructor() {
     super();
   }
@@ -68,7 +62,6 @@ export class GameScene extends Phaser.Scene {
     this.createGameContainer();
     this.createUICamera();
     const {
-      boardModel,
       boardView,
       tiles,
       coordinateCalculator,
@@ -89,18 +82,14 @@ export class GameScene extends Phaser.Scene {
     inventoryModel.addTile("normal", 1);
     inventoryModel.addTile("buffer", 1);
     this.UIContainer.add(inventoryView);
-    this.boardModel = boardModel;
     this.tiles = tiles;
     this.cursorModel = cursorModel;
-    this.boardViewCoodinateCalculator = coordinateCalculator;
     this.cursor = cursor;
     this.moneyCalculator = moneyCalculator;
     this.routeSearcher = routeSearcher;
     this.routeExecutor = routeExecutor;
     this.boardSize = boardSize;
-    this.boardView = boardView;
     this.inventoryModel = inventoryModel;
-    this.inventoryView = inventoryView;
     this.createDay();
     this.createDice();
     this.createMoney();
