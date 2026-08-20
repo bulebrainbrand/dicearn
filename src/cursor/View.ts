@@ -60,4 +60,7 @@ export class CursorView extends Phaser.GameObjects.Container {
       { x: newPos[0], y: newPos[1], type: "move" },
     ]);
   }
+  onChangeCursorVisible(value: boolean) {
+    this.setVisible(value);
+  }
 }

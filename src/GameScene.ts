@@ -31,6 +31,9 @@ import { DiceResultCalculator } from "./DiceResultCalculator.ts";
 import { RandomTileModel } from "./Tile/RandomTile/Model.ts";
 import { DiceModel } from "./Dice/Model.ts";
 import { DiceView } from "./Dice/View.ts";
+import { EditMode } from "./EditMode/Model.ts";
+import { EditModeButton } from "./EditMode/View.ts";
+import { applyEditModeListen } from "./EditMode/applyEditMode.ts";
 
 export class GameScene extends Phaser.Scene {
   tiles!: Tiles;
@@ -96,6 +99,7 @@ export class GameScene extends Phaser.Scene {
     this.registorEventListener();
     this.initTiles();
     this.createReword();
+    this.createEditMode();
     const cameraController = new CameraController(this);
     this.GameContainer.addAt(cameraController.background, 0);
     this.UIContainer.setScrollFactor(0, 0, true);
@@ -108,6 +112,12 @@ export class GameScene extends Phaser.Scene {
         },
       );
     }
+  }
+  private createEditMode() {
+    const model = new EditMode();
+    const view = new EditModeButton(this, 0, 0, model);
+    applyEditModeListen(model, this.cursorModel, this.dice);
+    this.UIContainer.add(view);
   }
   private createUICamera() {
     this.cameras.add(0, 0, this.scale.width, this.scale.height, false, "UI");

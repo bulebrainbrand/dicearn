@@ -82,6 +82,9 @@ export class BoardContextFactory {
       defaultCursorPosition.y,
       boardViewCoordinateCalculator,
     );
+    cursorModel.addListener("visible", (bool: boolean) => {
+      cursorView.onChangeCursorVisible(bool);
+    });
     const moneyCalculator = new MoneyCalculator(tiles);
     return {
       boardModel,

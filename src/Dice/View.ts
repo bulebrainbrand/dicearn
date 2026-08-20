@@ -21,20 +21,22 @@ export class DiceView extends Phaser.GameObjects.Container {
       this.setPosition(cursor.x, cursor.y);
     });
     this.setSize(cursor.width, cursor.height);
+    this.enableRoll();
+
+    this.setDepth(DICE_DEPTH_RANGE.getDepth(0));
+  }
+  disableRoll() {
+    this.canRoll = false;
+    this.disableInteractive();
+  }
+  enableRoll() {
+    this.canRoll = true;
     this.setInteractive();
     this.on("pointerdown", () => {
       if (this.canRoll) {
         this.diceModel.roll();
       }
     });
-
-    this.setDepth(DICE_DEPTH_RANGE.getDepth(0));
-  }
-  disableRoll() {
-    this.canRoll = false;
-  }
-  enableRoll() {
-    this.canRoll = true;
   }
   showRollResult(result: number) {
     const text = this.scene.add.text(this.x, this.y, String(result), {

@@ -4,6 +4,7 @@ import { BoardSize } from "@/types";
 
 export class CursorModel extends EventEmitter {
   private movable: boolean = true;
+  private visible: boolean = true;
   constructor(
     private x: number,
     private y: number,
@@ -58,5 +59,9 @@ export class CursorModel extends EventEmitter {
   }
   setMovable(value: boolean) {
     this.movable = value;
+  }
+  setVisible(value: boolean) {
+    this.visible = value;
+    this.emit("visible", value);
   }
 }
