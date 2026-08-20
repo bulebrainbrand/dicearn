@@ -110,8 +110,8 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
 
     // Compute positions for reword containers
     const rewordsWidth = 3 * REWORD_WIDTH_PX + 2 * REWORDS_GAP_PX;
-    const left = (width - rewordsWidth) / 2;
-    const top = (height - REWORD_HEIGHT_PX) / 2;
+    const left = (width - rewordsWidth) / 2 + REWORD_WIDTH_PX / 2;
+    const top = (height - REWORD_HEIGHT_PX) / 2 + REWORD_HEIGHT_PX / 2;
 
     // Position each reword container
     this.rewordContainers.forEach((container, i) => {

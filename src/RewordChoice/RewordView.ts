@@ -27,8 +27,7 @@ export class RewordView extends Phaser.GameObjects.Container {
       REWORD_BACKGROUND_COLOR,
     );
     this.add(background);
-    background.setOrigin(0, 0);
-    const title = scene.add.text(0, 0, name, {
+    const title = scene.add.text(0, -REWORD_HEIGHT_PX / 2, name, {
       fontSize: TITLE_FONT_SIZE_PX,
       color: INK_COLOR,
       wordWrap: {
@@ -36,8 +35,10 @@ export class RewordView extends Phaser.GameObjects.Container {
         useAdvancedWrap: true,
       },
     });
+    title.setOrigin(0.5, 0.5);
+    title.y += title.height / 2;
     this.add(title);
-    const descText = scene.add.text(0, title.height + 10, desc, {
+    const descText = scene.add.text(0, title.y + title.height / 2 + 32, desc, {
       fontSize: DESC_FONT_SIZE_PX,
       color: INK_COLOR,
       wordWrap: {
@@ -45,6 +46,8 @@ export class RewordView extends Phaser.GameObjects.Container {
         useAdvancedWrap: true,
       },
     });
+    descText.y += descText.height / 2;
+    descText.setOrigin(0.5, 0.5);
     this.add(descText);
     this.setSize(REWORD_WIDTH_PX, REWORD_HEIGHT_PX);
   }
