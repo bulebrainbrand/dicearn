@@ -1,9 +1,12 @@
 import Phaser from "phaser";
 import { DICE_DEPTH_RANGE } from "@/layer";
 import { DiceModel } from "./Model";
+import { BUTTON_COLOR } from "./constants";
+import { INK_COLOR } from "@/colors";
 
 export class DiceView extends Phaser.GameObjects.Container {
-  private dice: Phaser.GameObjects.Text;
+  private text: Phaser.GameObjects.Text;
+  private button: Phaser.GameObjects.Arc;
   private canRoll: boolean;
   constructor(
     scene: Phaser.Scene,
@@ -16,12 +19,18 @@ export class DiceView extends Phaser.GameObjects.Container {
     scene.add.existing(this);
     const text = scene.add.text(0, 0, "-", {
       fontSize: "256px",
-      color: "#000000",
+      color: INK_COLOR,
     });
+    this.text = text;
+    const button = scene.add.circle(0, 0, 128, BUTTON_COLOR);
+    this.add(button);
     this.add(text);
-    this.dice = text;
+    this.button = button;
     text.setOrigin(0.5, 0.5);
-    this.setSize(text.width, text.height);
+    this.setSize(
+      Math.max(text.width, button.width),
+      Math.max(text.height, button.height),
+    );
     this.setInteractive();
     this.on("pointerdown", () => {
       if (this.canRoll) {
@@ -36,8 +45,9 @@ export class DiceView extends Phaser.GameObjects.Container {
   }
   enableRoll() {
     this.canRoll = true;
+    this.text.text = "-";
   }
   showRollResult(result: number) {
-    this.dice.text = String(result);
+    this.text.text = String(result);
   }
 }
