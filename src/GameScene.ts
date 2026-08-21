@@ -36,6 +36,7 @@ import { EditModeButton } from "./EditMode/View.ts";
 import { applyEditModeListen } from "./EditMode/applyEditMode.ts";
 import { Board } from "./board/Model.ts";
 import { StopTileModel } from "./Tile/StopTile/Model.ts";
+import { DizzyTileModel } from "./Tile/DizzyTile/Model.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -62,6 +63,7 @@ export class GameScene extends Phaser.Scene {
       width: 80,
       height: 80,
     });
+    this.load.svg("dizzy_tile_icon", "/dizzy.svg", { width: 80, height: 80 });
   }
   create() {
     this.createUIContainer();
@@ -218,7 +220,7 @@ export class GameScene extends Phaser.Scene {
         ),
       ),
     );
-    this.tiles.setTile(1, 1, new StopTileModel("u"));
+    this.tiles.setTile(1, 1, new DizzyTileModel());
   }
   registorEventListener() {
     this.cursorModel.addListener(

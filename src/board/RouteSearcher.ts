@@ -23,6 +23,27 @@ export class RouteSearcher {
     if (tile.name === "random") {
       return { kind: "warp", destination: this.getRandomPosition() };
     }
+    if (tile.name === "dizzy") {
+      const offsets = [
+        [0, 1],
+        [1, 0],
+        [-1, 0],
+        [0, -1],
+      ];
+      const offset = offsets[Math.floor(Math.random() * offsets.length)];
+      const destination = this.covertPosToInside({
+        x: position.x + offset[0],
+        y: position.y + offset[1],
+      });
+      const nextTile = this.tiles.getTile(destination.x, destination.y);
+      if (nextTile === undefined) {
+        return { kind: "reset", destination: this.resetPosition };
+      }
+      if (nextTile.name === "stop") {
+        return { kind: "stop", destination };
+      }
+      return { kind: "move", destination };
+    }
     if (this.tileTypeChecker.isDirectionTile(tile) === false) {
       return { kind: "reset", destination: this.resetPosition };
     }
