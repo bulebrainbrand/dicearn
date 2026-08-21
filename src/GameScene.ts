@@ -35,6 +35,7 @@ import { EditMode } from "./EditMode/Model.ts";
 import { EditModeButton } from "./EditMode/View.ts";
 import { applyEditModeListen } from "./EditMode/applyEditMode.ts";
 import { Board } from "./board/Model.ts";
+import { StopTileModel } from "./Tile/StopTile/Model.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -217,7 +218,7 @@ export class GameScene extends Phaser.Scene {
         ),
       ),
     );
-    this.tiles.setTile(1, 1, new RandomTileModel());
+    this.tiles.setTile(1, 1, new StopTileModel("u"));
   }
   registorEventListener() {
     this.cursorModel.addListener(
