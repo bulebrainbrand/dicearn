@@ -11,6 +11,8 @@ export class RandomTileModel extends AbstrastMovableTile {
         return 0;
       case "warp":
         return 2;
+      case "stop":
+        return 2;
       default: {
         kind satisfies never;
         break;

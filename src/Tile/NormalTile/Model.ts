@@ -11,6 +11,8 @@ export class NormalTileModel extends AbstrastMovableRotatableTile {
         return 0;
       case "warp":
         return 1;
+      case "stop":
+        return 1;
       default: {
         kind satisfies never;
         break;
