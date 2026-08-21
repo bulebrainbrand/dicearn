@@ -8,6 +8,8 @@ import { NormalTileFactory } from "./NormalTile/Factory";
 import { NormalTileModel } from "./NormalTile/Model";
 import { RandomTileFactory } from "./RandomTile/Factory";
 import { RandomTileModel } from "./RandomTile/Model";
+import { StopTileFactory } from "./StopTile/Factory";
+import { StopTileModel } from "./StopTile/Model";
 import { TileFactory, TileModel, TileView } from "./types";
 
 export const TILE_DIFINITION = {
@@ -25,6 +27,7 @@ export const TILE_DIFINITION = {
     factory: new RandomTileFactory(),
     modelConstructor: RandomTileModel,
   },
+  stop: { factory: new StopTileFactory(), modelConstructor: StopTileModel },
 } as const satisfies Record<
   string,
   {
