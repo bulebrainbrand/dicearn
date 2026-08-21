@@ -31,10 +31,13 @@ export class RouteSearcher {
       x: position.x + offset[0],
       y: position.y + offset[1],
     });
-    if (this.tiles.getTile(destination.x, destination.y) === undefined) {
+    const nextTile = this.tiles.getTile(destination.x, destination.y);
+    if (nextTile === undefined) {
       return { kind: "reset", destination: this.resetPosition };
     }
-
+    if (nextTile.name === "stop") {
+      return { kind: "stop", destination };
+    }
     return { kind: "move", destination };
   }
 
