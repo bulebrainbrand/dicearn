@@ -1,1 +1,1 @@
-export type RouteKind = "move" | "reset" | "warp";
+export type RouteKind = "move" | "reset" | "warp" | "stop";

@@ -1,18 +1,18 @@
 import { RouteKind } from "@/board/types";
 import { AbstrastMovableRotatableTile } from "../AbstractTile/Model";
 
-export class NormalTileModel extends AbstrastMovableRotatableTile {
-  readonly name = "normal";
+export class StopTileModel extends AbstrastMovableRotatableTile {
+  readonly name = "stop";
   onStandMoney(kind: RouteKind): number {
     switch (kind) {
       case "move":
-        return 1;
+        return 0;
       case "reset":
         return 0;
       case "warp":
-        return 1;
+        return 0;
       case "stop":
-        return 1;
+        return 5;
       default: {
         kind satisfies never;
         break;
