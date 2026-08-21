@@ -37,6 +37,7 @@ export class Board extends EventEmitter {
       const transition = this.routeSearcher.search(beforePosition);
       this.routeExecutor.execute(transition);
       yield { transition, beforePosition };
+      if (transition.kind === "stop") break;
     }
   }
 }
