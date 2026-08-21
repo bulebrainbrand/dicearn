@@ -1,5 +1,7 @@
 import { BufferTileFactory } from "./BufferTIle/Factory";
 import { BufferTileModel } from "./BufferTIle/Model";
+import { DizzyTileFactory } from "./DizzyTile/Factory";
+import { DizzyTileModel } from "./DizzyTile/Model";
 import { GetaTileFactory } from "./GetaTile/Factory";
 import { GetaTileModel } from "./GetaTile/Model";
 import { MarkTileFactory } from "./MarkTile/Factory";
@@ -28,6 +30,7 @@ export const TILE_DIFINITION = {
     modelConstructor: RandomTileModel,
   },
   stop: { factory: new StopTileFactory(), modelConstructor: StopTileModel },
+  dizzy: { factory: new DizzyTileFactory(), modelConstructor: DizzyTileModel },
 } as const satisfies Record<
   string,
   {
