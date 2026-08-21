@@ -62,7 +62,13 @@ export class BoardContextFactory {
       defaultCursorPosition,
     );
     const routeExecutor = new RouteExecutor(cursorModel);
-    const boardModel = new Board(tiles, cursorModel, boardSize, routeSearcher);
+    const boardModel = new Board(
+      tiles,
+      cursorModel,
+      boardSize,
+      routeSearcher,
+      routeExecutor,
+    );
     const tileViewFactory = new TileViewFactory(scene, tileTypeChecker);
     const boardView = new BoardView(scene, {}, boardSize);
     const tilesView = new TilesView(

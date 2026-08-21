@@ -34,8 +34,10 @@ import { DiceView } from "./Dice/View.ts";
 import { EditMode } from "./EditMode/Model.ts";
 import { EditModeButton } from "./EditMode/View.ts";
 import { applyEditModeListen } from "./EditMode/applyEditMode.ts";
+import { Board } from "./board/Model.ts";
 
 export class GameScene extends Phaser.Scene {
+  board!: Board;
   tiles!: Tiles;
   cursorModel!: CursorModel;
   cursor!: CursorView;
@@ -75,6 +77,7 @@ export class GameScene extends Phaser.Scene {
       routeSearcher,
       routeExecutor,
       boardSize,
+      boardModel,
     } = this.createBoardContext();
     const { inventoryModel, inventoryView } = this.createInventoryContext(
       boardView,
@@ -85,6 +88,7 @@ export class GameScene extends Phaser.Scene {
     inventoryModel.addTile("normal", 1);
     inventoryModel.addTile("buffer", 1);
     this.cameras.main.ignore(inventoryView);
+    this.board = boardModel;
     this.tiles = tiles;
     this.cursorModel = cursorModel;
     this.cursor = cursor;
@@ -248,12 +252,9 @@ export class GameScene extends Phaser.Scene {
     );
     dice.on("roll", async (value: number) => {
       dice.disable();
-      for (let i = 0; i < value; i++) {
-        const beforePosition = this.cursorModel.getPosition();
-        const transition = this.routeSearcher.search(beforePosition);
-        this.routeExecutor.execute(transition);
-        // cursorModel の "move" イベント経由でキューに積まれたアニメーションが
-        // 実際に終わるまで待ってから次の1マスへ進む
+      for (const { transition, beforePosition } of this.board.moveCursor(
+        value,
+      )) {
         await this.cursorAnimationQueue;
         this.money.applyMoney(
           this.moneyCalculator.calcMoneyBySnapshotRoute(
