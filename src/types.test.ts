@@ -23,4 +23,9 @@ describe("BoardSize", () => {
       maxY: 5,
     });
   });
+  it("contain", () => {
+    const boardSize = new BoardSize(0, 0, 5, 5);
+    expect(boardSize.contains(0, 0)).toBe(true);
+    expect(boardSize.contains(-1, -1)).toBe(false);
+  });
 });
