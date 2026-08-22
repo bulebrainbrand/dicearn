@@ -128,12 +128,13 @@ export class GameScene extends Phaser.Scene {
     }
   }
   private createPay() {
-    new Pay(this.dayModel, this.paymentModel, this.money).addListener(
-      "pay",
-      () => {
+    new Pay(this.dayModel, this.paymentModel, this.money)
+      .addListener("pay", () => {
         this.rewordModel.show(this.rewordGenerator.generate());
-      },
-    );
+      })
+      .addListener("failed", () => {
+        console.log("failed");
+      });
   }
   private createEditMode() {
     const model = new EditMode();

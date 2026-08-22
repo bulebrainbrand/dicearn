@@ -9,7 +9,7 @@ export class Pay extends EventEmitter {
     day.addListener("nextDay", (day: number) => {
       const todayPayment = payment.getPaymentByDay(day);
       if (todayPayment === null) return;
-      if (money.getMoney() > todayPayment) {
+      if (money.getMoney() >= todayPayment) {
         money.applyMoney(-todayPayment);
         this.emit("pay", todayPayment);
       } else {

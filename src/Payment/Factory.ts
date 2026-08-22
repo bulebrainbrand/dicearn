@@ -21,6 +21,7 @@ export class PaymentFactory {
     day.addListener("nextDay", (day: number) => {
       view.nextDay(day, model.getNextPaymentByDay(day));
     });
+    view.nextDay(day.getDay(), model.getNextPaymentByDay(day.getDay()));
     return { model, view };
   }
 }

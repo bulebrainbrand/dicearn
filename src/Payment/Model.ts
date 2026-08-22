@@ -17,12 +17,8 @@ export class PaymentModel extends EventEmitter {
   ): { day: number; money: number } | null {
     let closePayment: { day: number; money: number } | null = null;
     for (const { day, money } of this.paymentData) {
-      if (day === targetDay) continue;
-      if (closePayment === null) {
-        if (targetDay > day) continue;
-        closePayment = { day, money };
-      }
-      if (closePayment.day - targetDay > day - targetDay) {
+      if (day <= targetDay) continue;
+      if (closePayment === null || day < closePayment.day) {
         closePayment = { day, money };
       }
     }
