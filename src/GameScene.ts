@@ -39,6 +39,7 @@ import { PaymentModel } from "./Payment/Model.ts";
 import { PaymentFactory } from "./Payment/Factory.ts";
 import { Pay } from "./Payment/Pay.ts";
 import { Description } from "./description/index.ts";
+import { FullScreanButton } from "./fullscreanButton/View.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -115,6 +116,7 @@ export class GameScene extends Phaser.Scene {
     this.initTiles();
     this.createReword();
     this.createEditMode();
+    this.UIContainer.add(new FullScreanButton(this, 0, 0, 256, 256, 0xffffff));
     const { model } = this.createPayment();
     this.paymentModel = model;
     this.createPay();
