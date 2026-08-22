@@ -60,6 +60,7 @@ export class GameScene extends Phaser.Scene {
   paymentModel!: PaymentModel;
   rewordModel!: RewordChoice;
   rewordGenerator!: RewordGenerator;
+  description!: Description;
   constructor() {
     super();
   }
@@ -75,6 +76,7 @@ export class GameScene extends Phaser.Scene {
     this.createUIContainer();
     this.createGameContainer();
     this.createUICamera();
+    this.createDescription();
     const {
       boardView,
       tiles,
@@ -116,7 +118,6 @@ export class GameScene extends Phaser.Scene {
     const { model } = this.createPayment();
     this.paymentModel = model;
     this.createPay();
-    this.createDescription();
     const cameraController = new CameraController(this);
     this.GameContainer.addAt(cameraController.background, 0);
     this.UIContainer.setScrollFactor(0, 0, true);
@@ -136,8 +137,9 @@ export class GameScene extends Phaser.Scene {
       this.scale.width - 640,
       this.scale.height - 320,
     );
-    view.show("hello");
+    view.hide();
     this.UIContainer.add(view);
+    this.description = view;
   }
   private createPay() {
     new Pay(this.dayModel, this.paymentModel, this.money)
@@ -212,6 +214,7 @@ export class GameScene extends Phaser.Scene {
       { maxX: 5, maxY: 5, minX: 0, minY: 0 },
       { x: 0, y: 0 },
       chessContainer,
+      this.description,
     );
   }
   createInventoryContext(

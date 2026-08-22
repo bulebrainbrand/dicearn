@@ -15,6 +15,7 @@ import { Tiles } from "./Tiles/Model";
 import { TilesView } from "./Tiles/View";
 import { BoardSize, BoardSizeValues } from "./types";
 import { TileViewFactory } from "./Tile/TileViewFactory";
+import { Description } from "./description";
 
 export class BoardContextFactory {
   static create(
@@ -22,6 +23,7 @@ export class BoardContextFactory {
     initialBoardSize: BoardSizeValues,
     defaultCursorPosition: Position,
     chessContainer: Phaser.GameObjects.Container,
+    description: Description,
   ): {
     boardModel: Board;
     boardView: BoardView;
@@ -79,6 +81,7 @@ export class BoardContextFactory {
       boardViewCoordinateCalculator,
       tileViewFactory,
       tileTypeChecker,
+      description,
     );
     const cursorView = new CursorView(
       scene,

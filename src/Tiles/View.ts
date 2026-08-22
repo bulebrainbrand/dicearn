@@ -15,6 +15,7 @@ import { Direction } from "@/Direction";
 import { TileView, TileViewFactory } from "@/Tile/types";
 import { TileTypeChecker } from "@/Tile/TileTypeChecker";
 import { TileModelUnion } from "@/Tile/TileDifinition";
+import { Description } from "@/description";
 export class TilesView {
   private tiles: TilesDataStorage<TileView>;
   constructor(
@@ -25,6 +26,7 @@ export class TilesView {
     private boardViewCoordinateCalculator: BoardViewCoordinateCalculator,
     private readonly tileViewFactory: TileViewFactory,
     private readonly tileTypeChecker: TileTypeChecker,
+    private readonly description: Description,
   ) {
     this.tiles = new TilesDataStorage(
       tilesModel.getBoardSize(),
@@ -63,6 +65,13 @@ export class TilesView {
     sprite.setInteractive({ draggable: true, cursor: "grab" });
     const drag = new Drag(sprite);
     drag.setEnable(true);
+    sprite.on("pointerdown", () => {
+      console.log("a");
+      this.description.show(tile.getDescription());
+    });
+    sprite.on("pointerup", () => {
+      this.description.hide();
+    });
     if (this.tileTypeChecker.isMovable(tile) && tile.getMovable()) {
       sprite.on("drag", () => {
         const tileXY = this.board.worldXYToTileXY(sprite.x, sprite.y, true);
