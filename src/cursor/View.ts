@@ -23,7 +23,7 @@ export class CursorView extends Phaser.GameObjects.Container {
   ) {
     super(scene, CELL_SIZE_PX * tileX, CELL_SIZE_PX * tileY);
     this.setDepth(CURSOR_DEPTH_RANGE.getDepth(0));
-    const arc = scene.add.circle(0, 0, CURSOR_RADIUS, CURSOR_COLOR, 0.8);
+    const arc = scene.add.circle(0, 0, CURSOR_RADIUS, CURSOR_COLOR, 1);
     this.add(arc);
     scene.add.existing(this);
     boardView.addChess(this, tileX, tileY, CURSOR_TILE_Z, true);
@@ -61,6 +61,10 @@ export class CursorView extends Phaser.GameObjects.Container {
     ]);
   }
   onChangeCursorVisible(value: boolean) {
-    this.setVisible(value);
+    if (value === true) {
+      this.setAlpha(1);
+    } else {
+      this.setAlpha(0.4);
+    }
   }
 }
