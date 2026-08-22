@@ -66,7 +66,6 @@ export class TilesView {
     const drag = new Drag(sprite);
     drag.setEnable(true);
     sprite.on("pointerdown", () => {
-      console.log("a");
       this.description.show(tile.getDescription());
     });
     sprite.on("pointerup", () => {
@@ -74,6 +73,13 @@ export class TilesView {
     });
     if (this.tileTypeChecker.isMovable(tile) && tile.getMovable()) {
       sprite.on("drag", () => {
+        if (this.tilesModel.getMovable() === false) {
+          const x = sprite.getData("x");
+          const y = sprite.getData("y");
+          const worldXY = this.board.tileXYToWorldXY(x, y);
+          sprite.setPosition(worldXY.x, worldXY.y);
+          return;
+        }
         const tileXY = this.board.worldXYToTileXY(sprite.x, sprite.y, true);
 
         const clampedPosition =
@@ -86,6 +92,13 @@ export class TilesView {
         sprite.setPosition(newPosition.x, newPosition.y);
       });
       sprite.on("dragend", (pointer: Phaser.Input.Pointer) => {
+        if (this.tilesModel.getMovable() === false) {
+          const x = sprite.getData("x");
+          const y = sprite.getData("y");
+          const worldXY = this.board.tileXYToWorldXY(x, y);
+          sprite.setPosition(worldXY.x, worldXY.y);
+          return;
+        }
         if (this.isDrag(pointer, sprite)) {
           const tileXY = this.board.worldXYToTileXY(sprite.x, sprite.y, true);
           console.log("dragend", pointer.downTime);
@@ -102,6 +115,7 @@ export class TilesView {
     }
     if (this.tileTypeChecker.isRotatable(tile)) {
       sprite.on("dragend", (pointer: Phaser.Input.Pointer) => {
+        if (this.tilesModel.getMovable() === false) return;
         if (!this.isDrag(pointer, sprite)) {
           const getNextDirection = (dir: Direction): Direction => {
             if (dir === "d") return "l";

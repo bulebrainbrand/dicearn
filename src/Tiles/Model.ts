@@ -14,11 +14,13 @@ export type TilesModelSwapEvent = {
 };
 export class Tiles extends EventEmitter {
   private tiles: TilesDataStorage<TileModelUnion>;
+  private movable: boolean;
   constructor(private readonly boardSize: BoardSize) {
     super();
     this.tiles = new TilesDataStorage(boardSize, (tile) => {
       if (tile) this.emit("destroy", tile);
     });
+    this.movable = false;
   }
   setTile(x: number, y: number, tile: TileModelUnion) {
     this.tiles.setTile(x, y, tile);
@@ -58,5 +60,14 @@ export class Tiles extends EventEmitter {
     fn: (data: TileModelUnion | undefined, x: number, y: number) => boolean,
   ) {
     return this.tiles.some(fn);
+  }
+  setMovable(value: boolean) {
+    console.log(value);
+    if (this.movable === value) return;
+    this.movable = value;
+    this.emit("movable", value);
+  }
+  getMovable() {
+    return this.movable;
   }
 }
