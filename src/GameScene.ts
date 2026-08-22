@@ -297,6 +297,9 @@ export class GameScene extends Phaser.Scene {
           ),
         );
       }
+      await new Promise((resolve) => {
+        setTimeout(resolve, 400);
+      });
       dice.enable();
       this.dayModel.nextDay();
     });
