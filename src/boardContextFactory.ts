@@ -16,6 +16,7 @@ import { TilesView } from "./Tiles/View";
 import { BoardSize, BoardSizeValues } from "./types";
 import { TileViewFactory } from "./Tile/TileViewFactory";
 import { Description } from "./description";
+import { EditMode } from "./EditMode/Model";
 
 export class BoardContextFactory {
   static create(
@@ -24,6 +25,7 @@ export class BoardContextFactory {
     defaultCursorPosition: Position,
     chessContainer: Phaser.GameObjects.Container,
     description: Description,
+    editMode: EditMode,
   ): {
     boardModel: Board;
     boardView: BoardView;
@@ -51,6 +53,12 @@ export class BoardContextFactory {
     if (boardViewCoordinateCalculator.isOutside(defaultCursorPosition))
       throw new TypeError(`cursor position is invalid`);
     const tiles = new Tiles(boardSize);
+    editMode.addListener("enable", () => {
+      tiles.setMovable(true);
+    });
+    editMode.addListener("disable", () => {
+      tiles.setMovable(false);
+    });
     const cursorModel = new CursorModel(
       defaultCursorPosition.x,
       defaultCursorPosition.y,

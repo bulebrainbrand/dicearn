@@ -62,6 +62,7 @@ export class GameScene extends Phaser.Scene {
   rewordModel!: RewordChoice;
   rewordGenerator!: RewordGenerator;
   description!: Description;
+  editMode!: EditMode;
   constructor() {
     super();
   }
@@ -78,6 +79,7 @@ export class GameScene extends Phaser.Scene {
     this.createGameContainer();
     this.createUICamera();
     this.createDescription();
+    this.createEditMode();
     const {
       boardView,
       tiles,
@@ -115,7 +117,7 @@ export class GameScene extends Phaser.Scene {
     this.registorEventListener();
     this.initTiles();
     this.createReword();
-    this.createEditMode();
+    applyEditModeListen(this.editMode, this.cursorModel, this.dice);
     this.UIContainer.add(new FullScreanButton(this, 0, 0, 256, 256, 0xffffff));
     const { model } = this.createPayment();
     this.paymentModel = model;
@@ -155,8 +157,9 @@ export class GameScene extends Phaser.Scene {
   private createEditMode() {
     const model = new EditMode();
     const view = new EditModeButton(this, 128, 128, model);
-    applyEditModeListen(model, this.cursorModel, this.dice);
+
     this.UIContainer.add(view);
+    this.editMode = model;
   }
   private createUICamera() {
     this.cameras.add(0, 0, this.scale.width, this.scale.height, false, "UI");
@@ -217,6 +220,7 @@ export class GameScene extends Phaser.Scene {
       { x: 0, y: 0 },
       chessContainer,
       this.description,
+      this.editMode,
     );
   }
   createInventoryContext(
