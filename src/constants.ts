@@ -6,3 +6,4 @@ export const GAME_WIDTH = 19 * CELL_SIZE_PX;
 export const GAME_HEIGHT = 9 * CELL_SIZE_PX;
 
 export const DEBUG = true;
+export const FONT_FAMILY = '"Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif';

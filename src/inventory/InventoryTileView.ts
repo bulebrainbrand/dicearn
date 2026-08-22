@@ -2,6 +2,8 @@ import Phaser from "phaser";
 import { TileFactory, TileView } from "@/Tile/types";
 import { InventoryTileView as IInventoryTileView } from "./types";
 import { TileModelUnion } from "@/Tile/TileDifinition";
+import { INK_COLOR } from "@/colors";
+import { FONT_FAMILY } from "@/constants";
 
 export class InventoryTileView
   extends Phaser.GameObjects.Container
@@ -23,10 +25,13 @@ export class InventoryTileView
     tileView.disableInteractive();
     this.add(tileView);
     this.tileView = tileView;
-    this.text = scene.add.text(0, 0, String(amount), {
-      color: "#000000",
-      fontSize: 128,
-    });
+    this.text = scene.add
+      .text(60, 80, String(amount), {
+        color: INK_COLOR,
+        fontSize: "64px",
+        fontFamily: FONT_FAMILY,
+      })
+      .setOrigin(1, 1);
     this.add(this.text);
     this.setSize(tileView.width, tileView.height);
   }

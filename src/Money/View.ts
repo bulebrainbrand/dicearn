@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { MONEY_FADEOUT_TEXT_SIZE_PX, MONEY_TEXT_SIZE_PX } from "./constants";
 import { MoneyModelEvent } from "./Model";
 import { MONEY_DEPTH_RANGE } from "@/layer";
+import { FONT_FAMILY } from "@/constants";
 
 export class MoneyView extends Phaser.GameObjects.Container {
   private text: Phaser.GameObjects.Text;
@@ -16,10 +17,11 @@ export class MoneyView extends Phaser.GameObjects.Container {
     const text = scene.add.text(0, 0, "", {
       color: color,
       fontSize: MONEY_TEXT_SIZE_PX,
+      fontFamily: FONT_FAMILY,
     });
     this.add(text);
     this.text = text;
-    text.setOrigin(0.5, 0.5);
+    text.setOrigin(0, 0);
     this.setDepth(MONEY_DEPTH_RANGE.getDepth(0));
   }
   updateMoney({ money, diff }: MoneyModelEvent["updateMoney"]) {
@@ -27,8 +29,8 @@ export class MoneyView extends Phaser.GameObjects.Container {
     if (diff === 0) return;
     const segment = diff > 0 ? "+" : "-";
     const text = this.scene.add.text(
+      this.text.width / 2,
       0,
-      -100,
       segment + String(Math.abs(diff)),
       { color: this.color, fontSize: MONEY_FADEOUT_TEXT_SIZE_PX },
     );
