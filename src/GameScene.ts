@@ -68,6 +68,7 @@ export class GameScene extends Phaser.Scene {
       height: 80,
     });
     this.load.svg("dizzy_tile_icon", "/dizzy.svg", { width: 80, height: 80 });
+    this.load.svg("edit_button_icon", "/edit.svg", { width: 80, height: 80 });
   }
   create() {
     this.createUIContainer();
@@ -138,7 +139,7 @@ export class GameScene extends Phaser.Scene {
   }
   private createEditMode() {
     const model = new EditMode();
-    const view = new EditModeButton(this, 0, 0, model);
+    const view = new EditModeButton(this, 128, 128, model);
     applyEditModeListen(model, this.cursorModel, this.dice);
     this.UIContainer.add(view);
   }
