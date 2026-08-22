@@ -59,6 +59,7 @@ export class BoardContextFactory {
     editMode.addListener("disable", () => {
       tiles.setMovable(false);
     });
+    tiles.setMovable(editMode.getEditMode());
     const cursorModel = new CursorModel(
       defaultCursorPosition.x,
       defaultCursorPosition.y,
