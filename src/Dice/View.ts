@@ -30,7 +30,7 @@ export class DiceView extends Phaser.GameObjects.Container {
   }
   enableRoll() {
     this.canRoll = true;
-    this.setInteractive();
+    this.setInteractive({ cursor: "pointer" });
     this.on("pointerdown", () => {
       if (this.canRoll) {
         this.diceModel.roll();

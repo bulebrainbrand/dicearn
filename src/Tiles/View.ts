@@ -60,7 +60,7 @@ export class TilesView {
     this.chessContainer.add(sprite);
     this.tiles.setTile(x, y, sprite);
     sprite.setDepth(BOARD_DEPTH_RANGE.getDepth(0));
-    sprite.setInteractive({ draggable: true });
+    sprite.setInteractive({ draggable: true, cursor: "grab" });
     const drag = new Drag(sprite);
     drag.setEnable(true);
     if (this.tileTypeChecker.isMovable(tile) && tile.getMovable()) {
