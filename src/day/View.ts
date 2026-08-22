@@ -1,12 +1,15 @@
+import { INK_COLOR } from "@/colors";
+import { FONT_FAMILY } from "@/constants";
 import Phaser from "phaser";
 
 export class DayView extends Phaser.GameObjects.Container {
   private child: Phaser.GameObjects.Text;
   constructor(scene: Phaser.Scene, x: number, y: number, day: number = 0) {
     super(scene, x, y);
-    const sprite = scene.add.text(0, 0, String(day), {
-      color: "#000000",
-      fontSize: "256px",
+    const sprite = scene.add.text(0, 0, `day${day + 1}`, {
+      color: INK_COLOR,
+      fontSize: "64px",
+      fontFamily: FONT_FAMILY,
     });
     sprite.setOrigin(0.5, 0.5);
     this.add(sprite);
@@ -14,6 +17,6 @@ export class DayView extends Phaser.GameObjects.Container {
     scene.add.existing(this);
   }
   updateDay(day: number) {
-    this.child.text = `${day}`;
+    this.child.text = `day${day + 1}`;
   }
 }

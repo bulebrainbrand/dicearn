@@ -6,4 +6,7 @@ export class BufferTileModel extends AbstrastMovableRotatableTile {
   onStandMoney(_kind: RouteKind): number {
     return 0;
   }
+  getDescription(): string {
+    return "隣接するタイルの稼ぎが倍になる";
+  }
 }

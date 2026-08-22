@@ -38,6 +38,7 @@ import { DizzyTileModel } from "./Tile/DizzyTile/Model.ts";
 import { PaymentModel } from "./Payment/Model.ts";
 import { PaymentFactory } from "./Payment/Factory.ts";
 import { Pay } from "./Payment/Pay.ts";
+import { Description } from "./description/index.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -59,6 +60,7 @@ export class GameScene extends Phaser.Scene {
   paymentModel!: PaymentModel;
   rewordModel!: RewordChoice;
   rewordGenerator!: RewordGenerator;
+  description!: Description;
   constructor() {
     super();
   }
@@ -74,6 +76,7 @@ export class GameScene extends Phaser.Scene {
     this.createUIContainer();
     this.createGameContainer();
     this.createUICamera();
+    this.createDescription();
     const {
       boardView,
       tiles,
@@ -128,6 +131,16 @@ export class GameScene extends Phaser.Scene {
       );
     }
   }
+  private createDescription() {
+    const view = new Description(
+      this,
+      this.scale.width - 640,
+      this.scale.height - 320,
+    );
+    view.hide();
+    this.UIContainer.add(view);
+    this.description = view;
+  }
   private createPay() {
     new Pay(this.dayModel, this.paymentModel, this.money)
       .addListener("pay", () => {
@@ -175,12 +188,7 @@ export class GameScene extends Phaser.Scene {
   }
   private createMoney() {
     this.money = new MoneyModel(0);
-    const view = new MoneyView(
-      this,
-      this.scale.width / 2,
-      this.scale.height / 8,
-      INK_COLOR,
-    );
+    const view = new MoneyView(this, 20, this.scale.height - 150, INK_COLOR);
     this.money.addListener(
       "updateMoney",
       (arg: MoneyModelEvent["updateMoney"]) => view.updateMoney(arg),
@@ -191,8 +199,8 @@ export class GameScene extends Phaser.Scene {
   private createPayment() {
     const { view, model } = PaymentFactory.create(
       this,
-      this.scale.width - 800,
-      100,
+      this.scale.width - 650,
+      160,
       this.dayModel,
     );
     this.cameras.main.ignore(view);
@@ -206,6 +214,7 @@ export class GameScene extends Phaser.Scene {
       { maxX: 5, maxY: 5, minX: 0, minY: 0 },
       { x: 0, y: 0 },
       chessContainer,
+      this.description,
     );
   }
   createInventoryContext(
@@ -224,11 +233,7 @@ export class GameScene extends Phaser.Scene {
     );
   }
   createDay() {
-    const { model, view } = dayFactory(
-      this,
-      CELL_SIZE_PX * 13,
-      CELL_SIZE_PX * 8,
-    );
+    const { model, view } = dayFactory(this, this.scale.width - 150, 80);
     this.dayModel = model;
     this.dayView = view;
     this.UIContainer.add(view);

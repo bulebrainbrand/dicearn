@@ -22,4 +22,7 @@ export class NormalTileModel extends AbstrastMovableRotatableTile {
     // oxlint-disable-next-line typescript/restrict-template-expressions
     throw new TypeError(`unexpected Routekind:${kind}`);
   }
+  getDescription(): string {
+    return "乗った時に+1コイン";
+  }
 }

@@ -23,4 +23,7 @@ export class RandomTileModel extends AbstrastMovableTile {
     // oxlint-disable-next-line typescript/restrict-template-expressions
     throw new TypeError(`unexpected Routekind:${kind}`);
   }
+  getDescription(): string {
+    return "ランダムにワープする";
+  }
 }
