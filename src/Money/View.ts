@@ -32,7 +32,7 @@ export class MoneyView extends Phaser.GameObjects.Container {
       this.text.width / 2,
       0,
       segment + String(Math.abs(diff)),
-      { color: this.color, fontSize: MONEY_FADEOUT_TEXT_SIZE_PX },
+      { color: this.color, fontSize: MONEY_FADEOUT_TEXT_SIZE_PX, font: "bold" },
     );
     text.setOrigin(0.5, 0.5);
     this.add(text);
