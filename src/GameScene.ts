@@ -38,6 +38,7 @@ import { DizzyTileModel } from "./Tile/DizzyTile/Model.ts";
 import { PaymentModel } from "./Payment/Model.ts";
 import { PaymentFactory } from "./Payment/Factory.ts";
 import { Pay } from "./Payment/Pay.ts";
+import { Description } from "./description/index.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -115,6 +116,7 @@ export class GameScene extends Phaser.Scene {
     const { model } = this.createPayment();
     this.paymentModel = model;
     this.createPay();
+    this.createDescription();
     const cameraController = new CameraController(this);
     this.GameContainer.addAt(cameraController.background, 0);
     this.UIContainer.setScrollFactor(0, 0, true);
@@ -127,6 +129,15 @@ export class GameScene extends Phaser.Scene {
         },
       );
     }
+  }
+  private createDescription() {
+    const view = new Description(
+      this,
+      this.scale.width - 640,
+      this.scale.height - 320,
+    );
+    view.show("hello");
+    this.UIContainer.add(view);
   }
   private createPay() {
     new Pay(this.dayModel, this.paymentModel, this.money)
