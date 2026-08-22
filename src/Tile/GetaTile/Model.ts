@@ -6,4 +6,7 @@ export class GetaTileModel extends AbstrastMovableRotatableTile {
   onStandMoney(_kind: RouteKind): number {
     return 0;
   }
+  getDescription(): string {
+    return "出目を+1する。重複しない";
+  }
 }

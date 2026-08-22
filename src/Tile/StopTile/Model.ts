@@ -22,4 +22,7 @@ export class StopTileModel extends AbstrastMovableRotatableTile {
     // oxlint-disable-next-line typescript/restrict-template-expressions
     throw new TypeError(`unexpected Routekind:${kind}`);
   }
+  getDescription(): string {
+    return "このタイルに乗るとその日の移動を終わる";
+  }
 }

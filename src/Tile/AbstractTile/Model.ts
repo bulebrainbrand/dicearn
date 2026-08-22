@@ -31,6 +31,7 @@ export abstract class AbstrastMovableRotatableTile
   }
 
   abstract onStandMoney(kind: RouteKind): number;
+  abstract getDescription(): string;
 }
 
 export abstract class AbstrastMovableTile
@@ -45,4 +46,5 @@ export abstract class AbstrastMovableTile
     return true;
   }
   abstract onStandMoney(kind: RouteKind): number;
+  abstract getDescription(): string;
 }

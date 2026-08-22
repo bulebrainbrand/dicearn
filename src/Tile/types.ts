@@ -6,6 +6,7 @@ import { RouteKind } from "@/board/types";
 export interface TileModel extends EventEmitter {
   readonly name: string;
   onStandMoney(kind: RouteKind): number;
+  getDescription(): string;
 }
 
 export interface DirectionTileModel extends TileModel {
