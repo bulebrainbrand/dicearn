@@ -28,15 +28,16 @@ import { InventoryModel } from "./inventory/Model.ts";
 import { CameraController } from "./CameraController.ts";
 import { UI_DEPTH_RANGE } from "./layer.ts";
 import { DiceResultCalculator } from "./DiceResultCalculator.ts";
-import { RandomTileModel } from "./Tile/RandomTile/Model.ts";
 import { DiceModel } from "./Dice/Model.ts";
 import { DiceView } from "./Dice/View.ts";
 import { EditMode } from "./EditMode/Model.ts";
 import { EditModeButton } from "./EditMode/View.ts";
 import { applyEditModeListen } from "./EditMode/applyEditMode.ts";
 import { Board } from "./board/Model.ts";
-import { StopTileModel } from "./Tile/StopTile/Model.ts";
 import { DizzyTileModel } from "./Tile/DizzyTile/Model.ts";
+import { PaymentModel } from "./Payment/Model.ts";
+import { PaymentFactory } from "./Payment/Factory.ts";
+import { Pay } from "./Payment/Pay.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -55,6 +56,9 @@ export class GameScene extends Phaser.Scene {
   dice!: DiceModel;
   UIContainer!: Phaser.GameObjects.Container;
   GameContainer!: Phaser.GameObjects.Container;
+  paymentModel!: PaymentModel;
+  rewordModel!: RewordChoice;
+  rewordGenerator!: RewordGenerator;
   constructor() {
     super();
   }
@@ -107,6 +111,9 @@ export class GameScene extends Phaser.Scene {
     this.initTiles();
     this.createReword();
     this.createEditMode();
+    const { model } = this.createPayment();
+    this.paymentModel = model;
+    this.createPay();
     const cameraController = new CameraController(this);
     this.GameContainer.addAt(cameraController.background, 0);
     this.UIContainer.setScrollFactor(0, 0, true);
@@ -119,6 +126,14 @@ export class GameScene extends Phaser.Scene {
         },
       );
     }
+  }
+  private createPay() {
+    new Pay(this.dayModel, this.paymentModel, this.money).addListener(
+      "pay",
+      () => {
+        this.rewordModel.show(this.rewordGenerator.generate());
+      },
+    );
   }
   private createEditMode() {
     const model = new EditMode();
@@ -146,9 +161,6 @@ export class GameScene extends Phaser.Scene {
     const model = new RewordChoice();
     const view = new RewordChoiceView(this, 0, 0, model);
     const generator = new RewordGenerator(this.inventoryModel, this.boardSize);
-    this.dayModel.addListener("nextDay", () => {
-      model.show(generator.generate());
-    });
     model.on("hide", () => {
       this.dice.enable();
     });
@@ -156,6 +168,8 @@ export class GameScene extends Phaser.Scene {
       this.dice.disable();
     });
     this.UIContainer.add(view);
+    this.rewordModel = model;
+    this.rewordGenerator = generator;
   }
   private createMoney() {
     this.money = new MoneyModel(0);
@@ -171,6 +185,16 @@ export class GameScene extends Phaser.Scene {
     );
     this.money.applyMoney(0);
     this.UIContainer.add(view);
+  }
+  private createPayment() {
+    const { view, model } = PaymentFactory.create(
+      this,
+      this.scale.width - 800,
+      100,
+      this.dayModel,
+    );
+    this.cameras.main.ignore(view);
+    return { view, model };
   }
   createBoardContext() {
     const chessContainer = this.add.container();
@@ -236,9 +260,6 @@ export class GameScene extends Phaser.Scene {
         this.cursor.playWarp(event),
       );
     });
-    this.dayModel.addListener("checkMoney", (money: number) => {
-      this.checkMoney(money);
-    });
     this.dayModel.addListener("nextDay", (day: number) => {
       this.dayView.updateDay(day);
     });
@@ -281,12 +302,5 @@ export class GameScene extends Phaser.Scene {
     });
     this.dice = dice;
     this.GameContainer.add(diceView);
-  }
-  checkMoney(needMoney: number) {
-    if (this.money.getMoney() < needMoney) {
-      console.log("game over");
-    } else {
-      console.log("pass");
-    }
   }
 }
