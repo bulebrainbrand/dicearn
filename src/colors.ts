@@ -16,3 +16,5 @@ export const ICON_COLOR = "#215038";
 export const LIGHT_COLOR = "#F6D6A7";
 
 export const LIGHT_BACKGROUND_COLOR = "#8fd0fc";
+
+export const LIGHT_INK = "#ccbb70";
