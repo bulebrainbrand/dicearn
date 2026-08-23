@@ -16,6 +16,8 @@ import { TileView, TileViewFactory } from "@/Tile/types";
 import { TileTypeChecker } from "@/Tile/TileTypeChecker";
 import { TileModelUnion } from "@/Tile/TileDifinition";
 import { Description } from "@/description";
+import { ACTUAL_CELL_SIZE_PX } from "@/constants";
+import { ACCENT_COLOR } from "@/colors";
 export class TilesView {
   private tiles: TilesDataStorage<TileView>;
   constructor(
@@ -23,7 +25,7 @@ export class TilesView {
     private board: Board,
     private chessContainer: Phaser.GameObjects.Container,
     private tilesModel: Tiles,
-    private boardViewCoordinateCalculator: BoardViewCoordinateCalculator,
+    private readonly boardViewCoordinateCalculator: BoardViewCoordinateCalculator,
     private readonly tileViewFactory: TileViewFactory,
     private readonly tileTypeChecker: TileTypeChecker,
     private readonly description: Description,
@@ -82,27 +84,36 @@ export class TilesView {
     sprite.on("pointerup", () => {
       this.description.hide();
     });
+
     if (this.tileTypeChecker.isMovable(tile) && tile.getMovable()) {
-      sprite.on("drag", () => {
-        if (this.tilesModel.getMovable() === false) {
-          const x = sprite.getData("x");
-          const y = sprite.getData("y");
-          const worldXY = this.board.tileXYToWorldXY(x, y);
-          sprite.setPosition(worldXY.x, worldXY.y);
-          return;
-        }
+      let graphics = this.scene.add.graphics();
+      graphics.fillStyle(
+        Phaser.Display.Color.HexStringToColor(ACCENT_COLOR).color,
+        0.2,
+      );
+      this.scene.cameras.getCamera("UI")?.ignore(graphics);
+      sprite.once("destroy", () => graphics.destroy());
+      const dragHandler = () => {
         const tileXY = this.board.worldXYToTileXY(sprite.x, sprite.y, true);
-
-        const clampedPosition =
-          this.boardViewCoordinateCalculator.clampPosition(tileXY);
-
-        const newPosition = this.board.tileXYToWorldXY(
-          clampedPosition.x,
-          clampedPosition.y,
-        );
+        const newPosition = this.board.tileXYToWorldXY(tileXY.x, tileXY.y);
         sprite.setPosition(newPosition.x, newPosition.y);
-      });
-      sprite.on("dragend", (pointer: Phaser.Input.Pointer) => {
+        graphics.clear();
+        graphics.fillStyle(
+          Phaser.Display.Color.HexStringToColor(ACCENT_COLOR).color,
+          0.8,
+        );
+        graphics.setDepth(-1);
+        if (this.boardViewCoordinateCalculator.isOutside(tileXY)) {
+          graphics.fillRect(
+            newPosition.x - ACTUAL_CELL_SIZE_PX / 2,
+            newPosition.y - ACTUAL_CELL_SIZE_PX / 2,
+            ACTUAL_CELL_SIZE_PX,
+            ACTUAL_CELL_SIZE_PX,
+          );
+        }
+      };
+      const dragendHandler = (pointer: Phaser.Input.Pointer) => {
+        graphics.clear();
         if (this.tilesModel.getMovable() === false) {
           const x = sprite.getData("x");
           const y = sprite.getData("y");
@@ -111,18 +122,18 @@ export class TilesView {
           return;
         }
         if (this.isDrag(pointer, sprite)) {
+          const oldX = sprite.getData("x");
+          const oldY = sprite.getData("y");
           const tileXY = this.board.worldXYToTileXY(sprite.x, sprite.y, true);
-          console.log("dragend", pointer.downTime);
-          const newPosition =
-            this.boardViewCoordinateCalculator.clampPosition(tileXY);
-          this.tilesModel.swapTile(
-            sprite.getData("x"),
-            sprite.getData("y"),
-            newPosition.x,
-            newPosition.y,
-          );
+          if (this.boardViewCoordinateCalculator.isOutside(tileXY)) {
+            this.tilesModel.removeTile(oldX, oldY);
+            return;
+          }
+          this.tilesModel.swapTile(x, y, tileXY.x, tileXY.y);
         }
-      });
+      };
+      sprite.on("drag", dragHandler);
+      sprite.on("dragend", dragendHandler);
     }
     if (this.tileTypeChecker.isRotatable(tile)) {
       sprite.on("dragend", (pointer: Phaser.Input.Pointer) => {
