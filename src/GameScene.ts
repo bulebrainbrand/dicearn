@@ -20,7 +20,7 @@ import { BoardSize } from "./types.ts";
 import { BufferTileModel } from "./Tile/BufferTIle/Model.ts";
 import { MoneyModel, MoneyModelEvent } from "./Money/Model.ts";
 import { MoneyView } from "./Money/View.ts";
-import { INK_COLOR, LIGHT_COLOR, LIGHT_INK } from "./colors.ts";
+import { LIGHT_INK } from "./colors.ts";
 import { RewordChoice } from "./RewordChoice/Model.ts";
 import { RewordChoiceView } from "./RewordChoice/View.ts";
 import { RewordGenerator } from "./RewordChoice/RewordGenerator.ts";
@@ -40,6 +40,7 @@ import { PaymentFactory } from "./Payment/Factory.ts";
 import { Pay } from "./Payment/Pay.ts";
 import { Description } from "./description/index.ts";
 import { FullScreanButton } from "./fullscreanButton/View.ts";
+import { RewordViewFactory } from "./RewordChoice/RewordViewFactory.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -185,7 +186,8 @@ export class GameScene extends Phaser.Scene {
   }
   private createReword() {
     const model = new RewordChoice();
-    const view = new RewordChoiceView(this, 0, 0, model);
+    const factory = new RewordViewFactory();
+    const view = new RewordChoiceView(this, 0, 0, model, factory);
     const generator = new RewordGenerator(this.inventoryModel, this.boardSize);
     model.on("hide", () => {
       this.dice.enable();

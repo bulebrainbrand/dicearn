@@ -1,6 +1,11 @@
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter";
 
-export type Reword = { name: string; desc: string; callback: CallableFunction };
+export type Reword = {
+  type: string;
+  name: string;
+  desc: string;
+  callback: CallableFunction;
+};
 export type Rewords = [
   Reword | undefined,
   Reword | undefined,

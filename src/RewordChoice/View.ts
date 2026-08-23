@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import { Reword, RewordChoice, RewordChoiceModelEvent, Rewords } from "./Model";
-import { RewordView } from "./RewordView";
 import { REWORDS_DEPTH_RANGE } from "@/layer";
 import {
   REWORD_HEIGHT_PX,
@@ -9,6 +8,7 @@ import {
   REWORDS_BACKGROUND_COLOR,
   REWORDS_GAP_PX,
 } from "./constants";
+import { RewordViewFactory } from "./RewordViewFactory";
 
 export class RewordChoiceView extends Phaser.GameObjects.Container {
   private backgroundRectangle: Phaser.GameObjects.Rectangle | null = null;
@@ -20,6 +20,7 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
     x: number,
     y: number,
     private readonly rewordChoiceModel: RewordChoice,
+    private readonly rewordViewFactory: RewordViewFactory,
   ) {
     super(scene, x, y);
     scene.add.existing(this);
@@ -121,8 +122,15 @@ export class RewordChoiceView extends Phaser.GameObjects.Container {
   private choice(_index: number): void {
     this.rewordChoiceModel.hide();
   }
-  private createReword({ name, desc }: Reword) {
-    const rewordSprite = new RewordView(this.scene, 0, 0, name, desc);
+  private createReword({ name, desc, type }: Reword) {
+    const rewordSprite = this.rewordViewFactory.create(
+      this.scene,
+      0,
+      0,
+      name,
+      desc,
+      type,
+    );
     return rewordSprite;
   }
   private createUndefinedReword() {

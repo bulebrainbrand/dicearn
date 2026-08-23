@@ -5,7 +5,7 @@ import { PaymentScheduleView } from "./View";
 export class PaymentFactory {
   static model(): PaymentModel {
     return new PaymentModel([
-      { day: 7, money: 20 },
+      { day: 1, money: 0 },
       { day: 14, money: 250 },
       { day: 21, money: 700 },
     ]);

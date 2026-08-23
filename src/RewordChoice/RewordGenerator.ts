@@ -10,6 +10,7 @@ export class RewordGenerator {
   generate(): Rewords {
     const rewords = [
       {
+        type: "normal",
         name: "ノーマルタイル",
         desc: "1枚のノーマルタイルを獲得します",
         callback: () => {
@@ -17,6 +18,7 @@ export class RewordGenerator {
         },
       },
       {
+        type: "buffer",
         name: "バッファータイル",
         desc: "隣接するタイルでの稼ぎを倍にするバッファータイルを1枚獲得します",
         callback: () => {
@@ -24,6 +26,7 @@ export class RewordGenerator {
         },
       },
       {
+        type: "geta",
         name: "下駄タイル",
         desc: "毎回の出目が1増える下駄タイルを1枚獲得します。重複しません",
         callback: () => {
@@ -31,6 +34,7 @@ export class RewordGenerator {
         },
       },
       {
+        type: "mark",
         name: "的タイル",
         desc: "ワープで乗った場合にたくさんのコインが手に入るワープタイルを1枚獲得します",
         callback: () => {
@@ -38,6 +42,7 @@ export class RewordGenerator {
         },
       },
       {
+        type: "random",
         name: "ランダムタイル",
         desc: "駒がランダムに移動するランダムタイルを1枚獲得します",
         callback: () => {
@@ -45,6 +50,7 @@ export class RewordGenerator {
         },
       },
       {
+        type: "upgrade",
         name: "ボードをアップグレード",
         desc: "ボードを上下左右に1マスずつ広げます",
         callback: () => {
