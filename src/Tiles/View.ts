@@ -58,13 +58,24 @@ export class TilesView {
     tile: TileModelUnion,
   ): TileView {
     const sprite = this.tileViewFactory.create(tile);
+    console.log(sprite, sprite.scene);
     this.board.addChess(sprite, x, y, TILE_TILE_Z, true);
     this.chessContainer.add(sprite);
     this.tiles.setTile(x, y, sprite);
     sprite.setDepth(BOARD_DEPTH_RANGE.getDepth(0));
     sprite.setInteractive({ draggable: true, cursor: "grab" });
-    const drag = new Drag(sprite);
-    drag.setEnable(true);
+    const drag = new Drag(sprite, { enable: this.tilesModel.getMovable() });
+    const movableHandler = (bool: boolean) => {
+      if (bool === true) {
+        drag.setEnable(true);
+      } else {
+        drag.setEnable(false);
+      }
+    };
+    this.tilesModel.on("movable", movableHandler);
+    sprite.once("destroy", () => {
+      this.tilesModel.off("movable", movableHandler);
+    });
     sprite.on("pointerdown", () => {
       this.description.show(tile.getDescription());
     });
