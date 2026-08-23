@@ -81,8 +81,14 @@ export class TilesView {
     sprite.on("pointerdown", () => {
       this.description.show(tile.getDescription());
     });
+    sprite.on("pointerover", () => {
+      this.description.show(tile.getDescription());
+    });
     sprite.on("pointerup", () => {
       this.description.hide();
+    });
+    sprite.on("pointerout", () => {
+      this.description.show(tile.getDescription());
     });
 
     if (this.tileTypeChecker.isMovable(tile) && tile.getMovable()) {
