@@ -133,6 +133,12 @@ export class GameScene extends Phaser.Scene {
           console.log("clicked gameobject:", b);
         },
       );
+      this.input.on(
+        "pointerover",
+        (a: Phaser.Input.Pointer, b: Phaser.GameObjects.GameObject) => {
+          console.log("hovered gameobject:", b);
+        },
+      );
     }
   }
   private createDescription() {
