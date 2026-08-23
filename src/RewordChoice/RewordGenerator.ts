@@ -10,43 +10,43 @@ export class RewordGenerator {
   generate(): Rewords {
     const rewords = [
       {
-        name: "normal tile",
-        desc: "get 1 normal tile",
+        name: "ノーマルタイル",
+        desc: "1枚のノーマルタイルを獲得します",
         callback: () => {
           this.inventoryModel.addTile("normal", 1);
         },
       },
       {
-        name: "buffer tile",
-        desc: "get 1 buffer tile",
+        name: "バッファータイル",
+        desc: "隣接するタイルでの稼ぎを倍にするバッファータイルを1枚獲得します",
         callback: () => {
           this.inventoryModel.addTile("buffer", 1);
         },
       },
       {
-        name: "geta  tile",
-        desc: "get 1 geta tile. it will plus one to each dice result",
+        name: "下駄タイル",
+        desc: "毎回の出目が1増える下駄タイルを1枚獲得します。重複しません",
         callback: () => {
           this.inventoryModel.addTile("geta", 1);
         },
       },
       {
-        name: "mark tile",
-        desc: "get 1 mark tile. +10 money when warp to this tile",
+        name: "的タイル",
+        desc: "ワープで乗った場合にたくさんのコインが手に入るワープタイルを1枚獲得します",
         callback: () => {
           this.inventoryModel.addTile("mark", 1);
         },
       },
       {
-        name: "random tile",
-        desc: "warp to everywhere",
+        name: "ランダムタイル",
+        desc: "駒がランダムに移動するランダムタイルを1枚獲得します",
         callback: () => {
           this.inventoryModel.addTile("random", 1);
         },
       },
       {
-        name: "upgrade board",
-        desc: "board size +1",
+        name: "ボードをアップグレード",
+        desc: "ボードを上下左右に1マスずつ広げます",
         callback: () => {
           this.boardSize.expand(1);
         },
