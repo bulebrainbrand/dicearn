@@ -129,7 +129,7 @@ export class TilesView {
             this.tilesModel.removeTile(oldX, oldY);
             return;
           }
-          this.tilesModel.swapTile(x, y, tileXY.x, tileXY.y);
+          this.tilesModel.swapTile(oldX, oldY, tileXY.x, tileXY.y);
         }
       };
       sprite.on("drag", dragHandler);
