@@ -11,6 +11,7 @@ export class MoneyView extends Phaser.GameObjects.Container {
     x: number,
     y: number,
     private readonly color: string,
+    private readonly followObject: Phaser.GameObjects.Container,
   ) {
     super(scene, x, y);
     scene.add.existing(this);
@@ -29,18 +30,23 @@ export class MoneyView extends Phaser.GameObjects.Container {
     if (diff === 0) return;
     const segment = diff > 0 ? "+" : "-";
     const text = this.scene.add.text(
-      this.text.width / 2,
-      0,
+      this.followObject.x,
+      this.followObject.y,
       segment + String(Math.abs(diff)),
-      { color: this.color, fontSize: MONEY_FADEOUT_TEXT_SIZE_PX, font: "bold" },
+      {
+        color: this.color,
+        fontSize: `${MONEY_FADEOUT_TEXT_SIZE_PX}px`,
+        fontStyle: "bold",
+        fontFamily: FONT_FAMILY,
+      },
     );
     text.setOrigin(0.5, 0.5);
-    this.add(text);
+    this.scene.cameras.getCamera("UI")?.ignore(text);
     this.scene.tweens.add({
       targets: text,
-      y: text.y - 50,
+      y: text.y - 150,
       alpha: 0,
-      duration: 500,
+      duration: 1000,
       onComplete: () => {
         text.destroy();
       },

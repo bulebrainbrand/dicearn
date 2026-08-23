@@ -20,7 +20,7 @@ import { BoardSize } from "./types.ts";
 import { BufferTileModel } from "./Tile/BufferTIle/Model.ts";
 import { MoneyModel, MoneyModelEvent } from "./Money/Model.ts";
 import { MoneyView } from "./Money/View.ts";
-import { INK_COLOR } from "./colors.ts";
+import { INK_COLOR, LIGHT_COLOR, LIGHT_INK } from "./colors.ts";
 import { RewordChoice } from "./RewordChoice/Model.ts";
 import { RewordChoiceView } from "./RewordChoice/View.ts";
 import { RewordGenerator } from "./RewordChoice/RewordGenerator.ts";
@@ -199,7 +199,13 @@ export class GameScene extends Phaser.Scene {
   }
   private createMoney() {
     this.money = new MoneyModel(0);
-    const view = new MoneyView(this, 20, this.scale.height - 150, INK_COLOR);
+    const view = new MoneyView(
+      this,
+      20,
+      this.scale.height - 150,
+      LIGHT_INK,
+      this.cursor,
+    );
     this.money.addListener(
       "updateMoney",
       (arg: MoneyModelEvent["updateMoney"]) => view.updateMoney(arg),
