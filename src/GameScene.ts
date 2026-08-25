@@ -3,7 +3,7 @@ import { DIRECTION_TAPLE } from "./Direction.ts";
 import { Tiles } from "./Tiles/Model.ts";
 import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalculator.ts";
 import { CursorModel } from "@/cursor/Model.ts";
-import { CELL_SIZE_PX, DEBUG } from "@/constants.ts";
+import { CELL_SIZE_PX, DEBUG, FONT_FAMILY } from "@/constants.ts";
 import { CursorView } from "./cursor/View.ts";
 import { BoardView } from "./board/View.ts";
 import { DayModel } from "./day/Model.ts";
@@ -20,7 +20,7 @@ import { BoardSize } from "./types.ts";
 import { BufferTileModel } from "./Tile/BufferTIle/Model.ts";
 import { MoneyModel, MoneyModelEvent } from "./Money/Model.ts";
 import { MoneyView } from "./Money/View.ts";
-import { LIGHT_INK } from "./colors.ts";
+import { INK_COLOR, LIGHT_INK } from "./colors.ts";
 import { RewordChoice } from "./RewordChoice/Model.ts";
 import { RewordChoiceView } from "./RewordChoice/View.ts";
 import { RewordGenerator } from "./RewordChoice/RewordGenerator.ts";
@@ -158,7 +158,20 @@ export class GameScene extends Phaser.Scene {
         this.rewordModel.show(this.rewordGenerator.generate());
       })
       .addListener("failed", () => {
-        console.log("failed");
+        this.children.removeAll();
+        this.cameras.main.ignore(
+          this.add
+            .text(
+              this.scale.width / 2,
+              this.scale.height / 2,
+              `GameOver\n${this.dayModel.getDay()}日生き残りました`,
+              { fontFamily: FONT_FAMILY, fontSize: 256, color: INK_COLOR },
+            )
+            .setOrigin(0.5, 0.5),
+        );
+        this.input.on("pointerdown", () => {
+          window.location.reload();
+        });
       });
   }
   private createEditMode() {
