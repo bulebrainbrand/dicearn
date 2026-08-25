@@ -23,6 +23,8 @@ export abstract class AbstractDirectionTileView
     this.setSize(ACTUAL_CELL_SIZE_PX, ACTUAL_CELL_SIZE_PX);
   }
   protected drawTile(dir: Direction): void {
+    this.setToTop();
+
     const g = this.graphics;
     g.clear();
     this.directionTileDrawer.draw(g, dir);
@@ -50,6 +52,7 @@ export abstract class AbstractTileView
     this.setSize(ACTUAL_CELL_SIZE_PX, ACTUAL_CELL_SIZE_PX);
   }
   protected drawTile(): void {
+    this.setToTop();
     const g = this.graphics;
     g.clear();
     this.tileDrawer.draw(g);
