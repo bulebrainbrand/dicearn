@@ -4,15 +4,16 @@ import { AbstrastMovableRotatableTile } from "../AbstractTile/Model";
 export class LackTileModel extends AbstrastMovableRotatableTile {
   readonly name = "lack";
   onStandMoney(kind: RouteKind): number {
+    const random = () => Math.floor(Math.random() * 10) + 1;
     switch (kind) {
       case "move":
-        return Math.floor(Math.random() * 11);
+        return random();
       case "reset":
         return 0;
       case "warp":
-        return Math.floor(Math.random() * 11);
+        return random();
       case "stop":
-        return Math.floor(Math.random() * 11);
+        return random();
       default: {
         kind satisfies never;
         break;
