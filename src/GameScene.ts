@@ -231,8 +231,8 @@ export class GameScene extends Phaser.Scene {
   private createPayment() {
     const { view, model } = PaymentFactory.create(
       this,
-      this.scale.width - 650,
-      160,
+      this.scale.width - 48,
+      216,
       this.dayModel,
     );
     this.cameras.main.ignore(view);
@@ -266,7 +266,7 @@ export class GameScene extends Phaser.Scene {
     );
   }
   createDay() {
-    const { model, view } = dayFactory(this, this.scale.width - 150, 80);
+    const { model, view } = dayFactory(this, this.scale.width - 48, 48);
     this.dayModel = model;
     this.dayView = view;
     this.UIContainer.add(view);

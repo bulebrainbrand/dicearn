@@ -10,6 +10,7 @@ export class PaymentScheduleView extends Phaser.GameObjects.Container {
       color: INK_COLOR,
       fontSize: "64px",
     });
+    text.setOrigin(1, 0);
     this.add(text);
     this.textObject = text;
     this.setSize(text.width, text.height);
