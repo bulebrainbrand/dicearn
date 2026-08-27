@@ -48,3 +48,30 @@ export abstract class AbstrastMovableTile
   abstract onStandMoney(kind: RouteKind): number;
   abstract getDescription(): string;
 }
+
+export abstract class AbstrastRotatableTile
+  extends EventEmitter
+  implements RotatableTileModel
+{
+  abstract readonly name: string;
+  constructor(private dir: Direction) {
+    super();
+  }
+  getDirection(): Direction {
+    return this.dir;
+  }
+  /**
+   * @fires Tile#event:changeDirection
+   * @param dir
+   */
+  changeDirection(dir: Direction) {
+    this.dir = dir;
+    /**
+     * @event Tile#event:changeDirection
+     * @param {Direction} dir
+     */
+    this.emit("changeDirection", dir);
+  }
+  abstract onStandMoney(kind: RouteKind): number;
+  abstract getDescription(): string;
+}

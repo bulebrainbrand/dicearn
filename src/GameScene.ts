@@ -41,6 +41,7 @@ import { Description } from "./description/index.ts";
 import { FullScreanButton } from "./fullscreanButton/View.ts";
 import { RewordViewFactory } from "./RewordChoice/RewordViewFactory.ts";
 import { LackTileModel } from "./Tile/LackTile/Model.ts";
+import { HomeTileModel } from "./Tile/HomeTile/Model.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -285,6 +286,7 @@ export class GameScene extends Phaser.Scene {
         ),
       ),
     );
+    this.tiles.setTile(0, 0, new HomeTileModel("u"));
     this.tiles.setTile(1, 1, new LackTileModel("u"));
   }
   registorEventListener() {
