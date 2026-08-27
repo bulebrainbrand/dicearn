@@ -12,13 +12,15 @@ export class RouteSearcher {
     private readonly tiles: Tiles,
     private readonly boardSize: BoardSize,
     private readonly tileTypeChecker: TileTypeChecker,
-    private readonly resetPosition: Position,
   ) {}
 
   search(position: Position): RouteTransition {
+    const homeTile = this.tiles.find((tile) => tile?.name === "home");
+    if (homeTile === undefined) throw new TypeError(`there are no homeTile`);
+    const resetPosition = { x: homeTile.x, y: homeTile.y };
     const tile = this.tiles.getTile(position.x, position.y);
     if (tile === undefined) {
-      return { kind: "reset", destination: this.resetPosition };
+      return { kind: "reset", destination: resetPosition };
     }
     if (tile.name === "random") {
       return { kind: "warp", destination: this.getRandomPosition() };
@@ -37,7 +39,7 @@ export class RouteSearcher {
       });
       const nextTile = this.tiles.getTile(destination.x, destination.y);
       if (nextTile === undefined) {
-        return { kind: "reset", destination: this.resetPosition };
+        return { kind: "reset", destination: resetPosition };
       }
       if (nextTile.name === "stop") {
         return { kind: "stop", destination };
@@ -45,7 +47,7 @@ export class RouteSearcher {
       return { kind: "move", destination };
     }
     if (this.tileTypeChecker.isDirectionTile(tile) === false) {
-      return { kind: "reset", destination: this.resetPosition };
+      return { kind: "reset", destination: resetPosition };
     }
     const offset = DIRECTION_OFFSET[tile.getDirection()];
     const destination = this.covertPosToInside({
@@ -54,7 +56,7 @@ export class RouteSearcher {
     });
     const nextTile = this.tiles.getTile(destination.x, destination.y);
     if (nextTile === undefined) {
-      return { kind: "reset", destination: this.resetPosition };
+      return { kind: "reset", destination: resetPosition };
     }
     if (nextTile.name === "stop") {
       return { kind: "stop", destination };
