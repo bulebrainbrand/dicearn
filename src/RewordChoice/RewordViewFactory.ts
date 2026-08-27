@@ -33,6 +33,8 @@ export class RewordViewFactory {
         return TILE_DIFINITION.stop.factory.view(scene);
       case "dizzy":
         return TILE_DIFINITION.dizzy.factory.view(scene);
+      case "lack":
+        return TILE_DIFINITION.lack.factory.view(scene);
       case "upgrade":
         return scene.add.container();
       default:
