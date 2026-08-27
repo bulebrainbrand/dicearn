@@ -4,7 +4,7 @@ import { DirectionTileDrawer } from "../DirectionTileDrawer";
 import { AbstractDirectionTileView } from "../AbstractTile/View";
 
 export class HomeTileView extends AbstractDirectionTileView {
-  readonly name: string = "lack";
+  readonly name: string = "home";
   constructor(
     scene: Phaser.Scene,
     dir: Direction,
