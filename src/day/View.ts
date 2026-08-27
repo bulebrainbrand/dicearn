@@ -11,7 +11,7 @@ export class DayView extends Phaser.GameObjects.Container {
       fontSize: "64px",
       fontFamily: FONT_FAMILY,
     });
-    sprite.setOrigin(0.5, 0.5);
+    sprite.setOrigin(1, 0);
     this.add(sprite);
     this.child = sprite;
     scene.add.existing(this);
