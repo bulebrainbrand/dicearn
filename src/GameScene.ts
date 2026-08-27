@@ -34,13 +34,13 @@ import { EditMode } from "./EditMode/Model.ts";
 import { EditModeButton } from "./EditMode/View.ts";
 import { applyEditModeListen } from "./EditMode/applyEditMode.ts";
 import { Board } from "./board/Model.ts";
-import { DizzyTileModel } from "./Tile/DizzyTile/Model.ts";
 import { PaymentModel } from "./Payment/Model.ts";
 import { PaymentFactory } from "./Payment/Factory.ts";
 import { Pay } from "./Payment/Pay.ts";
 import { Description } from "./description/index.ts";
 import { FullScreanButton } from "./fullscreanButton/View.ts";
 import { RewordViewFactory } from "./RewordChoice/RewordViewFactory.ts";
+import { LackTileModel } from "./Tile/LackTile/Model.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -74,6 +74,7 @@ export class GameScene extends Phaser.Scene {
     });
     this.load.svg("dizzy_tile_icon", "/dizzy.svg", { width: 80, height: 80 });
     this.load.svg("edit_button_icon", "/edit.svg", { width: 80, height: 80 });
+    this.load.svg("lack_tile_icon", "/clover.svg", { width: 80, height: 80 });
   }
   create() {
     this.createUIContainer();
@@ -284,7 +285,7 @@ export class GameScene extends Phaser.Scene {
         ),
       ),
     );
-    this.tiles.setTile(1, 1, new DizzyTileModel());
+    this.tiles.setTile(1, 1, new LackTileModel("u"));
   }
   registorEventListener() {
     this.cursorModel.addListener(

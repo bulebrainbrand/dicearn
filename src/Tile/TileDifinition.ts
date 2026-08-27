@@ -4,6 +4,8 @@ import { DizzyTileFactory } from "./DizzyTile/Factory";
 import { DizzyTileModel } from "./DizzyTile/Model";
 import { GetaTileFactory } from "./GetaTile/Factory";
 import { GetaTileModel } from "./GetaTile/Model";
+import { LackTileFactory } from "./LackTile/Factory";
+import { LackTileModel } from "./LackTile/Model";
 import { MarkTileFactory } from "./MarkTile/Factory";
 import { MarkTileModel } from "./MarkTile/Model";
 import { NormalTileFactory } from "./NormalTile/Factory";
@@ -31,6 +33,7 @@ export const TILE_DIFINITION = {
   },
   stop: { factory: new StopTileFactory(), modelConstructor: StopTileModel },
   dizzy: { factory: new DizzyTileFactory(), modelConstructor: DizzyTileModel },
+  lack: { factory: new LackTileFactory(), modelConstructor: LackTileModel },
 } as const satisfies Record<
   string,
   {
