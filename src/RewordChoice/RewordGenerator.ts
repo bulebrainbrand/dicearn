@@ -50,6 +50,22 @@ export class RewordGenerator {
         },
       },
       {
+        type: "lack",
+        name: "ラックタイル",
+        desc: "ランダムに獲得量が決まるラックタイルを1枚獲得します",
+        callback: () => {
+          this.inventoryModel.addTile("lack", 1);
+        },
+      },
+      {
+        type: "stop",
+        name: "ストップタイル",
+        desc: "乗るとその日が終わるストップタイルを1枚獲得します",
+        callback: () => {
+          this.inventoryModel.addTile("stop", 1);
+        },
+      },
+      {
         type: "upgrade",
         name: "ボードをアップグレード",
         desc: "ボードを上下左右に1マスずつ広げます",
