@@ -15,3 +15,10 @@ export const DIRECTION_RADIAN = {
   d: Phaser.Math.DegToRad(180),
   l: Phaser.Math.DegToRad(270),
 } as const satisfies Record<Direction, number>;
+
+export const getNextDirection = (dir: Direction): Direction => {
+  if (dir === "d") return "l";
+  if (dir === "l") return "u";
+  if (dir === "r") return "d";
+  return "r";
+};

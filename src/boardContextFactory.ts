@@ -66,12 +66,7 @@ export class BoardContextFactory {
       boardSize,
     );
     const tileTypeChecker = new TileTypeChecker();
-    const routeSearcher = new RouteSearcher(
-      tiles,
-      boardSize,
-      tileTypeChecker,
-      defaultCursorPosition,
-    );
+    const routeSearcher = new RouteSearcher(tiles, boardSize, tileTypeChecker);
     const routeExecutor = new RouteExecutor(cursorModel);
     const boardModel = new Board(
       tiles,

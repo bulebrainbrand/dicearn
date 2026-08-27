@@ -11,7 +11,7 @@ import { TilesDataStorage } from "./tilesDataStorage";
 import { TILE_TILE_Z } from "./constants";
 import { BOARD_DEPTH_RANGE } from "@/layer";
 import { BoardViewCoordinateCalculator } from "@/board/BoardViewCoordinateCalculator";
-import { Direction } from "@/Direction";
+import { getNextDirection } from "@/Direction";
 import { TileView, TileViewFactory } from "@/Tile/types";
 import { TileTypeChecker } from "@/Tile/TileTypeChecker";
 import { TileModelUnion } from "@/Tile/TileDifinition";
@@ -65,33 +65,23 @@ export class TilesView {
     this.chessContainer.add(sprite);
     this.tiles.setTile(x, y, sprite);
     sprite.setDepth(BOARD_DEPTH_RANGE.getDepth(0));
-    sprite.setInteractive({ draggable: true, cursor: "grab" });
-    const drag = new Drag(sprite, { enable: this.tilesModel.getMovable() });
-    const movableHandler = (bool: boolean) => {
-      if (bool === true) {
-        drag.setEnable(true);
-      } else {
-        drag.setEnable(false);
-      }
-    };
-    this.tilesModel.on("movable", movableHandler);
-    sprite.once("destroy", () => {
-      this.tilesModel.off("movable", movableHandler);
-    });
-    sprite.on("pointerdown", () => {
-      this.description.show(tile.getDescription());
-    });
-    sprite.on("pointerover", () => {
-      this.description.show(tile.getDescription());
-    });
-    sprite.on("pointerup", () => {
-      this.description.hide();
-    });
-    sprite.on("pointerout", () => {
-      this.description.show(tile.getDescription());
-    });
+    const isMovable = this.tileTypeChecker.isMovable(tile);
+    const isRotatable = this.tileTypeChecker.isRotatable(tile);
+    if (isMovable) {
+      sprite.setInteractive({ draggable: true, cursor: "grab" });
+      const drag = new Drag(sprite, { enable: this.tilesModel.getMovable() });
+      const movableHandler = (bool: boolean) => {
+        if (bool === true) {
+          drag.setEnable(true);
+        } else {
+          drag.setEnable(false);
+        }
+      };
+      this.tilesModel.on("movable", movableHandler);
+      sprite.once("destroy", () => {
+        this.tilesModel.off("movable", movableHandler);
+      });
 
-    if (this.tileTypeChecker.isMovable(tile) && tile.getMovable()) {
       let graphics = this.scene.add.graphics();
       graphics.fillStyle(
         Phaser.Display.Color.HexStringToColor(ACCENT_COLOR).color,
@@ -120,7 +110,10 @@ export class TilesView {
       };
       const dragendHandler = (pointer: Phaser.Input.Pointer) => {
         graphics.clear();
-        if (this.tilesModel.getMovable() === false) {
+        if (
+          this.tilesModel.getMovable() === false ||
+          tile.getMovable() === false
+        ) {
           const x = sprite.getData("x");
           const y = sprite.getData("y");
           const worldXY = this.board.tileXYToWorldXY(x, y);
@@ -140,21 +133,34 @@ export class TilesView {
       };
       sprite.on("drag", dragHandler);
       sprite.on("dragend", dragendHandler);
-    }
-    if (this.tileTypeChecker.isRotatable(tile)) {
-      sprite.on("dragend", (pointer: Phaser.Input.Pointer) => {
+
+      if (isRotatable) {
+        sprite.on("dragend", (pointer: Phaser.Input.Pointer) => {
+          if (this.tilesModel.getMovable() === false) return;
+          if (!this.isDrag(pointer, sprite)) {
+            tile.changeDirection(getNextDirection(tile.getDirection()));
+          }
+        });
+      }
+    } else if (isRotatable) {
+      sprite.setInteractive({ cursor: "pointer" });
+      sprite.on("pointerup", () => {
         if (this.tilesModel.getMovable() === false) return;
-        if (!this.isDrag(pointer, sprite)) {
-          const getNextDirection = (dir: Direction): Direction => {
-            if (dir === "d") return "l";
-            if (dir === "l") return "u";
-            if (dir === "r") return "d";
-            return "r";
-          };
-          tile.changeDirection(getNextDirection(tile.getDirection()));
-        }
+        tile.changeDirection(getNextDirection(tile.getDirection()));
       });
     }
+    sprite.on("pointerdown", () => {
+      this.description.show(tile.getDescription());
+    });
+    sprite.on("pointerover", () => {
+      this.description.show(tile.getDescription());
+    });
+    sprite.on("pointerup", () => {
+      this.description.hide();
+    });
+    sprite.on("pointerout", () => {
+      this.description.show(tile.getDescription());
+    });
     return sprite;
   }
   private isDrag(pointer: Phaser.Input.Pointer, sprite: TileView): boolean {
