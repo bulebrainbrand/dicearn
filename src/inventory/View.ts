@@ -50,7 +50,6 @@ export class InventoryView extends MiniBoard {
     name: InventoryItemName,
     item: InventoryTileView,
   ) {
-    console.log(item);
     item.setDepth(INVENTORY_DEPTH_RANGE.getDepth(1));
     item.setInteractive({ draggable: true });
     let clone: TileView | undefined = undefined;

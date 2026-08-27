@@ -1,5 +1,5 @@
 import { Board, QuadGrid } from "phaser4-rex-plugins/plugins/board-components";
-import { CELL_SIZE_PX } from "./constants";
+import { ACTUAL_CELL_SIZE_PX, CELL_SIZE_PX } from "./constants";
 import { InventoryTileViewFactory } from "./inventory/InventoryTileViewFactory";
 import { InventoryModel } from "./inventory/Model";
 import { InventoryView } from "./inventory/View";
@@ -32,8 +32,8 @@ export class InventoryContextFactory {
         grid: new QuadGrid({
           x: 0, // グリッド原点のワールドX座標
           y: 0,
-          cellWidth: CELL_SIZE_PX,
-          cellHeight: CELL_SIZE_PX,
+          cellWidth: ACTUAL_CELL_SIZE_PX,
+          cellHeight: ACTUAL_CELL_SIZE_PX,
           type: "orthogonal",
         }),
         draggable: false,
