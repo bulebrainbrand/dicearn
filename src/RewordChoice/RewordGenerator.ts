@@ -70,7 +70,7 @@ export class RewordGenerator {
         name: "ストーンタイル",
         desc: "3回乗るごとにコインがもらえるストーンタイルを1枚獲得します",
         callback: () => {
-          this.inventoryModel.addTile("stop", 1);
+          this.inventoryModel.addTile("stone", 1);
         },
       },
       {
