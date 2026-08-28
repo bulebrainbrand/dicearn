@@ -35,10 +35,13 @@ export class RewordViewFactory {
         return TILE_DIFINITION.dizzy.factory.view(scene);
       case "lack":
         return TILE_DIFINITION.lack.factory.view(scene);
+      case "stone":
+        return TILE_DIFINITION.stone.factory.view(scene);
       case "upgrade":
         return scene.add.container();
       default:
-        throw new TypeError(`unexpected icon name:${name}`);
+        console.log(`unexpected icon name:${name}`);
+        return scene.add.container();
     }
   }
 }
