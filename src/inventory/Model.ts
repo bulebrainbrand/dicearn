@@ -11,6 +11,7 @@ type InventoryData = Partial<
 export class InventoryModel extends EventEmitter {
   private tileAmounts: InventoryData;
   private index: number = 0;
+  private _enable: boolean = false;
   constructor() {
     super();
     this.tileAmounts = {};
@@ -61,5 +62,16 @@ export class InventoryModel extends EventEmitter {
   }
   getAmounts(): Readonly<InventoryData> {
     return this.tileAmounts;
+  }
+  enable() {
+    this._enable = true;
+    this.emit("enable");
+  }
+  disable() {
+    this._enable = false;
+    this.emit("disable");
+  }
+  getEnable(): boolean {
+    return this._enable;
   }
 }

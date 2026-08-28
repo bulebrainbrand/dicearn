@@ -132,7 +132,12 @@ export class GameScene extends Phaser.Scene {
     this.createReword();
     this.inventoryModel.addTile("buffer", 4);
     this.inventoryModel.addTile("normal", 4);
-    applyEditModeListen(this.editMode, this.cursorModel, this.dice);
+    applyEditModeListen(
+      this.editMode,
+      this.cursorModel,
+      this.dice,
+      inventoryModel,
+    );
     this.UIContainer.add(new FullScreanButton(this, 0, 0, 256, 256, 0xffffff));
     const { model } = this.createPayment();
     this.paymentModel = model;
@@ -141,6 +146,9 @@ export class GameScene extends Phaser.Scene {
     this.GameContainer.addAt(cameraController.background, 0);
     this.UIContainer.setScrollFactor(0, 0, true);
     this.initCameras();
+    this.editMode.disable();
+    this.editMode.enable();
+    this.editMode.disable();
     if (DEBUG) {
       this.input.on(
         "pointerdown",

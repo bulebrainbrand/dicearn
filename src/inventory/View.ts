@@ -43,6 +43,13 @@ export class InventoryView extends MiniBoard {
         console.log("InventoryView bounds:", this.getBounds());
       },
     );
+    inventoryModel.addListener("enable", () => this.enable());
+    inventoryModel.addListener("disable", () => this.disable());
+    if (inventoryModel.getEnable()) {
+      this.enable();
+    } else {
+      this.disable();
+    }
     this.setScrollFactor(0, 0);
     this.setDepth(INVENTORY_DEPTH_RANGE.getDepth(0));
   }
@@ -54,6 +61,9 @@ export class InventoryView extends MiniBoard {
     item.setInteractive({ draggable: true });
     let clone: TileView | undefined = undefined;
     item.on("dragstart", (pointer: Phaser.Input.Pointer) => {
+      if (this.inventoryModel.getEnable() === false) {
+        return;
+      }
       if (this.inventoryModel.getAmount(name) === 0) {
         return;
       }
@@ -69,6 +79,9 @@ export class InventoryView extends MiniBoard {
       clone.setY(y);
     });
     item.on("drag", (pointer: Phaser.Input.Pointer) => {
+      if (this.inventoryModel.getEnable() === false) {
+        return;
+      }
       if (clone === undefined) return;
       // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       const { x, y } = pointer.positionToCamera(
@@ -78,6 +91,9 @@ export class InventoryView extends MiniBoard {
       clone.setY(y);
     });
     item.on("dragend", (pointer: Phaser.Input.Pointer) => {
+      if (this.inventoryModel.getEnable() === false) {
+        return;
+      }
       if (clone === undefined) return;
       clone.destroy();
       clone = undefined;
@@ -112,5 +128,18 @@ export class InventoryView extends MiniBoard {
     this.makeInventoryTileViewPlacable(name, inventoryTileView);
     inventoryTileView.updateAmount(amount);
     this.items[name] = inventoryTileView;
+  }
+  private enable() {
+    console.log("enable");
+    console.log(this.getAllChess());
+    this.getAllChess()
+      .filter((_child): _child is TileView => true)
+      .forEach((child) => child?.setAlpha(1));
+  }
+  private disable() {
+    console.log("disable");
+    this.getAllChess()
+      .filter((_child): _child is TileView => true)
+      .forEach((child) => child?.setAlpha(0.5));
   }
 }
