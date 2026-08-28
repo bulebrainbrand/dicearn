@@ -40,7 +40,6 @@ import { Pay } from "./Payment/Pay.ts";
 import { Description } from "./description/index.ts";
 import { FullScreanButton } from "./fullscreanButton/View.ts";
 import { RewordViewFactory } from "./RewordChoice/RewordViewFactory.ts";
-import { LackTileModel } from "./Tile/LackTile/Model.ts";
 import { HomeTileModel } from "./Tile/HomeTile/Model.ts";
 import { StoneTileModel } from "./Tile/StoneTile/Model.ts";
 
