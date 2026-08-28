@@ -8,8 +8,8 @@
    version="1.1"
    id="svg1"
    inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
-   sodipodi:docname="stone.svg"
-   inkscape:export-filename="..\public\stone.svg"
+   sodipodi:docname="stone_2.svg"
+   inkscape:export-filename="..\public\stone_2.svg"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -26,9 +26,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="1.0167041"
-     inkscape:cx="254.25294"
-     inkscape:cy="368.3471"
+     inkscape:zoom="2.0334082"
+     inkscape:cx="379.65815"
+     inkscape:cy="435.47577"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="-8"
@@ -42,19 +42,19 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:#205038;fill-opacity:1;stroke:none;stroke-width:33.6598;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
+       style="fill:#205038;fill-opacity:1;stroke:#205038;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;stroke-opacity:1;stroke-dasharray:none"
        id="path1"
        cx="105"
        cy="128.88597"
        r="19.614027" />
     <circle
-       style="fill:#205038;fill-opacity:1;stroke:none;stroke-width:33.6598;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
+       style="fill:#205038;fill-opacity:1;stroke:#205038;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;stroke-opacity:1;stroke-dasharray:none"
        id="path1-8"
        cx="124.61403"
        cy="128.88597"
        r="19.614027" />
     <circle
-       style="fill:#205038;fill-opacity:1;stroke:none;stroke-width:33.6598;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke"
+       style="fill:none;fill-opacity:1;stroke:#205038;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;paint-order:markers fill stroke;stroke-opacity:1;stroke-dasharray:none"
        id="path1-8-1"
        cx="115.41544"
        cy="112.26585"
