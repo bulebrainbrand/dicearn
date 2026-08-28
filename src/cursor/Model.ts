@@ -1,6 +1,7 @@
 import { Position } from "@/board/BoardViewCoordinateCalculator";
 import EventEmitter from "phaser4-rex-plugins/plugins/utils/eventemitter/EventEmitter.js";
 import { BoardSize } from "@/types";
+import { Direction } from "@/Direction";
 
 export class CursorModel extends EventEmitter {
   private movable: boolean = true;
@@ -18,7 +19,7 @@ export class CursorModel extends EventEmitter {
    * @param x
    * @param y
    */
-  move(x: number, y: number) {
+  move(x: number, y: number, dir: Direction) {
     if (!this.movable) {
       throw new Error("Cursor is not movable");
     }
@@ -30,7 +31,7 @@ export class CursorModel extends EventEmitter {
      * @event Cursor#event:move
      * @param { {old: [number, number], new: [number, number]} } data
      */
-    this.emit("move", { old: [oldX, oldY], new: [x, y] });
+    this.emit("move", { old: [oldX, oldY], new: [x, y], dir });
   }
   /**
    * @fires Cursor#event:warp

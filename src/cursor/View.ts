@@ -10,6 +10,7 @@ import BoardPlugin from "phaser4-rex-plugins/plugins/board-plugin";
 import MoveTo from "phaser4-rex-plugins/plugins/board/moveto/MoveTo";
 import { CELL_SIZE_PX } from "@/constants";
 import { CURSOR_DEPTH_RANGE } from "@/layer";
+import { Direction } from "@/Direction";
 export class CursorView extends Phaser.GameObjects.Container {
   private moveToPosititon: MoveTo;
   private setToPosition: MoveTo;
@@ -34,10 +35,12 @@ export class CursorView extends Phaser.GameObjects.Container {
   animateCursorMove(
     oldPos: [number, number],
     newPos: [number, number],
+    dir: Direction,
   ): Promise<void> {
     const route = this.boardViewCoodinateCalculator.twoPosToRoute(
       { x: oldPos[0], y: oldPos[1] },
       { x: newPos[0], y: newPos[1] },
+      dir,
     );
     console.log("animateCursorMove", { oldPos, newPos, route });
     return this.playRoute(route);

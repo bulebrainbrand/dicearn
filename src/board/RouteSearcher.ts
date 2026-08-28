@@ -3,11 +3,11 @@ import { TileTypeChecker } from "@/Tile/TileTypeChecker";
 import { Tiles } from "@/Tiles/Model.ts";
 import { BoardSize } from "@/types";
 import { Position } from "./BoardViewCoordinateCalculator";
-import { RouteKind } from "./types";
+import { RouteKind, WalkRouteKind } from "./types";
 
 export type RouteTransition =
-  | { kind: "move"; destination: Position; isUsedOutside: boolean }
-  | { kind: Exclude<RouteKind, "move">; destination: Position };
+  | { kind: WalkRouteKind; destination: Position; dir: Direction }
+  | { kind: Exclude<RouteKind, WalkRouteKind>; destination: Position };
 
 export class RouteSearcher {
   constructor(
@@ -28,35 +28,35 @@ export class RouteSearcher {
       return { kind: "warp", destination: this.getRandomPosition() };
     }
     if (tile.name === "dizzy") {
-      const offset =
+      const dir =
         DIRECTION_TAPLE[Math.floor(Math.random() * DIRECTION_TAPLE.length)];
-      const nextPos = this.getNextWithDir(position, offset);
-      if (nextPos === null)
+      const destination = this.getNextWithDir(position, dir);
+      if (destination === null)
         return { kind: "reset", destination: resetPosition };
-      const { destination, isUsedOutside } = nextPos;
       const nextTile = this.tiles.getTile(destination.x, destination.y);
       if (nextTile === undefined) {
         return { kind: "reset", destination: resetPosition };
       }
       if (nextTile.name === "stop") {
-        return { kind: "stop", destination };
+        return { kind: "stop", destination, dir };
       }
-      return { kind: "move", destination, isUsedOutside };
+      return { kind: "move", destination, dir };
     }
     if (this.tileTypeChecker.isDirectionTile(tile) === false) {
       return { kind: "reset", destination: resetPosition };
     }
-    const nextPos = this.getNextWithDir(position, tile.getDirection());
-    if (nextPos === null) return { kind: "reset", destination: resetPosition };
-    const { destination, isUsedOutside } = nextPos;
+    const dir = tile.getDirection();
+    const destination = this.getNextWithDir(position, tile.getDirection());
+    if (destination === null)
+      return { kind: "reset", destination: resetPosition };
     const nextTile = this.tiles.getTile(destination.x, destination.y);
     if (nextTile === undefined) {
       return { kind: "reset", destination: resetPosition };
     }
     if (nextTile.name === "stop") {
-      return { kind: "stop", destination };
+      return { kind: "stop", destination, dir };
     }
-    return { kind: "move", destination, isUsedOutside };
+    return { kind: "move", destination, dir };
   }
 
   private covertPosToInside(pos: Position): Position {
@@ -86,7 +86,7 @@ export class RouteSearcher {
   private getNextWithDir(
     { x, y }: Readonly<Position>,
     dir: Direction,
-  ): { destination: Position; isUsedOutside: boolean } | null {
+  ): Position | null {
     const offset = DIRECTION_OFFSET[dir];
     let beforePos: Position = { x, y };
     let currentPos: Position = this.covertPosToInside({
@@ -95,10 +95,7 @@ export class RouteSearcher {
     });
     while (beforePos.x !== currentPos.x || beforePos.y !== currentPos.y) {
       if (this.tiles.getTile(currentPos.x, currentPos.y) !== undefined) {
-        return {
-          destination: currentPos,
-          isUsedOutside: this.isUsedOutside({ x, y }, currentPos, offset),
-        };
+        return currentPos;
       }
       beforePos = currentPos;
       currentPos = this.covertPosToInside({
@@ -107,14 +104,5 @@ export class RouteSearcher {
       });
     }
     return null;
-  }
-  private isUsedOutside(
-    start: Readonly<Position>,
-    end: Readonly<Position>,
-    offset: Readonly<[number, number]>,
-  ) {
-    const isXUsed = offset[0] > 0 ? start.x < end.x : end.x < start.x;
-    const isYUsed = offset[1] > 0 ? start.y < end.y : end.y < start.y;
-    return isXUsed || isYUsed;
   }
 }

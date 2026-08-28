@@ -1,5 +1,5 @@
 import * as Phaser from "phaser";
-import { DIRECTION_TAPLE } from "./Direction.ts";
+import { Direction, DIRECTION_TAPLE } from "./Direction.ts";
 import { Tiles } from "./Tiles/Model.ts";
 import { BoardViewCoordinateCalculator } from "./board/BoardViewCoordinateCalculator.ts";
 import { CursorModel } from "@/cursor/Model.ts";
@@ -301,9 +301,13 @@ export class GameScene extends Phaser.Scene {
   registorEventListener() {
     this.cursorModel.addListener(
       "move",
-      (event: { old: [number, number]; new: [number, number] }) => {
+      (event: {
+        old: [number, number];
+        new: [number, number];
+        dir: Direction;
+      }) => {
         this.cursorAnimationQueue = this.cursorAnimationQueue.then(() =>
-          this.cursor.animateCursorMove(event.old, event.new),
+          this.cursor.animateCursorMove(event.old, event.new, event.dir),
         );
       },
     );
