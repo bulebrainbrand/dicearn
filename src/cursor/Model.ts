@@ -18,6 +18,7 @@ export class CursorModel extends EventEmitter {
    * @fires Cursor#event:move
    * @param x
    * @param y
+   * @param dir
    */
   move(x: number, y: number, dir: Direction) {
     if (!this.movable) {

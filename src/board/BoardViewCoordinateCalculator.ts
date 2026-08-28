@@ -26,6 +26,10 @@ export class BoardViewCoordinateCalculator {
     const offset = DIRECTION_OFFSET[dir];
     let route: Route[] = [];
 
+    if (
+      this.isSamePosition(this.applyOffsetAllowedOutsidePos(pos1, offset), pos2)
+    )
+      return [move(pos2)];
     // pos1 to next
     route.push(move(this.applyOffsetAllowedOutsidePos(pos1, offset)));
     // warp pos2 bakword
@@ -50,22 +54,6 @@ export class BoardViewCoordinateCalculator {
   }
   private isSamePosition(pos1: Position, pos2: Position) {
     return pos1.x === pos2.x && pos1.y === pos2.y;
-  }
-  private covertPosToInside(pos: Position): Position {
-    return {
-      x:
-        pos.x < this.boardSize.minX
-          ? this.boardSize.maxX
-          : this.boardSize.maxX < pos.x
-            ? this.boardSize.minX
-            : pos.x,
-      y:
-        pos.y < this.boardSize.minY
-          ? this.boardSize.maxY
-          : this.boardSize.maxY < pos.y
-            ? this.boardSize.minY
-            : pos.y,
-    };
   }
   private invertOffset(offset: Readonly<Offset>): Offset {
     return [offset[0] * -1, offset[1] * -1];
