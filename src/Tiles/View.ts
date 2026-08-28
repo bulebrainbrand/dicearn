@@ -60,7 +60,6 @@ export class TilesView {
     tile: TileModelUnion,
   ): TileView {
     const sprite = this.tileViewFactory.create(tile);
-    console.log(sprite, sprite.scene);
     this.board.addChess(sprite, x, y, TILE_TILE_Z, true);
     this.chessContainer.add(sprite);
     this.tiles.setTile(x, y, sprite);
@@ -125,10 +124,23 @@ export class TilesView {
           const oldY = sprite.getData("y");
           const tileXY = this.board.worldXYToTileXY(sprite.x, sprite.y, true);
           if (this.boardViewCoordinateCalculator.isOutside(tileXY)) {
-            this.tilesModel.removeTile(oldX, oldY);
+            const result = this.tilesModel.removeTile(oldX, oldY);
+            if (result === false) {
+              const oldPosition = this.board.tileXYToWorldXY(oldX, oldY);
+              sprite.setPosition(oldPosition.x, oldPosition.y);
+            }
             return;
           }
-          this.tilesModel.swapTile(oldX, oldY, tileXY.x, tileXY.y);
+          const result = this.tilesModel.swapTile(
+            oldX,
+            oldY,
+            tileXY.x,
+            tileXY.y,
+          );
+          if (result === false) {
+            const oldPosition = this.board.tileXYToWorldXY(oldX, oldY);
+            sprite.setPosition(oldPosition.x, oldPosition.y);
+          }
         }
       };
       sprite.on("drag", dragHandler);

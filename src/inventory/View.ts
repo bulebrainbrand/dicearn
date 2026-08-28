@@ -92,8 +92,17 @@ export class InventoryView extends MiniBoard {
       if (this.inventoryModel.getAmount(name) === 0) {
         return;
       }
-      this.inventoryModel.useTile(name);
-      this.tiles.setTile(tileXY.x, tileXY.y, item.createTileModelForTiles());
+
+      const tileModel = item.createTileModelForTiles();
+      // if success, usetile
+      // if failed, destory
+      const result = this.tiles.setTile(tileXY.x, tileXY.y, tileModel, false);
+      if (result === true) {
+        this.inventoryModel.useTile(name);
+      }
+      if (result === false) {
+        tileModel.destroy();
+      }
     });
   }
   private createItem(name: InventoryItemName, amount: number, index: number) {

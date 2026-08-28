@@ -52,7 +52,8 @@ export class BoardContextFactory {
     );
     if (boardViewCoordinateCalculator.isOutside(defaultCursorPosition))
       throw new TypeError(`cursor position is invalid`);
-    const tiles = new Tiles(boardSize);
+    const tileTypeChecker = new TileTypeChecker();
+    const tiles = new Tiles(boardSize, tileTypeChecker);
     editMode.addListener("enable", () => {
       tiles.setMovable(true);
     });
@@ -65,7 +66,6 @@ export class BoardContextFactory {
       defaultCursorPosition.y,
       boardSize,
     );
-    const tileTypeChecker = new TileTypeChecker();
     const routeSearcher = new RouteSearcher(tiles, boardSize, tileTypeChecker);
     const routeExecutor = new RouteExecutor(cursorModel);
     const boardModel = new Board(

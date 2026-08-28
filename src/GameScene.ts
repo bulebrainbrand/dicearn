@@ -293,10 +293,11 @@ export class GameScene extends Phaser.Scene {
           x,
           y,
           new NormalTileModel(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)]),
+          true,
         ),
       ),
     );
-    this.tiles.setTile(0, 0, new HomeTileModel("u"));
+    this.tiles.setTile(0, 0, new HomeTileModel("u"), true);
   }
   registorEventListener() {
     this.cursorModel.addListener(
