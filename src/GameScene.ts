@@ -17,7 +17,6 @@ import { MoneyCalculator } from "./board/MoneyCalculator.ts";
 import { RouteExecutor } from "./board/RouteExecutor.ts";
 import { RouteSearcher } from "./board/RouteSearcher.ts";
 import { BoardSize } from "./types.ts";
-import { BufferTileModel } from "./Tile/BufferTIle/Model.ts";
 import { MoneyModel, MoneyModelEvent } from "./Money/Model.ts";
 import { MoneyView } from "./Money/View.ts";
 import { INK_COLOR, LIGHT_INK } from "./colors.ts";
@@ -41,7 +40,6 @@ import { Description } from "./description/index.ts";
 import { FullScreanButton } from "./fullscreanButton/View.ts";
 import { RewordViewFactory } from "./RewordChoice/RewordViewFactory.ts";
 import { HomeTileModel } from "./Tile/HomeTile/Model.ts";
-import { StoneTileModel } from "./Tile/StoneTile/Model.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -132,6 +130,8 @@ export class GameScene extends Phaser.Scene {
     this.registorEventListener();
     this.initTiles();
     this.createReword();
+    this.inventoryModel.addTile("buffer", 4);
+    this.inventoryModel.addTile("normal", 4);
     applyEditModeListen(this.editMode, this.cursorModel, this.dice);
     this.UIContainer.add(new FullScreanButton(this, 0, 0, 256, 256, 0xffffff));
     const { model } = this.createPayment();
@@ -287,19 +287,16 @@ export class GameScene extends Phaser.Scene {
   }
 
   initTiles() {
-    Array.from({ length: 6 }, (_, x) =>
-      Array.from({ length: 6 }, (_, y) =>
+    Array.from({ length: 2 }, (_, x) =>
+      Array.from({ length: 2 }, (_, y) =>
         this.tiles.setTile(
           x,
           y,
-          Math.random() > 0.5
-            ? new NormalTileModel(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)])
-            : new BufferTileModel(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)]),
+          new NormalTileModel(DIRECTION_TAPLE[Phaser.Math.Between(0, 3)]),
         ),
       ),
     );
     this.tiles.setTile(0, 0, new HomeTileModel("u"));
-    this.tiles.setTile(1, 1, new StoneTileModel("u"));
   }
   registorEventListener() {
     this.cursorModel.addListener(
