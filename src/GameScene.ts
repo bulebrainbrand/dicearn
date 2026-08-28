@@ -356,7 +356,7 @@ export class GameScene extends Phaser.Scene {
       await new Promise((resolve) => {
         setTimeout(resolve, 400);
       });
-      dice.enable();
+      if (this.editMode.getEditMode() === false) dice.enable();
       this.dayModel.nextDay();
     });
     dice.on("enableRoll", () => {
