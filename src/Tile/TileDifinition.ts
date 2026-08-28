@@ -14,6 +14,8 @@ import { NormalTileFactory } from "./NormalTile/Factory";
 import { NormalTileModel } from "./NormalTile/Model";
 import { RandomTileFactory } from "./RandomTile/Factory";
 import { RandomTileModel } from "./RandomTile/Model";
+import { StoneTileFactory } from "./StoneTile/Factory";
+import { StoneTileModel } from "./StoneTile/Model";
 import { StopTileFactory } from "./StopTile/Factory";
 import { StopTileModel } from "./StopTile/Model";
 import { TileFactory, TileModel, TileView } from "./types";
@@ -37,6 +39,7 @@ export const TILE_DIFINITION = {
   dizzy: { factory: new DizzyTileFactory(), modelConstructor: DizzyTileModel },
   lack: { factory: new LackTileFactory(), modelConstructor: LackTileModel },
   home: { factory: new HomeTileFactory(), modelConstructor: HomeTileModel },
+  stone: { factory: new StoneTileFactory(), modelConstructor: StoneTileModel },
 } as const satisfies Record<
   string,
   {
