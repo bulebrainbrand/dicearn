@@ -1,4 +1,4 @@
-import { DIRECTION_OFFSET } from "@/Direction.ts";
+import { Direction, DIRECTION_OFFSET, DIRECTION_TAPLE } from "@/Direction.ts";
 import { TileTypeChecker } from "@/Tile/TileTypeChecker";
 import { Tiles } from "@/Tiles/Model.ts";
 import { BoardSize } from "@/types";
@@ -26,17 +26,11 @@ export class RouteSearcher {
       return { kind: "warp", destination: this.getRandomPosition() };
     }
     if (tile.name === "dizzy") {
-      const offsets = [
-        [0, 1],
-        [1, 0],
-        [-1, 0],
-        [0, -1],
-      ];
-      const offset = offsets[Math.floor(Math.random() * offsets.length)];
-      const destination = this.covertPosToInside({
-        x: position.x + offset[0],
-        y: position.y + offset[1],
-      });
+      const offset =
+        DIRECTION_TAPLE[Math.floor(Math.random() * DIRECTION_TAPLE.length)];
+      const destination = this.getNextWithDir(position, offset);
+      if (destination === null)
+        return { kind: "reset", destination: resetPosition };
       const nextTile = this.tiles.getTile(destination.x, destination.y);
       if (nextTile === undefined) {
         return { kind: "reset", destination: resetPosition };
@@ -49,11 +43,9 @@ export class RouteSearcher {
     if (this.tileTypeChecker.isDirectionTile(tile) === false) {
       return { kind: "reset", destination: resetPosition };
     }
-    const offset = DIRECTION_OFFSET[tile.getDirection()];
-    const destination = this.covertPosToInside({
-      x: position.x + offset[0],
-      y: position.y + offset[1],
-    });
+    const destination = this.getNextWithDir(position, tile.getDirection());
+    if (destination === null)
+      return { kind: "reset", destination: resetPosition };
     const nextTile = this.tiles.getTile(destination.x, destination.y);
     if (nextTile === undefined) {
       return { kind: "reset", destination: resetPosition };
@@ -87,5 +79,13 @@ export class RouteSearcher {
       const y = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
       if (this.tiles.getTile(x, y) !== undefined) return { x, y };
     }
+  }
+  private getNextWithDir({ x, y }: Position, dir: Direction): Position | null {
+    const offset = DIRECTION_OFFSET[dir];
+    const destination = this.covertPosToInside({
+      x: x + offset[0],
+      y: y + offset[1],
+    });
+    return destination;
   }
 }
