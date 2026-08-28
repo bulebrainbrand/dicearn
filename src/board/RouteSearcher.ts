@@ -82,10 +82,20 @@ export class RouteSearcher {
   }
   private getNextWithDir({ x, y }: Position, dir: Direction): Position | null {
     const offset = DIRECTION_OFFSET[dir];
-    const destination = this.covertPosToInside({
+    let beforePos: Position = { x, y };
+    let currentPos: Position = this.covertPosToInside({
       x: x + offset[0],
       y: y + offset[1],
     });
-    return destination;
+    while (beforePos.x !== currentPos.x || beforePos.y !== currentPos.y) {
+      if (this.tiles.getTile(currentPos.x, currentPos.y) !== undefined)
+        return currentPos;
+      beforePos = currentPos;
+      currentPos = this.covertPosToInside({
+        x: currentPos.x + offset[0],
+        y: currentPos.y + offset[1],
+      });
+    }
+    return null;
   }
 }
