@@ -12,7 +12,7 @@ export class StopTileModel extends AbstrastMovableRotatableTile {
       case "warp":
         return 0;
       case "stop":
-        return 5;
+        return 15;
       default: {
         kind satisfies never;
         break;
