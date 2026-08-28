@@ -40,8 +40,8 @@ import { Pay } from "./Payment/Pay.ts";
 import { Description } from "./description/index.ts";
 import { FullScreanButton } from "./fullscreanButton/View.ts";
 import { RewordViewFactory } from "./RewordChoice/RewordViewFactory.ts";
-import { LackTileModel } from "./Tile/LackTile/Model.ts";
 import { HomeTileModel } from "./Tile/HomeTile/Model.ts";
+import { StoneTileModel } from "./Tile/StoneTile/Model.ts";
 
 export class GameScene extends Phaser.Scene {
   board!: Board;
@@ -76,6 +76,18 @@ export class GameScene extends Phaser.Scene {
     this.load.svg("dizzy_tile_icon", "/dizzy.svg", { width: 80, height: 80 });
     this.load.svg("edit_button_icon", "/edit.svg", { width: 80, height: 80 });
     this.load.svg("lack_tile_icon", "/clover.svg", { width: 80, height: 80 });
+    this.load.svg("stone_tile_0_icon", "/stone_0.svg", {
+      width: 80,
+      height: 80,
+    });
+    this.load.svg("stone_tile_1_icon", "/stone_1.svg", {
+      width: 80,
+      height: 80,
+    });
+    this.load.svg("stone_tile_2_icon", "/stone_2.svg", {
+      width: 80,
+      height: 80,
+    });
   }
   create() {
     this.createUIContainer();
@@ -287,7 +299,7 @@ export class GameScene extends Phaser.Scene {
       ),
     );
     this.tiles.setTile(0, 0, new HomeTileModel("u"));
-    this.tiles.setTile(1, 1, new LackTileModel("u"));
+    this.tiles.setTile(1, 1, new StoneTileModel("u"));
   }
   registorEventListener() {
     this.cursorModel.addListener(

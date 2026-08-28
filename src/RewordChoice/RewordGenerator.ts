@@ -66,6 +66,14 @@ export class RewordGenerator {
         },
       },
       {
+        type: "stone",
+        name: "ストーンタイル",
+        desc: "3回乗るごとにコインがもらえるストーンタイルを1枚獲得します",
+        callback: () => {
+          this.inventoryModel.addTile("stone", 1);
+        },
+      },
+      {
         type: "upgrade",
         name: "ボードをアップグレード",
         desc: "ボードを上下左右に1マスずつ広げます",
@@ -73,7 +81,7 @@ export class RewordGenerator {
           this.boardSize.expand(1);
         },
       },
-    ];
+    ] as const;
     const indices = Array.from(rewords.keys());
     for (let i = 0; i < 3; i++) {
       const j = i + Math.floor(Math.random() * (indices.length - i));
