@@ -19,21 +19,6 @@ export class BoardViewCoordinateCalculator {
       this.boardSize.maxY < pos.y
     );
   }
-  covertPosToInside(pos: Position): Position {
-    const x =
-      pos.x < this.boardSize.minX
-        ? this.boardSize.maxX
-        : this.boardSize.maxX < pos.x
-          ? this.boardSize.minX
-          : pos.x;
-    const y =
-      pos.y < this.boardSize.minY
-        ? this.boardSize.maxY
-        : this.boardSize.maxY < pos.y
-          ? this.boardSize.minY
-          : pos.y;
-    return { x, y };
-  }
   getMoveRoute(pos: Position, dir: Direction): Route[] {
     console.log("getMoveRoute", { pos, dir });
     const offset = DIRECTION_OFFSET[dir];
@@ -95,14 +80,5 @@ export class BoardViewCoordinateCalculator {
   }
   isWarp(pos1: Position, pos2: Position): boolean {
     return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y) >= 2;
-  }
-  clampPosition({ x, y }: Position): Position {
-    return {
-      x: this.clamp(this.boardSize.minX, x, this.boardSize.maxX),
-      y: this.clamp(this.boardSize.minY, y, this.boardSize.maxY),
-    };
-  }
-  private clamp(a: number, b: number, c: number) {
-    return Math.min(Math.max(a, b), c);
   }
 }
