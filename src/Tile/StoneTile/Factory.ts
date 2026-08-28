@@ -25,6 +25,7 @@ export class StoneTileFactory implements TileFactory<
     model.addListener("count", (count: 0 | 1 | 2) => {
       view.changeCount(count);
     });
+    view.changeCount(model.getCount());
     return view;
   }
   readonly DEFAULT_DIR: Direction = "u";
