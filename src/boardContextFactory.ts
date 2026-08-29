@@ -18,12 +18,7 @@ import { TileViewFactory } from "./Tile/TileViewFactory";
 import { Description } from "./description";
 import { EditMode } from "./EditMode/Model";
 import { BoardBorder } from "./board/Border";
-import {
-  BASE_COLOR,
-  INK_COLOR,
-  PRIMARY_COLOR,
-  SECONDARY_COLOR,
-} from "./colors";
+import { BASE_COLOR } from "./colors";
 import Phaser from "phaser";
 
 export class BoardContextFactory {
