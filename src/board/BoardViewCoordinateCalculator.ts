@@ -42,8 +42,6 @@ export class BoardViewCoordinateCalculator {
     return route;
   }
   twoPosToRoute(pos1: Position, pos2: Position, dir: Direction): Route[] {
-    if (pos1.x === pos2.x && pos1.y === pos2.y) return [];
-
     if (pos1.x !== pos2.x && pos1.y !== pos2.y) {
       return [set(pos2)];
     }
