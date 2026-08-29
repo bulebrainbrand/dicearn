@@ -125,19 +125,21 @@ export class InventoryView extends MiniBoard {
     if (this.items[name] !== undefined) return;
     const inventoryTileView = this.inventoryTileViewFactory.create(name);
     this.addChess(inventoryTileView, index, 0, 0);
+    if (this.inventoryModel.getEnable()) {
+      inventoryTileView.setAlpha(1);
+    } else {
+      inventoryTileView.setAlpha(0.5);
+    }
     this.makeInventoryTileViewPlacable(name, inventoryTileView);
     inventoryTileView.updateAmount(amount);
     this.items[name] = inventoryTileView;
   }
   private enable() {
-    console.log("enable");
-    console.log(this.getAllChess());
     this.getAllChess()
       .filter((_child): _child is TileView => true)
       .forEach((child) => child?.setAlpha(1));
   }
   private disable() {
-    console.log("disable");
     this.getAllChess()
       .filter((_child): _child is TileView => true)
       .forEach((child) => child?.setAlpha(0.5));
