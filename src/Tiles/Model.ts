@@ -37,6 +37,13 @@ export class Tiles extends EventEmitter {
     ) {
       return false;
     }
+    if (
+      oldTile &&
+      this.tileTypeChecker.isRotatable(oldTile) &&
+      this.tileTypeChecker.isRotatable(tile)
+    ) {
+      tile.changeDirection(oldTile.getDirection());
+    }
     this.tiles.setTile(x, y, tile);
     this.emit("set", { x, y, newTile: tile } satisfies TilesModelSetEvent);
     return true;
