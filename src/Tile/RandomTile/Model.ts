@@ -6,13 +6,13 @@ export class RandomTileModel extends AbstrastMovableTile {
   onStandMoney(kind: RouteKind): number {
     switch (kind) {
       case "move":
-        return 2;
+        return 7;
       case "reset":
         return 0;
       case "warp":
-        return 2;
+        return 7;
       case "stop":
-        return 2;
+        return 7;
       default: {
         kind satisfies never;
         break;

@@ -10,7 +10,7 @@ export class MarkTileModel extends AbstrastMovableRotatableTile {
       case "reset":
         return 0;
       case "warp":
-        return 10;
+        return 50;
       case "stop":
         return 0;
       default: {
