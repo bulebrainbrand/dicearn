@@ -17,6 +17,14 @@ import { BoardSize, BoardSizeValues } from "./types";
 import { TileViewFactory } from "./Tile/TileViewFactory";
 import { Description } from "./description";
 import { EditMode } from "./EditMode/Model";
+import { BoardBorder } from "./board/Border";
+import {
+  BASE_COLOR,
+  INK_COLOR,
+  PRIMARY_COLOR,
+  SECONDARY_COLOR,
+} from "./colors";
+import Phaser from "phaser";
 
 export class BoardContextFactory {
   static create(
@@ -40,6 +48,7 @@ export class BoardContextFactory {
     routeSearcher: RouteSearcher;
     routeExecutor: RouteExecutor;
     boardSize: BoardSize;
+    boardBorder: BoardBorder;
   } {
     const boardSize = new BoardSize(
       initialBoardSize.minX,
@@ -99,6 +108,14 @@ export class BoardContextFactory {
       cursorView.onChangeCursorVisible(bool);
     });
     const moneyCalculator = new MoneyCalculator(tiles);
+    const boardBorder = new BoardBorder(
+      scene,
+      Phaser.Display.Color.HexStringToColor(BASE_COLOR).color,
+    );
+    boardSize.addListener("change", () =>
+      boardBorder.updateSize(boardSize.toValues()),
+    );
+    boardBorder.updateSize(boardSize.toValues());
     return {
       boardModel,
       boardView,
@@ -113,6 +130,7 @@ export class BoardContextFactory {
       routeSearcher,
       routeExecutor,
       boardSize,
+      boardBorder,
     };
   }
 }
